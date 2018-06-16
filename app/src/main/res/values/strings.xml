@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Crypto Address Tracker</string>
+    <string name="add_a_new_address">Add a new address</string>
+</resources>

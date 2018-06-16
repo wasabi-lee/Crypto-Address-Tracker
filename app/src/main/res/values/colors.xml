@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#191919</color>
+    <color name="colorPrimaryDark">#141414</color>
+    <color name="colorAccent">#3cb271</color>
+
+
+    <color name="text_color_light">#000000</color>
+    <color name="text_color_dark">#ffffff</color>
+    <color name="text_color_secondary_gray">#ababab</color>
+
+    <color name="window_background_light">#ffffff</color>
+    <color name="window_background_dark">#212121</color>
+</resources>
