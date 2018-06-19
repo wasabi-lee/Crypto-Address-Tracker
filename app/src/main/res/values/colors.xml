@@ -15,5 +15,6 @@
 
     <color name="blockies_background">#8e8e8e</color>
 
-    <color name="gray_card_background">#ededed</color>
+    <color name="overview_card_background_light">#f4f4f4</color>
+    <color name="overview_card_background_dark">#2d2d2d</color>
 </resources>

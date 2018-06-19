@@ -9,8 +9,7 @@
         <item name="android:textColor">@color/text_color_light</item>
         <item name="android:windowBackground">@color/window_background_light</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
-
-
+        <item name="overview_card_background">@color/overview_card_background_light</item>
 
     </style>
 
@@ -23,49 +22,103 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:windowBackground">@color/window_background_dark</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="overview_card_background">@color/overview_card_background_dark</item>
 
 
     </style>
+
+    <attr name="overview_card_background" format="reference" />
 
 
     <!-- ****************** Text appearance ******************* -->
 
-    <style name="TextLargeHeaderAppearance">
+    <!-- Large fonts -->
+
+    <style name="TextLargeRegularAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextLargeSemiBoldAppearance">
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="TextBoldLargeHeaderAppearance">
+    <style name="TextLargeBoldAppearance">
         <item name="android:textSize">24sp</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
-    <style name="TextMediumLargeHeaderAppearance">
+
+    <!-- Medium large fonts -->
+
+    <style name="TextMediumLargeRegularAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextMediumLargeSemiBoldAppearance">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="TextBoldMediumLargeLargeHeaderAppearance">
+    <style name="TextMediumLargeBoldAppearance">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
-    <style name="TextMediumHeaderAppearance">
-        <item name="android:textSize">14sp</item>
-   </style>
 
-    <style name="TextBoldMediumHeaderAppearance">
+    <!-- Medium fonts -->
+
+    <style name="TextMediumRegularAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextMediumSemiBoldAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="TexMediumBoldAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
-    <style name="TextSmallHeaderAppearance">
+
+    <!-- Small fonts -->
+
+    <style name="TextSmallRegularAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextSmallSemiBoldAppearance">
         <item name="android:textSize">12sp</item>
     </style>
 
-    <style name="TextBoldSmallHeaderAppearance">
+    <style name="TextSmallBoldAppearance">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
 
+
+    <!-- XSmall fonts -->
+
+    <style name="TextXSmallRegularAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="TextXSmallSemiBoldAppearance">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextXSmallBoldAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+
+    <!-- Secondary fonts -->
 
     <style name="TextSecondaryAppearance">
         <item name="android:textSize">12sp</item>
@@ -73,8 +126,11 @@
         <item name="android:textColor">@color/text_color_secondary_gray</item>
     </style>
 
-
-
+    <style name="TextSecondarySmallAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/text_color_secondary_gray</item>
+    </style>
 
 
 </resources>

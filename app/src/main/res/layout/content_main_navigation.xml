@@ -95,7 +95,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="8dp"
-            style="@style/TextBoldSmallHeaderAppearance"/>
+            style="@style/TextSmallBoldAppearance"/>
 
         <View
             android:id="@+id/nav_divider_line_1"
@@ -116,7 +116,7 @@
             android:text="ERC20 Token Addresses"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_1"
-            style="@style/TextBoldMediumHeaderAppearance"/>
+            style="@style/TexMediumBoldAppearance"/>
 
 
         <TextView
@@ -129,7 +129,7 @@
             android:text="Exchange Addresses"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_content_item_token_addresses"
-            style="@style/TextBoldMediumHeaderAppearance" />
+            style="@style/TexMediumBoldAppearance" />
 
 
 
@@ -143,7 +143,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            style="@style/TextBoldSmallHeaderAppearance"
+            style="@style/TextSmallBoldAppearance"
             app:layout_constraintTop_toBottomOf="@id/nav_content_item_exchange_addresses" />
 
         <View
@@ -165,7 +165,7 @@
             android:text="Feedback"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_2"
-            style="@style/TextBoldMediumHeaderAppearance"/>
+            style="@style/TexMediumBoldAppearance"/>
 
 
         <TextView
@@ -178,7 +178,7 @@
             android:text="Rate This App"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_content_item_feedback"
-            style="@style/TextBoldMediumHeaderAppearance"/>
+            style="@style/TexMediumBoldAppearance"/>
 
 
         <TextView
@@ -191,7 +191,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
-            style="@style/TextBoldSmallHeaderAppearance"/>
+            style="@style/TextSmallBoldAppearance"/>
 
         <View
             android:id="@+id/nav_divider_line_3"
@@ -201,7 +201,7 @@
             app:layout_constraintTop_toBottomOf="@id/nav_content_header_settings"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="8dp"
-            style="@style/TextBoldMediumHeaderAppearance"/>
+            style="@style/TexMediumBoldAppearance"/>
 
         <TextView
             android:id="@+id/nav_content_item_settings"
@@ -213,7 +213,7 @@
             android:text="Settings"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_3"
-            style="@style/TextBoldMediumHeaderAppearance" />
+            style="@style/TexMediumBoldAppearance" />
 
 
 

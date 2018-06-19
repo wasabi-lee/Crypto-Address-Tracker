@@ -43,7 +43,7 @@
 
             <TextView
                 android:id="@+id/address_list_item_address_name"
-                style="@style/TextLargeHeaderAppearance"
+                style="@style/TextLargeSemiBoldAppearance"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:text="My Main Wallet" />
@@ -79,7 +79,7 @@
 
         <TextView
             android:id="@+id/address_list_item_transactions"
-            style="@style/TextMediumLargeHeaderAppearance"
+            style="@style/TextMediumLargeSemiBoldAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="232"
@@ -101,7 +101,7 @@
 
         <TextView
             android:id="@+id/address_list_item_balance"
-            style="@style/TextMediumLargeHeaderAppearance"
+            style="@style/TextMediumLargeSemiBoldAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
