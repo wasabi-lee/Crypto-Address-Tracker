@@ -1,8 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme_light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -11,10 +9,12 @@
         <item name="android:textColor">@color/text_color_light</item>
         <item name="android:windowBackground">@color/window_background_light</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
+
+
+
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -23,16 +23,57 @@
         <item name="android:textColor">@color/text_color_dark</item>
         <item name="android:windowBackground">@color/window_background_dark</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
+
+
     </style>
-    
-    <style name="TextAppearance.AppCompat.TextHeaderAppearance">
+
+
+    <!-- ****************** Text appearance ******************* -->
+
+    <style name="TextLargeHeaderAppearance">
         <item name="android:textSize">24sp</item>
     </style>
 
-    <style name="TextAppearance.AppCompat.TextSecondaryAppearance">
+    <style name="TextBoldLargeHeaderAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="TextMediumLargeHeaderAppearance">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextBoldMediumLargeLargeHeaderAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="TextMediumHeaderAppearance">
+        <item name="android:textSize">14sp</item>
+   </style>
+
+    <style name="TextBoldMediumHeaderAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="TextSmallHeaderAppearance">
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextBoldSmallHeaderAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+
+    <style name="TextSecondaryAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/text_color_secondary_gray</item>
     </style>
+
+
 
 
 

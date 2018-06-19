@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Crypto Address Tracker</string>
     <string name="add_a_new_address">Add a new address</string>
+    <string name="version_info">Beta 0.0.1</string>
+    <string name="last_update_date">(July 12, 2018)</string>
+
+    <string name="lorem">
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vestibulum dictum ex eu rutrum. Suspendisse facilisis, felis feugiat vehicula aliquet, velit quam finibus orci, a semper arcu leo quis ligula. Vestibulum ultrices molestie sem eu efficitur. Maecenas tempus lectus non augue dictum finibus nec at arcu. Cras sapien risus, scelerisque ut suscipit in, lobortis id enim. Vivamus accumsan ipsum vel sollicitudin cursus. Aliquam at lectus in velit aliquam fermentum pretium sed enim. Aenean ultricies odio metus, vitae lobortis felis interdum sed. Sed nec purus felis. Mauris tincidunt hendrerit elit, vel consequat justo blandit ac. Nunc dui nisl, bibendum vitae magna eu, gravida tristique velit. Suspendisse convallis elementum nunc nec hendrerit. Vestibulum eu tincidunt arcu. Fusce risus sapien, viverra eget blandit vitae, dictum fringilla purus. Nunc ac neque ligula. Sed ut aliquam lacus, quis porta diam.
+
+Donec in tortor quis enim efficitur rutrum sit amet eget ligula. Vestibulum quis ipsum massa. Nunc eu diam tortor. Vestibulum auctor blandit enim, nec rutrum neque. Integer sed odio sed magna venenatis ultricies quis sed ante. Proin eget dolor a enim malesuada vestibulum id vitae tellus. Ut vel augue non nibh sodales faucibus sed in arcu. Nunc maximus mi quis lobortis lacinia. Vivamus egestas nisl metus, in mollis eros facilisis vel. Curabitur consectetur ornare quam, in commodo ipsum feugiat sit amet. Aenean non mollis orci. Nullam porttitor a enim et auctor. Sed sem dolor, mollis vitae porta ut, ullamcorper sed metus. Aliquam malesuada sem at justo fringilla, sit amet maximus felis dictum. Maecenas eleifend vehicula lorem, quis feugiat eros dignissim non. Curabitur ut hendrerit elit, in pretium risus.
+
+Maecenas elementum iaculis ultrices. Vestibulum varius eu diam ac aliquet. Quisque in neque commodo, vehicula dolor ut, ultrices lectus. Nullam in sollicitudin urna, ut tincidunt lectus. Phasellus mauris lacus, interdum ac malesuada ac, sollicitudin ut sem. Nunc non leo eu turpis suscipit interdum. Vivamus porttitor turpis quis ornare egestas. In sodales lorem non dui pulvinar, id tincidunt felis lacinia. Praesent quam lectus, ornare luctus elit vel, placerat ullamcorper dolor. Nullam lobortis velit nec tristique scelerisque. Nullam et elementum libero. Cras faucibus eros non augue fermentum, sit amet blandit tortor congue. Donec tincidunt commodo tempus.
+
+Cras imperdiet pharetra pharetra. Phasellus feugiat arcu ac mollis semper. Quisque ac tortor velit. Proin augue nulla, tempus quis finibus sit amet, ultricies quis metus. Cras molestie lobortis pellentesque. Pellentesque eget hendrerit nisi. Maecenas in leo suscipit, varius ipsum sit amet, eleifend lectus. Etiam vitae finibus dui. Donec rhoncus vestibulum ante, ut pharetra felis pellentesque nec. Donec a odio suscipit, volutpat tortor ac, ornare lacus.
+
+Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus rhoncus est dui non risus. Maecenas lacus ligula, aliquam a dui eget, pharetra rutrum est. Maecenas efficitur ac elit at blandit. Vivamus ut tristique arcu. Phasellus fringilla elementum rutrum. Aliquam euismod elit ut varius vestibulum. Donec venenatis odio et fermentum vehicula. Donec vel tempus magna. Proin facilisis ante vitae odio pharetra commodo. Donec placerat neque ut viverra tempus. Sed fermentum sem ut magna pharetra, a porttitor felis semper. Pellentesque nec rutrum libero. Etiam vitae pretium lacus. Mauris quam nisi, hendrerit id augue sit amet, euismod porttitor massa. </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
