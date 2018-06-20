@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/token_frag_item_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_small"
+    android:layout_marginEnd="@dimen/spacing_small"
+    android:layout_marginStart="@dimen/spacing_small"
+    android:layout_marginTop="@dimen/spacing_normal"
+    app:cardCornerRadius="@dimen/card_small_radius"
+    app:cardElevation="@dimen/card_medium_elevation">
+
+    <!-- TODO Dot icon! -->
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/default_card_background">
+
+        <TextView
+            android:id="@+id/tx_list_item_timestamp"
+            style="@style/TextSecondaryAppearance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/spacing_normal"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginTop="@dimen/spacing_normal"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="GNT"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_normal"
+            android:layout_marginLeft="@dimen/spacing_normal"
+            android:layout_marginBottom="@dimen/spacing_normal"
+            android:layout_marginEnd="@dimen/spacing_xxxlarge"
+            android:layout_marginRight="@dimen/spacing_xxxlarge"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tx_list_item_timestamp">
+
+            <TextView
+                android:id="@+id/tx_list_item_txhash_dummy"
+                style="@style/TextMediumLargeSemiBoldAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Golem"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tx_list_item_timestamp" />
+
+            <TextView
+                android:id="@+id/tx_list_item_txhash"
+                style="@style/TextSmallSemiBoldAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="0x804110abd55971b122c0e4de7f8d430d9f4b69ee48540e46f956cb984d3a3fa5 "
+                android:textColor="@color/colorAccent"
+                app:layout_constraintEnd_toStartOf="@+id/tx_list_item_amount_value"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tx_list_item_txhash_dummy" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/bookmark_dot_size"
+                android:layout_height="@dimen/bookmark_dot_size"
+                android:src="@color/colorAccent" />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v7.widget.CardView>

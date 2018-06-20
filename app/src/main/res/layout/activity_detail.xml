@@ -22,7 +22,7 @@
             android:fitsSystemWindows="true"
             app:contentScrim="@android:color/transparent"
             app:expandedTitleTextAppearance="@style/TextLargeSemiBoldAppearance"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
 
                 <LinearLayout
