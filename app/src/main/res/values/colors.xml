@@ -17,4 +17,8 @@
 
     <color name="overview_card_background_light">#f4f4f4</color>
     <color name="overview_card_background_dark">#2d2d2d</color>
+
+    <color name="purple_gradient_start">#ac7be1</color>
+    <color name="purple_gradient_end">#5236c9</color>
+    <color name="semi_transparent_background_color_black">#85000000</color>
 </resources>

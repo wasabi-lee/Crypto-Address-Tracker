@@ -23,7 +23,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TokenAddressActivity"></activity>
+        <activity android:name=".TokenAddressActivity" />
+        <activity android:name=".TxDetailActivity"></activity>
     </application>
 
 </manifest>
