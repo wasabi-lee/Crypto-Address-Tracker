@@ -20,5 +20,12 @@
 
     <color name="purple_gradient_start">#ac7be1</color>
     <color name="purple_gradient_end">#5236c9</color>
-    <color name="semi_transparent_background_color_black">#85000000</color>
+    <color name="semi_transparent_background_color_black">#9a000000</color>
+
+    <color name="bottom_sheet_background_light">#f4f4f4</color>
+    <color name="bottom_sheet_background_dark">#2d2d2d</color>
+
+    <color name="state_success_color">#3cb271</color>
+    <color name="state_fail_color">#e64545</color>
+    <color name="state_pending_color">#131b30</color>
 </resources>

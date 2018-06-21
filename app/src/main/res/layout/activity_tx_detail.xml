@@ -19,15 +19,16 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:fitsSystemWindows="true"
-            app:contentScrim="@android:color/transparent"
+            app:contentScrim="@color/colorPrimary"
             app:expandedTitleTextAppearance="@style/TextLargeSemiBoldAppearance"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|enterAlwaysCollapsed"
             app:titleEnabled="false">
 
             <include layout="@layout/tx_detail_header" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_toolbar"
+                android:id="@+id/tx_detail_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"
@@ -39,8 +40,9 @@
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
-
     </android.support.design.widget.AppBarLayout>
+
+    <include layout="@layout/tx_detail_content" />
 
     <include layout="@layout/tx_detail_bottom_sheet_content" />
 

@@ -20,4 +20,8 @@ Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus r
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="tokens">Tokens</string>
     <string name="txhash">TxHash</string>
+    <string name="new_address">New Address</string>
+    <string name="asterisk_warning">* denotes required field</string>
+    <string name="scan_qr_code">Scan QR Code</string>
+    <string name="save">SAVE</string>
 </resources>
