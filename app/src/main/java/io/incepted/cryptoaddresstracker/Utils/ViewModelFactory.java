@@ -35,7 +35,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-        if (modelClass.isAssignableFrom(MainActivity.class)) {
+        if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
             return (T) new MainViewModel(mApplication);
         }

@@ -1,6 +1,5 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ButterKnife.bind(this);
 
         mViewModel = obtainViewModel(this);
         initToolbar();
@@ -54,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
