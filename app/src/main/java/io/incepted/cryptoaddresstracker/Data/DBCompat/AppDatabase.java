@@ -10,7 +10,7 @@ import android.content.Context;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 
 
-@Database(entities = {Address.class}, version = 1)
+@Database(entities = {Address.class}, version = 1, exportSchema = false)
 @TypeConverters({DateTypeConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 

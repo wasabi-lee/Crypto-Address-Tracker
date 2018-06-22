@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.Activities.MainActivity;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
@@ -13,19 +14,22 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private static volatile ViewModelFactory INSTANCE;
 
     private final Application mApplication;
+    private final AddressRepository mRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null)
-                    INSTANCE = new ViewModelFactory(application);
+                    INSTANCE = new ViewModelFactory(application,
+                            AddressRepository.getInstance(application.getApplicationContext()));
             }
         }
         return INSTANCE;
     }
 
-    private ViewModelFactory(Application application) {
+    private ViewModelFactory(Application application, AddressRepository repository) {
         mApplication = application;
+        mRepository = repository;
     }
 
     public static void destroyInstance() {
@@ -37,7 +41,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
-            return (T) new MainViewModel(mApplication);
+            return (T) new MainViewModel(mApplication, mRepository);
         }
         return super.create(modelClass);
     }

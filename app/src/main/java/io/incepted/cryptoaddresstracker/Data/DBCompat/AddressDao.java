@@ -17,7 +17,7 @@ public interface AddressDao {
     List<Address> getAllAddresses();
 
     @Query("SELECT * FROM addresses WHERE _id = (:addressId)")
-    Address getAddressById(String addressId);
+    Address getAddressById(Integer addressId);
 
     @Query("SELECT count(*) FROM addresses")
     Integer getAddressCount();
@@ -29,6 +29,6 @@ public interface AddressDao {
     void update(Address address);
 
     @Query("DELETE FROM addresses WHERE _id = (:addressId)")
-    void delete(String addressId);
+    void delete(Integer addressId);
 
 }

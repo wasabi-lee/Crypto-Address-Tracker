@@ -1,71 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.MainActivity">
+<layout>
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/main_appbar_layout"
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewmodel"
+            type="io.incepted.cryptoaddresstracker.ViewModels.MainViewModel" />
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".Activities.MainActivity">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/main_toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/main_appbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="Addresses" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/main_appbar_layout">
-
-        <ImageView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/no_content_cat"/>
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            style="@style/TextMediumLargeBoldAppearance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Address Added!"
-            android:layout_marginTop="@dimen/spacing_normal"/>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/main_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="Addresses" />
 
-        <TextView
-            style="@style/TextMediumRegularAppearance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_xlarge"
-            android:layout_marginStart="@dimen/spacing_xlarge"
-            android:layout_marginRight="@dimen/spacing_xlarge"
-            android:layout_marginEnd="@dimen/spacing_xlarge"
-            android:text="Click the + button above and start tracking addresses!"
-            android:gravity="center"/>
-    </LinearLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/main_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_appbar_layout" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_appbar_layout"
+            android:visibility="@{viewmodel.addressesExist ? View.GONE : View.VISIBLE}">
 
-</android.support.constraint.ConstraintLayout>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_content_cat" />
+
+            <TextView
+                style="@style/TextMediumLargeBoldAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_normal"
+                android:text="No Address Added!" />
+
+            <TextView
+                style="@style/TextMediumRegularAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_xlarge"
+                android:layout_marginLeft="@dimen/spacing_xlarge"
+                android:layout_marginRight="@dimen/spacing_xlarge"
+                android:layout_marginStart="@dimen/spacing_xlarge"
+                android:gravity="center"
+                android:text="Click the + button above and start tracking addresses!" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_appbar_layout" />
+
+    </android.support.constraint.ConstraintLayout>
+</layout>
