@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.Activities;
 
 import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +10,11 @@ import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class TokenAddressActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+import io.incepted.cryptoaddresstracker.R;
 
+public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
-    private static final String TAG = TokenAddressActivity.class.getSimpleName();
+    private static final String TAG = TxActivity.class.getSimpleName();
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -27,17 +28,16 @@ public class TokenAddressActivity extends AppCompatActivity implements AppBarLay
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_token_address);
+        setContentView(R.layout.activity_tx);
 
 
-        mToolbar = findViewById(R.id.erc_toolbar);
-        mTitle = findViewById(R.id.erc_textview_title);
-        mTitleContainer = findViewById(R.id.erc_title_container);
-        mAppBarLayout = findViewById(R.id.erc_appbar);
+        mToolbar = findViewById(R.id.tx_toolbar);
+        mTitle = findViewById(R.id.tx_textview_title);
+        mTitleContainer = findViewById(R.id.tx_title_container);
+        mAppBarLayout = findViewById(R.id.tx_appbar);
 
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
@@ -50,7 +50,6 @@ public class TokenAddressActivity extends AppCompatActivity implements AppBarLay
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
 
     }
-
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -106,4 +105,5 @@ public class TokenAddressActivity extends AppCompatActivity implements AppBarLay
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
     }
+
 }

@@ -1,9 +1,11 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+
+import io.incepted.cryptoaddresstracker.R;
 
 public class NewAddressActivity extends AppCompatActivity {
 
