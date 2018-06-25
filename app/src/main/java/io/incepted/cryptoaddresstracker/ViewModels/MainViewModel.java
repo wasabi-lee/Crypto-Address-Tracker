@@ -3,9 +3,10 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -21,6 +22,8 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
     private AddressRepository mAddressRepository;
 
     private ObservableField<Boolean> addressesExist = new ObservableField<>();
+    public ObservableList<Address> mAddressList = new ObservableArrayList<>();
+
     private MutableLiveData<ActivityNavigator> mActivityNavigator = new MutableLiveData<>();
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
@@ -84,7 +87,8 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
     @Override
     public void onAddressesLoaded(List<Address> addresses) {
         addressesExist.set(addresses.size() != 0);
-        Log.d(TAG, "onAddressesLoaded: Addresses.size(): " + addresses.size());
+        mAddressList.clear();
+        mAddressList.addAll(addresses);
     }
 
     @Override

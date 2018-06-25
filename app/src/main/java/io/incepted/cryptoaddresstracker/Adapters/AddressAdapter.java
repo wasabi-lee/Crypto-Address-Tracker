@@ -4,6 +4,7 @@ import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -54,6 +55,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         AddressListItemBinding itemBinding = holder.getItemBinding();
         itemBinding.setAddress(currentItem);
         itemBinding.executePendingBindings();
+        Log.d(TAG, "onBindViewHolder: " + mAddresses.get(position).getName());
     }
 
     @Override

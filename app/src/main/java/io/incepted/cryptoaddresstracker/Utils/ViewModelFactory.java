@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.Activities.MainActivity;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
+import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
 
@@ -42,6 +43,9 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
             return (T) new MainViewModel(mApplication, mRepository);
+        } else if (modelClass.isAssignableFrom(NewAddressViewModel.class)) {
+            //noinspection unchecked
+            return (T) new NewAddressViewModel(mApplication, mRepository);
         }
         return super.create(modelClass);
     }

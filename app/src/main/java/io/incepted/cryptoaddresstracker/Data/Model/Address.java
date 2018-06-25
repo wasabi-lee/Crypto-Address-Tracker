@@ -29,6 +29,15 @@ public class Address {
     private Date timestamp;
 
 
+    // ---------------------- Constructor --------------------------
+
+    public Address(String name, String addrValue, Date timestamp) {
+        this.name = name;
+        this.addrValue = addrValue;
+        this.timestamp = timestamp;
+    }
+
+
     // ---------------------- Getter and setters -------------------
 
     public int get_id() {

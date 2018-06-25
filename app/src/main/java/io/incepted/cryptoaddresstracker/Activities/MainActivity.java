@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewModel = obtainViewModel(this);
-        mBinding.setViewmodel(mViewModel);
+        binding.setViewmodel(mViewModel);
 
         ButterKnife.bind(this);
 
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.main_add_new_address:
-                //TODO Add a new address
+                mViewModel.addNewAddress();
                 return true;
         }
 

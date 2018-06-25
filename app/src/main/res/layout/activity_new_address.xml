@@ -1,148 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activities.NewAddressActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/new_addr_appbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/new_addr_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-            app:title="@string/new_address" />
+        <variable
+            name="viewmodel"
+            type="io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel" />
+    </data>
 
-    </android.support.design.widget.AppBarLayout>
-
-    <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/spacing_normal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        tools:context=".Activities.NewAddressActivity">
 
-        <TextView
-            android:id="@+id/textView2"
-            style="@style/TextSmallRegularAppearance"
-            android:layout_width="wrap_content"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/new_addr_appbar_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Address Name (Optional)"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/new_addr_name_edit_text"
-            style="@style/TextMediumRegularAppearance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:hint="i.e.) My Main Address"
-            android:inputType="textPersonName"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView3"
-            style="@style/TextSmallRegularAppearance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/spacing_normal"
-            android:text="Your Address"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/new_addr_name_edit_text" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/new_addr_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:title="@string/new_address" />
 
-        <TextView
-            android:id="@+id/textView4"
-            style="@style/TextSmallRegularAppearance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/spacing_xxsmall"
-            android:layout_marginStart="@dimen/spacing_xxsmall"
-            android:text="*"
-            android:textColor="@color/state_fail_color"
-            app:layout_constraintStart_toEndOf="@id/textView3"
-            app:layout_constraintTop_toTopOf="@+id/textView3" />
+        </android.support.design.widget.AppBarLayout>
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <EditText
-            android:id="@+id/new_addr_addr_edit_text"
-            style="@style/TextMediumRegularAppearance"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
-            android:hint="i.e.) 0x123456789..."
-            android:ellipsize="end"
-            android:inputType="textMultiLine"
-            android:maxLines="5"
-            app:layout_constraintEnd_toStartOf="@+id/new_addr_qr_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/spacing_normal">
 
-        <ImageView
-            android:id="@+id/new_addr_qr_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:src="@drawable/ic_camera_alt_black"
-            app:layout_constraintBottom_toBottomOf="@+id/new_addr_addr_edit_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/new_addr_addr_edit_text"
-            android:contentDescription="@string/scan_qr_code"/>
+                <TextView
+                    android:id="@+id/new_addr_addr_name_dummy"
+                    style="@style/TextSmallRegularAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Address Name (Optional)"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <EditText
+                    android:id="@+id/new_addr_name_edit_text"
+                    style="@style/TextMediumRegularAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:hint="i.e.) My Main Address"
+                    android:inputType="textPersonName"
+                    android:text="@={viewmodel.name}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/new_addr_addr_name_dummy" />
 
-        <TextView
-            android:id="@+id/textView5"
-            style="@style/TextXSmallRegularAppearance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="@dimen/spacing_xsmall"
-            android:text="@string/asterisk_warning"
-            android:textColor="@color/state_fail_color"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/new_addr_addr_edit_text" />
+                <TextView
+                    android:id="@+id/new_addr_addr_field_dummy"
+                    style="@style/TextSmallRegularAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="Your Address"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/new_addr_name_edit_text" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="@dimen/spacing_normal"
-            android:background="@color/colorPrimary"
-            android:gravity="center"
-            android:paddingBottom="@dimen/spacing_small"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:paddingTop="@dimen/spacing_small"
-            android:text="SAVE"
-            android:textColor="@android:color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+                <TextView
+                    android:id="@+id/new_addr_addr_required"
+                    style="@style/TextSmallRegularAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_xxsmall"
+                    android:layout_marginStart="@dimen/spacing_xxsmall"
+                    android:text="*"
+                    android:textColor="@color/state_fail_color"
+                    app:layout_constraintStart_toEndOf="@id/new_addr_addr_field_dummy"
+                    app:layout_constraintTop_toTopOf="@+id/new_addr_addr_field_dummy" />
 
 
-    </android.support.constraint.ConstraintLayout>
+                <EditText
+                    android:id="@+id/new_addr_addr_edit_text"
+                    style="@style/TextMediumRegularAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:ellipsize="end"
+                    android:hint="i.e.) 0x123456789..."
+                    android:inputType="textMultiLine"
+                    android:maxLines="5"
+                    android:text="@={viewmodel.address}"
+                    app:layout_constraintEnd_toStartOf="@+id/new_addr_qr_icon"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/new_addr_addr_field_dummy" />
 
-</android.support.design.widget.CoordinatorLayout>
+                <ImageView
+                    android:id="@+id/new_addr_qr_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:contentDescription="@string/scan_qr_code"
+                    android:src="@drawable/ic_camera_alt_black"
+                    app:layout_constraintBottom_toBottomOf="@+id/new_addr_addr_edit_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/new_addr_addr_edit_text" />
+
+
+                <TextView
+                    android:id="@+id/new_addr_required_field_dummy"
+                    style="@style/TextXSmallRegularAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
+                    android:text="@string/asterisk_warning"
+                    android:textColor="@color/state_fail_color"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/new_addr_addr_edit_text" />
+
+                <TextView
+                    android:id="@+id/new_addr_save_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:paddingBottom="@dimen/spacing_small"
+                    android:paddingLeft="60dp"
+                    android:paddingRight="60dp"
+                    android:paddingTop="@dimen/spacing_small"
+                    android:text="SAVE"
+                    android:onClick="@{() -> viewmodel.saveAddress()}"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/new_addr_required_field_dummy" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/new_addr_progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:indeterminate="true"/>
+
+        </FrameLayout>
+    </android.support.design.widget.CoordinatorLayout>
+</layout>
