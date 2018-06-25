@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
+import io.incepted.cryptoaddresstracker.Listeners.AddressItemActionListener;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.databinding.AddressListItemBinding;
@@ -21,9 +22,11 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     private MainViewModel mViewModel;
     private List<Address> mAddresses;
+    private AddressItemActionListener mListener;
 
     public AddressAdapter(List<Address> addresses, MainViewModel viewModel) {
         this.mViewModel = viewModel;
+        this.mListener = addressId -> mViewModel.openAddressDetail(addressId);
         setList(addresses);
     }
 
@@ -54,6 +57,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         Address currentItem = mAddresses.get(position);
         AddressListItemBinding itemBinding = holder.getItemBinding();
         itemBinding.setAddress(currentItem);
+        itemBinding.setListener(mListener);
         itemBinding.executePendingBindings();
         Log.d(TAG, "onBindViewHolder: " + mAddresses.get(position).getName());
     }

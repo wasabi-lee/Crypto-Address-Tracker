@@ -66,7 +66,7 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
     }
 
     @Override
-    public void onDataNotAvailable() {
+    public void onSaveNotAvailable() {
         mAddressState.setValue(AddressStateNavigator.SAVE_ERROR);
         mSnackbarTextResource.setValue(R.string.unexpected_error);
     }

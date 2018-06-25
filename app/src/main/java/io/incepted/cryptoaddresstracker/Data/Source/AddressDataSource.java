@@ -11,37 +11,37 @@ public interface AddressDataSource {
     interface OnAddressesLoadedListener {
         void onAddressesLoaded(List<Address> addresses);
 
-        void onDataNotAvailable();
+        void onAddressesNotAvailable();
     }
 
     interface OnAddressLoadedListener {
-        void onAddressLoaded(Address addresses);
+        void onAddressLoaded(Address address);
 
-        void onDataNotAvailable();
+        void onAddressNotAvailable();
     }
 
     interface OnAddressSavedListener {
         void onAddressSaved();
 
-        void onDataNotAvailable();
+        void onSaveNotAvailable();
     }
 
     interface OnAddressDeletedListener {
         void onAddressDeleted();
 
-        void onDataNotAvailable();
+        void onDeletionNotAvailable();
     }
 
     interface OnAddressCountListener {
         void onAddressCount(Integer addressCount);
 
-        void onDataNotAvailable();
+        void onAddressCountNotAvailable();
     }
 
     interface OnAddressUpdatedListener {
         void onAddressUpdated();
 
-        void onDataNotAvailable();
+        void onUpdateNotAvailable();
     }
 
 

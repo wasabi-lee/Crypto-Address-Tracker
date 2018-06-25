@@ -76,23 +76,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupSnackbar() {
-        mViewModel.getmSnackbarText().observe(this, this::showSnackbar);
+        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
-        mViewModel.getmSnackbarTextResource().observe(this, stringResource -> {
+        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
             if (stringResource != null)
                 showSnackbar(getString(stringResource));
         });
     }
 
     private void setupTransitionObservers() {
-        mViewModel.getmActivityNavigator().observe(this, activityNavigator -> {
+        mViewModel.getActivityNavigator().observe(this, activityNavigator -> {
             if (activityNavigator != null)
                 switch (activityNavigator) {
                     case NEW_ADDRESS:
                         toNewAddressActivity();
-                        break;
-                    case ADDRESS_DETAIL:
-                        toDetailActivity();
                         break;
                     case TOKEN_ADDRESS:
                         toTokenAddressActivity();
@@ -101,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
                         toSettingsActivity();
                         break;
                 }
+        });
+
+        mViewModel.getOpenAddressDetail().observe(this, addressId -> {
+            if (addressId != null)
+                toDetailActivity(addressId);
         });
     }
 
@@ -112,8 +114,9 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void toDetailActivity() {
+    private void toDetailActivity(int addressId) {
         Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra(DetailActivity.ADDRESS_ID_EXTRA_KEY, addressId);
         startActivity(intent);
     }
 

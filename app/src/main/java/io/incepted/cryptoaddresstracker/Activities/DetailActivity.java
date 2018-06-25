@@ -1,76 +1,121 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.AlertDialog;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
+import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.Fragments.OverviewFragment;
+import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Fragments.TokenFragment;
 import io.incepted.cryptoaddresstracker.Adapters.ViewPagerAdapter;
+import io.incepted.cryptoaddresstracker.Utils.SnackbarUtils;
+import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
+import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
+import io.incepted.cryptoaddresstracker.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
 
+    public static final String ADDRESS_ID_EXTRA_KEY = "address_id_extra_key";
+
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
-    private LinearLayout mTitleContainer;
-    private TextView mTitle;
-    private AppBarLayout mAppBarLayout;
-    private Toolbar mToolbar;
-    private TabLayout mTabLayout;
+    @BindView(R.id.detail_appbar_content_inner_container)
+    LinearLayout mTitleContainer;
+    @BindView(R.id.detail_textview_title)
+    TextView mTitle;
+    @BindView(R.id.detail_app_bar)
+    AppBarLayout mAppBarLayout;
+    @BindView(R.id.detail_toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.detail_tab_layout)
+    TabLayout mTabLayout;
+    @BindView(R.id.detail_view_pager)
+    ViewPager mViewPager;
+    @BindView(R.id.detail_progress_bar)
+    ProgressBar mProgressBar;
 
-    private ViewPagerAdapter mAdapter;
-    private ViewPager mViewPager;
+    private DetailViewModel mViewModel;
+
+    private int mAddressId;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
+        mViewModel = obtainViewModel(this);
+        binding.setViewmodel(mViewModel);
 
-        SharedPreferences sharedPref = getSharedPreferences("pref_key", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putBoolean("dark_mode", false);
-        editor.commit();
-
-        boolean isDarkMode = sharedPref.getBoolean("dark_mode", false);
+        ButterKnife.bind(this);
 
 
-        mToolbar = findViewById(R.id.detail_toolbar);
-        mTitle = findViewById(R.id.detail_textview_title);
-        mTitleContainer = findViewById(R.id.detail_appbar_content_inner_container);
-        mAppBarLayout = findViewById(R.id.detail_app_bar);
-        mTabLayout = findViewById(R.id.detail_tab_layout);
-        mViewPager = findViewById(R.id.detail_view_pager);
+        mAddressId = unpackExtra();
+        Log.d(TAG, "onCreate: Address id: " + mAddressId);
 
+        initToolbar();
+        initAppbar();
+        initFragments();
+        setupObservers();
+        setupSnackbar();
+
+
+    }
+
+    private DetailViewModel obtainViewModel(FragmentActivity activity) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
+        return ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
+    }
+
+    private int unpackExtra() {
+        return getIntent().getIntExtra(ADDRESS_ID_EXTRA_KEY, 0);
+    }
+
+    private void initToolbar() {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(isDarkMode ? R.drawable.ic_arrow_back_white : R.drawable.ic_arrow_back_black);
-        //TODO Change back button icon based on the theme
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black);
+            //TODO Change back button icon based on the theme
+        }
+    }
 
+    private void initAppbar() {
         mAppBarLayout.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+    }
 
-        mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+    private void initFragments() {
+        ViewPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mAdapter.addFragment(ViewPagerAdapter.FARG_POSITION_OVERVIEW, new OverviewFragment(), "Overview");
         mAdapter.addFragment(ViewPagerAdapter.FARG_POSITION_TOKEN, new TokenFragment(), "Token");
         mViewPager.setAdapter(mAdapter);
@@ -92,6 +137,37 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
         });
         mTabLayout.setupWithViewPager(mViewPager);
     }
+
+    private void setupObservers() {
+        mViewModel.getDeletionState().observe(this, deletionStateNavigator -> {
+            if (deletionStateNavigator != null)
+                switch (deletionStateNavigator) {
+                    case DELETION_IN_PROGRESS:
+                        mProgressBar.setVisibility(View.VISIBLE);
+                        break;
+                    case DELETION_SUCCESSFUL:
+                        mProgressBar.setVisibility(View.GONE);
+                        finish();
+                        break;
+                    case DELETION_FAILED:
+                        mProgressBar.setVisibility(View.GONE);
+                        break;
+                }
+        });
+    }
+
+
+    private void setupSnackbar() {
+        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
+
+        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
+            if (stringResource != null)
+                showSnackbar(getString(stringResource));
+        });
+    }
+
+
+    // ------------------------------- UI animation stuff -----------------------------------
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -148,4 +224,53 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
         v.startAnimation(alphaAnimation);
     }
 
+
+
+    // ------------------------------- Activity override method -----------------------------------
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewModel.start(mAddressId);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.menu_detail_delete:
+                launchDeletionDialog();
+                break;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void launchDeletionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Are you sure?");
+        builder.setMessage("This address will be deleted from your watchlist and cannot be revoked");
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            dialog.dismiss();
+            mViewModel.deleteAddress();
+        });
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+        builder.create().show();
+    }
+
+
+    private void showSnackbar(String s) {
+        SnackbarUtils.showSnackbar(findViewById(android.R.id.content), s);
+    }
 }

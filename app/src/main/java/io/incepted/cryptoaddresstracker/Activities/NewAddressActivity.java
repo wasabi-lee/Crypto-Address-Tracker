@@ -1,9 +1,7 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -106,6 +104,8 @@ public class NewAddressActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
             case R.id.new_addr_menu_save:
                 // Save address
                 mViewModel.saveAddress();

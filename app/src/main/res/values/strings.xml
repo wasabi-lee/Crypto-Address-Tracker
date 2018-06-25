@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Crypto Address Tracker</string>
+
+    <string name="base_url">http://api.ethplorer.io/</string>
+    <string name="api_key">freekey</string>
+
     <string name="add_a_new_address">Add a new address</string>
     <string name="version_info">Beta 0.0.1</string>
     <string name="last_update_date">(July 12, 2018)</string>
@@ -28,4 +32,5 @@ Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus r
     <string name="balance_eth">Balance (ETH)</string>
 
     <string name="unexpected_error">Unexpected error occurred. Please try again later!</string>
+    <string name="delete">Delete</string>
 </resources>

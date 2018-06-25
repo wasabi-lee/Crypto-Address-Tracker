@@ -7,8 +7,11 @@ import android.arch.persistence.room.PrimaryKey;
 
 import java.util.Date;
 
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.SimpleAddressInfo;
+
 @Entity(tableName = "addresses")
 public class Address {
+
 
     @Ignore
     private static final String TAG = Address.class.getSimpleName();
@@ -27,6 +30,15 @@ public class Address {
 
     @ColumnInfo(name = "timestamp")
     private Date timestamp;
+
+    @Ignore
+    private SimpleAddressInfo simpleAddressInfo;
+
+    /**
+     * Temporary list position value. Used this to preserve the order from RxJava's flatMap() method.
+     */
+    @Ignore
+    private int listPosition;
 
 
     // ---------------------- Constructor --------------------------
@@ -78,5 +90,25 @@ public class Address {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public SimpleAddressInfo getSimpleAddressInfo() {
+        return simpleAddressInfo;
+    }
+
+    public void setSimpleAddressInfo(SimpleAddressInfo simpleAddressInfo) {
+        this.simpleAddressInfo = simpleAddressInfo;
+    }
+
+    public static String getTAG() {
+        return TAG;
+    }
+
+    public int getListPosition() {
+        return listPosition;
+    }
+
+    public void setListPosition(int listPosition) {
+        this.listPosition = listPosition;
     }
 }

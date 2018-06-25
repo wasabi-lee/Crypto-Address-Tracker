@@ -41,7 +41,7 @@ public class AddressRepository implements AddressDataSource {
         try {
             callback.onAddressCount(mAddressDao.getAddressCount());
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onAddressCountNotAvailable();
         }
     }
 
@@ -50,7 +50,7 @@ public class AddressRepository implements AddressDataSource {
         try {
             callback.onAddressesLoaded(mAddressDao.getAllAddresses());
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onAddressesNotAvailable();
         }
     }
 
@@ -59,7 +59,7 @@ public class AddressRepository implements AddressDataSource {
         try {
             callback.onAddressLoaded(mAddressDao.getAddressById(addressId));
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onAddressNotAvailable();
         }
     }
 
@@ -69,7 +69,7 @@ public class AddressRepository implements AddressDataSource {
             mAddressDao.insert(address);
             callback.onAddressSaved();
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onSaveNotAvailable();
         }
     }
 
@@ -79,7 +79,7 @@ public class AddressRepository implements AddressDataSource {
             mAddressDao.update(address);
             callback.onAddressUpdated();
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onUpdateNotAvailable();
         }
     }
 
@@ -89,7 +89,7 @@ public class AddressRepository implements AddressDataSource {
         try {
             callback.onAddressDeleted();
         } catch (Exception e) {
-            callback.onDataNotAvailable();
+            callback.onDeletionNotAvailable();
         }
     }
 

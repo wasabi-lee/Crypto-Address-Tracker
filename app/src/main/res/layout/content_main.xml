@@ -37,6 +37,16 @@
 
         </android.support.design.widget.AppBarLayout>
 
+        <ProgressBar
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            style="?android:attr/progressBarStyleHorizontal"
+            app:layout_constraintTop_toBottomOf="@id/main_appbar_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="@{viewmodel.isDataLoading ? View.VISIBLE : View.GONE}"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
