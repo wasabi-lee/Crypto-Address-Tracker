@@ -37,4 +37,6 @@ Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus r
     <string name="total_sent">Total Sent</string>
     <string name="of_transactions"># of Transactions</string>
     <string name="eth">ETH</string>
+    <string name="click_the_button_above_and_start_tracking_addresses">Click the + button above and start tracking addresses!</string>
+    <string name="no_address_added">No Address Added!</string>
 </resources>

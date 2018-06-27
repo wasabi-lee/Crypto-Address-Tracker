@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -17,6 +18,7 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -31,9 +33,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     private int mAddressId;
 
     public ObservableField<Address> mAddress = new ObservableField<>();
+    public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private MutableLiveData<String> mOpenTokenTransactions = new MutableLiveData<>();
 
     private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
@@ -72,6 +76,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         return mDeletionState;
     }
 
+    public MutableLiveData<String> getOpenTokenTransactions() {
+        return mOpenTokenTransactions;
+    }
+
     // ----------------------------- Callbacks -------------------------
 
     @SuppressLint("CheckResult")
@@ -86,10 +94,20 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(remoteAddressInfo -> {
+                            // Change address info
                             Address updatedAddress = mAddress.get();
                             updatedAddress.setRemoteAddressInfo(remoteAddressInfo);
                             mAddress.set(updatedAddress);
                             mAddress.notifyChange();
+
+                            // Update token list
+                            if (remoteAddressInfo.getContractInfo() != null) {
+                                // Contract address!
+                                // Show placeholder screen
+                            } else {
+                                mTokens.clear();
+                                mTokens.addAll(remoteAddressInfo.getTokens());
+                            }
                         },
                         throwable -> {
                             throwable.printStackTrace();

@@ -12,6 +12,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,8 +24,11 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.Adapters.TokenAdapter;
 import io.incepted.cryptoaddresstracker.Fragments.OverviewFragment;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.R;
@@ -165,6 +170,7 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
                 showSnackbar(getString(stringResource));
         });
     }
+
 
 
     // ------------------------------- UI animation stuff -----------------------------------

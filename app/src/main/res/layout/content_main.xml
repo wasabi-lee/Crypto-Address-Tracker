@@ -68,7 +68,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_normal"
-                android:text="No Address Added!" />
+                android:text="@string/no_address_added" />
 
             <TextView
                 style="@style/TextMediumRegularAppearance"
@@ -79,14 +79,14 @@
                 android:layout_marginRight="@dimen/spacing_xlarge"
                 android:layout_marginStart="@dimen/spacing_xlarge"
                 android:gravity="center"
-                android:text="Click the + button above and start tracking addresses!" />
+                android:text="@string/click_the_button_above_and_start_tracking_addresses" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/main_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:items="@{viewmodel.mAddressList}"
+            app:address_items="@{viewmodel.mAddressList}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
