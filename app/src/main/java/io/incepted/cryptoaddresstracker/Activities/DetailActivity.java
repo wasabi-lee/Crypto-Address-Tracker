@@ -90,7 +90,7 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
 
     }
 
-    private DetailViewModel obtainViewModel(FragmentActivity activity) {
+    public static DetailViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
         return ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
     }

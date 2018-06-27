@@ -106,8 +106,8 @@ public class NewAddressActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 onBackPressed();
+                return true;
             case R.id.new_addr_menu_save:
-                // Save address
                 mViewModel.saveAddress();
                 return true;
         }

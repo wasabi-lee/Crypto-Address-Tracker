@@ -7,7 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import io.incepted.cryptoaddresstracker.Activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
+import io.incepted.cryptoaddresstracker.databinding.FragmentOverviewBinding;
 
 
 /**
@@ -15,7 +18,10 @@ import io.incepted.cryptoaddresstracker.R;
  */
 public class OverviewFragment extends Fragment {
 
-    private Fragment
+    private static final String TAG = OverviewFragment.class.getSimpleName();
+
+    private DetailViewModel mViewModel;
+    private FragmentOverviewBinding mBinding;
 
     public OverviewFragment() {
         // Required empty public constructor
@@ -28,9 +34,18 @@ public class OverviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_overview, container, false);
 
-        //TODO Connect binding
+        if (mBinding == null) {
+            mBinding = FragmentOverviewBinding.bind(view);
+        }
 
-        return inflater.inflate(R.layout.fragment_overview, container, false);
+        mViewModel = DetailActivity.obtainViewModel(getActivity());
+        mBinding.setViewmodel(mViewModel);
+
+        setRetainInstance(false);
+
+        return mBinding.getRoot();
     }
+
+
 
 }

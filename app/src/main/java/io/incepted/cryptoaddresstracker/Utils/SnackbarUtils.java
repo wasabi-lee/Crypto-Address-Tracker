@@ -21,7 +21,4 @@ public class SnackbarUtils {
         snackbar.show();
     }
 
-    public static void showSnackbar(String s) {
-        Log.d(TAG, "showSnackbar: " + s);
-    }
 }

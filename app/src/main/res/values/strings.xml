@@ -33,4 +33,8 @@ Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus r
 
     <string name="unexpected_error">Unexpected error occurred. Please try again later!</string>
     <string name="delete">Delete</string>
+    <string name="total_received">Total Received</string>
+    <string name="total_sent">Total Sent</string>
+    <string name="of_transactions"># of Transactions</string>
+    <string name="eth">ETH</string>
 </resources>

@@ -41,7 +41,7 @@ public class Address {
      * An object that contains the server response data about this address.
      */
     @Ignore
-    RemoteAddressInfo remoteAddressInfo;
+    private RemoteAddressInfo remoteAddressInfo;
 
 
     /**

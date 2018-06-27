@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout>
+
     <data>
+
         <variable
-            name="address"
-            type="io.incepted.cryptoaddresstracker.Data.Model.Address" />
+            name="viewmodel"
+            type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel"/>
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -56,8 +58,8 @@
                             style="@style/TextMediumLargeBoldAppearance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:double_text="@{address.remoteAddressInfo.ethBalanceInfo.balance}"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorAccent"
+                            app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.balance}" />
 
                         <TextView
                             android:id="@+id/overview_frag_balance_unit"
@@ -66,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/spacing_xxsmall"
                             android:layout_marginStart="@dimen/spacing_xxsmall"
-                            android:text="ETH" />
+                            android:text="@string/eth" />
                     </LinearLayout>
 
                     <TextView
@@ -103,7 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_normal"
-                        android:text="Total Received"
+                        android:text="@string/total_received"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/view" />
 
@@ -113,7 +115,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xsmall"
-                        android:text="Total Sent"
+                        android:text="@string/total_sent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/overview_frag_total_received_dummy" />
 
@@ -123,7 +125,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xsmall"
-                        android:text="# of Transactions"
+                        android:text="@string/of_transactions"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/overview_frag_total_sent_dummy" />
@@ -133,7 +135,7 @@
                         style="@style/TextSmallSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="30,345.29"
+                        app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalIn}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/overview_frag_total_received_dummy" />
 
@@ -142,7 +144,7 @@
                         style="@style/TextSmallSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="2,544.23"
+                        app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalOut}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/overview_frag_total_sent_dummy" />
 
@@ -151,7 +153,7 @@
                         style="@style/TextSmallSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="434,543"
+                        app:double_text="@{viewmodel.mAddress.remoteAddressInfo.countTxs}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="@+id/overview_frag_total_txs" />
 

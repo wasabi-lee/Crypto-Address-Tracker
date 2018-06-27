@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -17,6 +18,7 @@ import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -28,17 +30,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     private int mAddressId;
 
-    public Address mAddress;
+    public ObservableField<Address> mAddress = new ObservableField<>();
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
     private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
-    public CopyListener copyListener = value -> {
-        ClipboardManager clipboard = (ClipboardManager) getApplication().getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText(null, value);
-        clipboard.setPrimaryClip(clip);
-    };
+    public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
     public DetailViewModel(@NonNull Application application, @NonNull AddressRepository repository) {
         super(application);
@@ -80,14 +78,19 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     @Override
     public void onAddressLoaded(Address address) {
         // Notifying databinding layout the data change first
-        this.mAddress = address;
+        this.mAddress.set(address);
 
         // Network call after
         NetworkManager.getDetailedAddressInfoService()
                 .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(remoteAddressInfo -> mAddress.setRemoteAddressInfo(remoteAddressInfo),
+                .subscribe(remoteAddressInfo -> {
+                            Address updatedAddress = mAddress.get();
+                            updatedAddress.setRemoteAddressInfo(remoteAddressInfo);
+                            mAddress.set(updatedAddress);
+                            mAddress.notifyChange();
+                        },
                         throwable -> {
                             throwable.printStackTrace();
                             getSnackbarTextResource().setValue(R.string.unexpected_error);
