@@ -11,9 +11,14 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.Map;
 
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.SimpleAddressInfo;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ETH;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 
 public class SimpleAddressInfoDeserializer implements JsonDeserializer {
+
+    /**
+     * A simple deserializer to just extract ETH balance, total IN/OUT, and Transaction counts.
+     */
 
     private static final String TAG = SimpleAddressInfoDeserializer.class.getSimpleName();
 
@@ -25,6 +30,7 @@ public class SimpleAddressInfoDeserializer implements JsonDeserializer {
 
         final JsonObject data = json.getAsJsonObject();
 
+        // Check for error response
         for (Map.Entry<String, JsonElement> entry : data.entrySet()) {
             String key = entry.getKey();
             if (key.equals("error")) {
@@ -40,11 +46,20 @@ public class SimpleAddressInfoDeserializer implements JsonDeserializer {
 
         JsonObject ethInfo = data.getAsJsonObject("ETH");
 
-        float ethBalance = ethInfo.get("balance").getAsFloat();
-        float ethTotalIn = ethInfo.get("totalIn").getAsFloat();
-        float ethTotalOut = ethInfo.get("totalOut").getAsFloat();
-        int txCount = data.get("countTxs").getAsInt();
+        double ethBalance = ethInfo.get("balance").getAsDouble();
+        double ethTotalIn = ethInfo.get("totalIn").getAsDouble();
+        double ethTotalOut = ethInfo.get("totalOut").getAsDouble();
+        long txCount = data.get("countTxs").getAsLong();
 
-        return new SimpleAddressInfo(ethBalance, ethTotalIn, ethTotalOut, txCount);
+        RemoteAddressInfo result = new RemoteAddressInfo();
+        ETH balanceInfo = new ETH();
+        balanceInfo.setBalance(ethBalance);
+        balanceInfo.setTotalIn(ethTotalIn);
+        balanceInfo.setTotalOut(ethTotalOut);
+
+        result.setEthBalanceInfo(balanceInfo);
+        result.setCountTxs(txCount);
+
+        return result;
     }
 }

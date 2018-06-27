@@ -102,7 +102,7 @@
                 android:ellipsize="end"
                 android:gravity="end"
                 android:maxLines="1"
-                app:int_text="@{address.simpleAddressInfo.totalTxs}"
+                app:long_text="@{address.remoteAddressInfo.countTxs}"
                 app:layout_constraintEnd_toEndOf="@+id/divider"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/address_list_item_dummy_transactions" />
@@ -132,7 +132,7 @@
                 android:ellipsize="end"
                 android:gravity="end"
                 android:maxLines="1"
-                app:float_text="@{address.simpleAddressInfo.ethBalance}"
+                app:double_text="@{address.remoteAddressInfo.ethBalanceInfo.balance}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/divider"
                 app:layout_constraintTop_toBottomOf="@+id/address_list_item_dummy_balance" />

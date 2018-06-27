@@ -8,7 +8,6 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -17,17 +16,12 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.Navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.SimpleAddressInfo;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkService;
 import io.incepted.cryptoaddresstracker.R;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Function3;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends AndroidViewModel implements AddressDataSource.OnAddressesLoadedListener {
@@ -132,8 +126,8 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
                                 // Network call observable
                                 networkService.getSimpleAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true),
                                 // Merging function
-                                (BiFunction<Address, SimpleAddressInfo, Object>) (emittedAddress, simpleAddressInfo) -> {
-                                    emittedAddress.setSimpleAddressInfo(simpleAddressInfo);
+                                (BiFunction<Address, RemoteAddressInfo, Object>) (emittedAddress, simpleAddressInfo) -> {
+                                    emittedAddress.setRemoteAddressInfo(simpleAddressInfo);
                                     return emittedAddress;
                                 }))
                 .subscribeOn(Schedulers.io())

@@ -1,17 +1,24 @@
 package io.incepted.cryptoaddresstracker.ViewModels;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableField;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
+import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.R;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener, AddressDataSource.OnAddressDeletedListener {
 
@@ -27,6 +34,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
     private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
+    public CopyListener copyListener = value -> {
+        ClipboardManager clipboard = (ClipboardManager) getApplication().getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText(null, value);
+        clipboard.setPrimaryClip(clip);
+    };
 
     public DetailViewModel(@NonNull Application application, @NonNull AddressRepository repository) {
         super(application);
@@ -64,9 +76,22 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     // ----------------------------- Callbacks -------------------------
 
+    @SuppressLint("CheckResult")
     @Override
     public void onAddressLoaded(Address address) {
+        // Notifying databinding layout the data change first
         this.mAddress = address;
+
+        // Network call after
+        NetworkManager.getDetailedAddressInfoService()
+                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(remoteAddressInfo -> mAddress.setRemoteAddressInfo(remoteAddressInfo),
+                        throwable -> {
+                            throwable.printStackTrace();
+                            getSnackbarTextResource().setValue(R.string.unexpected_error);
+                        });
     }
 
     @Override
@@ -85,4 +110,5 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         mSnackbarTextResource.setValue(R.string.unexpected_error);
         Log.d(TAG, "onDeletionNotAvailable: Failed to delete address with id: " + mAddressId);
     }
+
 }

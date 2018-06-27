@@ -3,6 +3,7 @@ package io.incepted.cryptoaddresstracker.Binding;
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,8 @@ import io.incepted.cryptoaddresstracker.Utils.Blockies;
 
 public class AddressListBindings {
 
+    private static final String TAG = AddressListBindings.class.getSimpleName();
+
     @BindingAdapter({"app:items"})
     public static void setItems(RecyclerView recyclerView, List<Address> items) {
         AddressAdapter adapter = (AddressAdapter) recyclerView.getAdapter();
@@ -26,9 +29,9 @@ public class AddressListBindings {
         }
     }
 
-    @BindingAdapter({"app:float_text"})
-    public static void setFloatText(TextView textView, float value) {
-        if ((Float.isNaN(value))) {
+    @BindingAdapter({"app:double_text"})
+    public static void setDoubleText(TextView textView, double value) {
+        if ((Double.isNaN(value))) {
             textView.setText("-");
         } else {
             DecimalFormat df = new DecimalFormat(value < 10 ? "#.####" : "#.##");
@@ -36,8 +39,8 @@ public class AddressListBindings {
         }
     }
 
-    @BindingAdapter({"app:int_text"})
-    public static void setIntText(TextView textView, int value) {
+    @BindingAdapter({"app:long_text"})
+    public static void setIntText(TextView textView, long value) {
         textView.setText(String.valueOf(value));
     }
 
