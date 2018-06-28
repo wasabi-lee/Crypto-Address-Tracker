@@ -68,10 +68,15 @@ public class TokenFragment extends Fragment {
     }
 
     private void setupRecyclerView() {
-        TokenAdapter adapter = new TokenAdapter(new ArrayList<>(0), mViewModel);
         mTokenList.setHasFixedSize(true);
+        mTokenList.setNestedScrollingEnabled(true);
         mTokenList.setItemAnimator(new DefaultItemAnimator());
-        mTokenList.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        LinearLayoutManager lm = new LinearLayoutManager(getContext());
+
+        mTokenList.setLayoutManager(lm);
+
+        TokenAdapter adapter = new TokenAdapter(mViewModel);
         mTokenList.setAdapter(adapter);
     }
 }

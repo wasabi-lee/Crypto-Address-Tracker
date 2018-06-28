@@ -1,55 +1,100 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
+import android.arch.lifecycle.ViewModelProviders;
+import android.databinding.DataBindingUtil;
 import android.support.design.widget.AppBarLayout;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
+import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
+import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
 
 public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private static final String TAG = TxActivity.class.getSimpleName();
 
+    public static final String TX_ADDRESS_ID_EXTRA_KEY = "tx_address_id_extra_key";
+    public static final String TX_TOKEN_NAME_EXTRA_KEY = "tx_token_name_extra_key";
+    public static final String TX_TOKEN_ADDRESS_EXTRA_KEY = "tx_token_address_extra_key";
+
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
     private static final int ALPHA_ANIMATIONS_DURATION = 200;
 
-    private LinearLayout mTitleContainer;
-    private TextView mTitle;
-    private AppBarLayout mAppBarLayout;
-    private Toolbar mToolbar;
+    @BindView(R.id.tx_title_container)
+    LinearLayout mTitleContainer;
+    @BindView(R.id.tx_textview_title)
+    TextView mTitle;
+    @BindView(R.id.tx_appbar)
+    AppBarLayout mAppBarLayout;
+    @BindView(R.id.tx_toolbar)
+    Toolbar mToolbar;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
+    private TxViewModel mViewModel;
+
+    private int mAddressId;
+    private String mTokenName;
+    private String mTokenAddress;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tx);
+        ActivityTxBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_tx);
+        mViewModel = obtainViewModel(this);
+        binding.setViewmodel(mViewModel);
 
+        ButterKnife.bind(this);
 
-        mToolbar = findViewById(R.id.tx_toolbar);
-        mTitle = findViewById(R.id.tx_textview_title);
-        mTitleContainer = findViewById(R.id.tx_title_container);
-        mAppBarLayout = findViewById(R.id.tx_appbar);
+        Log.d(TAG, "onCreate: Token address: " + mTokenAddress);
 
+        unpackExtras();
+        initToolbar();
+        initAppbar();
+    }
+
+    public static TxViewModel obtainViewModel(FragmentActivity activity) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
+        return ViewModelProviders.of(activity, factory).get(TxViewModel.class);
+    }
+
+    private void unpackExtras() {
+        mAddressId = getIntent().getIntExtra(TX_ADDRESS_ID_EXTRA_KEY, 0);
+        mTokenName = getIntent().getStringExtra(TX_TOKEN_NAME_EXTRA_KEY);
+        mTokenAddress = getIntent().getStringExtra(TX_TOKEN_ADDRESS_EXTRA_KEY);
+    }
+
+    private void initToolbar() {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black);
+            //TODO Change back button icon based on the theme
+        }
+    }
 
-        //TODO Change back button icon based on the theme
-
+    private void initAppbar() {
         mAppBarLayout.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
-
     }
+
+
+    // ------------------------------- UI animation stuff -----------------------------------
 
     @Override
     public void onOffsetChanged(AppBarLayout appBarLayout, int offset) {
@@ -106,4 +151,23 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
         v.startAnimation(alphaAnimation);
     }
 
+
+    // ------------------------------- Activity override method -----------------------------------
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewModel.start(mAddressId, mTokenName, mTokenAddress);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

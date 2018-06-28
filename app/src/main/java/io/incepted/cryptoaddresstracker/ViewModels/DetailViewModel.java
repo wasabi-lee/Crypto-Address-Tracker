@@ -12,13 +12,20 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,7 +44,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
-    private MutableLiveData<String> mOpenTokenTransactions = new MutableLiveData<>();
+    private MutableLiveData<TxExtraWrapper> mOpenTokenTransactions = new MutableLiveData<>();
 
     private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
@@ -61,6 +68,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         mAddressRepository.deleteAddress(mAddressId, this);
     }
 
+    public void toTxActivity(String tokenName, String tokenAddress) {
+        TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId, tokenName, tokenAddress);
+        mOpenTokenTransactions.setValue(wrapper);
+    }
+
 
     // ----------------------------- Getters ---------------------------
 
@@ -76,7 +88,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         return mDeletionState;
     }
 
-    public MutableLiveData<String> getOpenTokenTransactions() {
+    public MutableLiveData<TxExtraWrapper> getOpenTokenTransactions() {
         return mOpenTokenTransactions;
     }
 
@@ -93,26 +105,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
                 .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(remoteAddressInfo -> {
-                            // Change address info
-                            Address updatedAddress = mAddress.get();
-                            updatedAddress.setRemoteAddressInfo(remoteAddressInfo);
-                            mAddress.set(updatedAddress);
-                            mAddress.notifyChange();
-
-                            // Update token list
-                            if (remoteAddressInfo.getContractInfo() != null) {
-                                // Contract address!
-                                // Show placeholder screen
-                            } else {
-                                mTokens.clear();
-                                mTokens.addAll(remoteAddressInfo.getTokens());
-                            }
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            getSnackbarTextResource().setValue(R.string.unexpected_error);
-                        });
+                .subscribe(this::updateViews,
+                        this::handleError);
     }
 
     @Override
@@ -132,4 +126,57 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         Log.d(TAG, "onDeletionNotAvailable: Failed to delete address with id: " + mAddressId);
     }
 
+    private void updateViews(RemoteAddressInfo remoteAddressInfo) {
+        if (remoteAddressInfo.getContractInfo() != null) {
+            // TODO Contract address!
+            // Show placeholder screen
+        } else {
+            realignTokenList(remoteAddressInfo);
+            updateTokenList(remoteAddressInfo.getTokens());
+        }
+        updateAddressInfo(remoteAddressInfo);
+    }
+
+    private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
+        sortTokenList(remoteAddressInfo.getTokens());
+        putEthInfoFront(remoteAddressInfo);
+    }
+
+    private void putEthInfoFront(RemoteAddressInfo remoteAddressInfo) {
+        Token eth = new Token();
+        TokenInfo ethInfo = new TokenInfo();
+        Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
+
+        ethInfo.setAddress("base_currency_ethereum");
+        ethInfo.setSymbol("ETH");
+        ethInfo.setName("Ethereum");
+
+        eth.setTokenInfo(ethInfo);
+        eth.setBalance(ethBalance);
+
+        remoteAddressInfo.getTokens().add(0, eth);
+    }
+
+    private void sortTokenList(List<Token> tokens) {
+        Collections.sort(tokens, (obj1, obj2) ->
+                obj1.getTokenInfo().getName()
+                        .compareToIgnoreCase(obj2.getTokenInfo().getName()));
+    }
+
+    private void updateTokenList(List<Token> tokens) {
+        mTokens.clear();
+        mTokens.addAll(tokens);
+    }
+
+    private void updateAddressInfo(RemoteAddressInfo remoteAddressInfo) {
+        Address updatedAddress = mAddress.get();
+        updatedAddress.setRemoteAddressInfo(remoteAddressInfo);
+        mAddress.set(updatedAddress);
+        mAddress.notifyChange();
+    }
+
+    private void handleError(Throwable throwable) {
+        throwable.printStackTrace();
+        getSnackbarTextResource().setValue(R.string.unexpected_error);
+    }
 }

@@ -10,24 +10,14 @@
             type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel" />
     </data>
 
-    <FrameLayout
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/token_frag_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Fragments.TokenFragment">
+        android:fillViewport="true"
+        app:token_items="@{viewmodel.mTokens}"
+        tools:context=".Fragments.TokenFragment" />
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:isScrollContainer="true">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/token_frag_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:nestedScrollingEnabled="true"
-                app:token_items="@{viewmodel.mTokens}" />
-
-        </android.support.v4.widget.NestedScrollView>
-    </FrameLayout>
 
 </layout>

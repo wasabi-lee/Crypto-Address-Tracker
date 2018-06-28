@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Listeners.TokenItemActionListener;
@@ -24,10 +25,10 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     private List<Token> mTokens;
     private TokenItemActionListener mListener;
 
-    public TokenAdapter(List<Token> tokens, DetailViewModel viewModel) {
+    public TokenAdapter(DetailViewModel viewModel) {
         this.mViewModel = viewModel;
-        this.mListener = tokenAddress -> mViewModel.getOpenTokenTransactions().setValue(tokenAddress);
-        setList(tokens);
+        this.mListener = (tokenName, tokenAddress) -> mViewModel.toTxActivity(tokenName, tokenAddress);
+        this.mTokens = new ArrayList<Token>();
     }
 
 

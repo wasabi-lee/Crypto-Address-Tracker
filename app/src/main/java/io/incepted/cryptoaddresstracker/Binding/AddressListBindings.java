@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -64,6 +66,12 @@ public class AddressListBindings {
     @BindingAdapter({"app:long_text"})
     public static void setIntText(TextView textView, long value) {
         textView.setText(String.valueOf(value));
+    }
+
+    @BindingAdapter({"timestamp"})
+    public static void setTimestampText(TextView textView, Date date) {
+        String formattedTimestamp = SimpleDateFormat.getDateInstance().format(date);
+        textView.setText(formattedTimestamp);
     }
 
     @BindingAdapter({"app:blockies"})

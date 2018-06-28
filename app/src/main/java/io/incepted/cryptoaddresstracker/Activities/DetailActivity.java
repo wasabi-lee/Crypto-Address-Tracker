@@ -3,7 +3,7 @@ package io.incepted.cryptoaddresstracker.Activities;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -12,8 +12,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -24,13 +22,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.incepted.cryptoaddresstracker.Adapters.TokenAdapter;
+import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Fragments.OverviewFragment;
-import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Fragments.TokenFragment;
 import io.incepted.cryptoaddresstracker.Adapters.ViewPagerAdapter;
@@ -75,7 +70,6 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
         ActivityDetailBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_detail);
         mViewModel = obtainViewModel(this);
         binding.setViewmodel(mViewModel);
@@ -144,6 +138,8 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
     }
 
     private void setupObservers() {
+        mViewModel.getOpenTokenTransactions().observe(this, txExtraWrapper -> toTxActivity(txExtraWrapper));
+
         mViewModel.getDeletionState().observe(this, deletionStateNavigator -> {
             if (deletionStateNavigator != null)
                 switch (deletionStateNavigator) {
@@ -172,6 +168,16 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
     }
 
 
+    // ------------------------------- Activity transition methods --------------------------
+
+    private void toTxActivity(TxExtraWrapper wrapper) {
+        Intent intent = new Intent(this, TxActivity.class);
+        intent.putExtra(TxActivity.TX_ADDRESS_ID_EXTRA_KEY, wrapper.getAddressId());
+        intent.putExtra(TxActivity.TX_TOKEN_NAME_EXTRA_KEY, wrapper.getTokenName());
+        intent.putExtra(TxActivity.TX_TOKEN_ADDRESS_EXTRA_KEY, wrapper.getTokenAddress());
+        startActivity(intent);
+    }
+
 
     // ------------------------------- UI animation stuff -----------------------------------
 
@@ -185,13 +191,11 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
     }
 
     private void handleToolbarTitleVisibility(float percentage) {
-        Log.d(TAG, "Percentage: " + percentage + ", isTheTitleVisible: " + mIsTheTitleVisible);
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
 
             if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
-                Log.d(TAG, "Showing toolbar");
             }
 
         } else {
@@ -199,7 +203,6 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
             if (mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleVisible = false;
-                Log.d(TAG, "Hiding toolbar");
             }
         }
     }
@@ -229,7 +232,6 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
         alphaAnimation.setFillAfter(true);
         v.startAnimation(alphaAnimation);
     }
-
 
 
     // ------------------------------- Activity override method -----------------------------------
