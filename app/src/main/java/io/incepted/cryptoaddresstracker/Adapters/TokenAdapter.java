@@ -28,7 +28,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
     public TokenAdapter(DetailViewModel viewModel) {
         this.mViewModel = viewModel;
         this.mListener = (tokenName, tokenAddress) -> mViewModel.toTxActivity(tokenName, tokenAddress);
-        this.mTokens = new ArrayList<Token>();
+        this.mTokens = new ArrayList<>();
     }
 
 
@@ -61,7 +61,7 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
         itemBinding.setToken(currentItem);
         itemBinding.setListener(mListener);
         itemBinding.executePendingBindings();
-        Log.d(TAG, "onBindViewHolder: " + mTokens.get(position).getTokenInfo().getName());
+        Log.d(TAG, "onBindViewHolder: " + currentItem.getTokenInfo().getName());
     }
 
     @Override

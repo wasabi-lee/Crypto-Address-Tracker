@@ -71,10 +71,7 @@ public class TokenFragment extends Fragment {
         mTokenList.setHasFixedSize(true);
         mTokenList.setNestedScrollingEnabled(true);
         mTokenList.setItemAnimator(new DefaultItemAnimator());
-
-        LinearLayoutManager lm = new LinearLayoutManager(getContext());
-
-        mTokenList.setLayoutManager(lm);
+        mTokenList.setLayoutManager(new LinearLayoutManager(getContext()));
 
         TokenAdapter adapter = new TokenAdapter(mViewModel);
         mTokenList.setAdapter(adapter);

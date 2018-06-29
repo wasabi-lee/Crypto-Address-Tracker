@@ -2,6 +2,7 @@ package io.incepted.cryptoaddresstracker.Binding;
 
 import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.TextView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,8 +19,10 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.incepted.cryptoaddresstracker.Adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.Adapters.TokenAdapter;
+import io.incepted.cryptoaddresstracker.Adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Utils.Blockies;
 import io.incepted.cryptoaddresstracker.Utils.NumberUtils;
 
@@ -42,6 +46,14 @@ public class AddressListBindings {
         }
     }
 
+    @BindingAdapter({"app:tx_items"})
+    public static void setTxItems(RecyclerView recyclerView, List<Operation> items) {
+        TxAdapter adapter = (TxAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.replaceData(items);
+        }
+    }
+
     @BindingAdapter({"app:double_text"})
     public static void setDoubleText(TextView textView, double value) {
         if ((Double.isNaN(value))) {
@@ -57,9 +69,8 @@ public class AddressListBindings {
         if ((Double.isNaN(value))) {
             textView.setText("-");
         } else {
-            double editedValue =  NumberUtils.moveDecimal(value, decimals);
-            DecimalFormat df = new DecimalFormat(editedValue < 10 ? "#.####" : "#.##");
-            textView.setText(df.format(editedValue));
+            double editedValue = NumberUtils.moveDecimal(value, decimals);
+            textView.setText(NumberUtils.formatDouble(editedValue));
         }
     }
 
@@ -68,10 +79,34 @@ public class AddressListBindings {
         textView.setText(String.valueOf(value));
     }
 
-    @BindingAdapter({"timestamp"})
+    @BindingAdapter({"app:timestamp"})
     public static void setTimestampText(TextView textView, Date date) {
+        String formattedTimestamp = DateFormat.getDateInstance().format(date);
+        textView.setText(formattedTimestamp);
+    }
+
+    @BindingAdapter({"app:timestamp"})
+    public static void setTimestampText(TextView textView, Long timestamp) {
+        Date date = new Date(timestamp * 1000);
         String formattedTimestamp = SimpleDateFormat.getDateInstance().format(date);
         textView.setText(formattedTimestamp);
+    }
+
+    @BindingAdapter({"app:tx_amount", "app:decimal", "app:from", "app:address"})
+    public static void setAmount(TextView textView, String amount, int decimals, String from, String address) {
+        String formattedAmount = NumberUtils.moveDecimal(amount, decimals);
+
+        if (address == null) {
+            textView.setText(formattedAmount);
+            return;
+        }
+
+        boolean sent = address.equals(from);
+        String result = (sent ? "-" : "+") + formattedAmount;
+        String textColor = sent ? "#e65454" : "#3cb271";
+
+        textView.setText(result);
+        textView.setTextColor(Color.parseColor(textColor));
     }
 
     @BindingAdapter({"app:blockies"})

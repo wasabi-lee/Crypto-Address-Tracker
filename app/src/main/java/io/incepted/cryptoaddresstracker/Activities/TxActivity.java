@@ -1,11 +1,16 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -16,6 +21,8 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.Adapters.TxAdapter;
+import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
@@ -41,11 +48,14 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
     AppBarLayout mAppBarLayout;
     @BindView(R.id.tx_toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.tx_recycler_view)
+    RecyclerView mTxList;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
 
     private TxViewModel mViewModel;
+    private TxAdapter mAdapter;
 
     private int mAddressId;
     private String mTokenName;
@@ -65,6 +75,8 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
         unpackExtras();
         initToolbar();
         initAppbar();
+        setupObservers();
+        setupRecyclerView();
     }
 
     public static TxViewModel obtainViewModel(FragmentActivity activity) {
@@ -91,6 +103,21 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
     private void initAppbar() {
         mAppBarLayout.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
+    }
+
+    private void setupObservers() {
+        mViewModel.getmAddress().observe(this, address ->
+                mAdapter.setTxHoldingAddress(address != null ? address.getAddrValue() : null));
+    }
+
+    private void setupRecyclerView() {
+        mTxList.setHasFixedSize(true);
+        mTxList.setNestedScrollingEnabled(true);
+        mTxList.setItemAnimator(new DefaultItemAnimator());
+        mTxList.setLayoutManager(new LinearLayoutManager(this));
+
+        mAdapter = new TxAdapter(mViewModel);
+        mTxList.setAdapter(mAdapter);
     }
 
 
