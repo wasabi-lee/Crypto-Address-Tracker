@@ -2,6 +2,7 @@ package io.incepted.cryptoaddresstracker.Activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.Adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.Utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
@@ -70,13 +72,16 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
 
         ButterKnife.bind(this);
 
-        Log.d(TAG, "onCreate: Token address: " + mTokenAddress);
 
         unpackExtras();
         initToolbar();
         initAppbar();
+        setupSnackbar();
         setupObservers();
         setupRecyclerView();
+
+        Log.d(TAG, "onCreate: Token address: " + mTokenAddress);
+
     }
 
     public static TxViewModel obtainViewModel(FragmentActivity activity) {
@@ -105,9 +110,29 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
     }
 
+    private void setupSnackbar() {
+        mViewModel.getSnackbarText().observe(this, message -> {
+            if (message != null)
+                showSnackbar(message);
+        });
+
+        mViewModel.getSnackbarTextResource().observe(this, message -> {
+            if (message != null)
+                showSnackbar(getString(message));
+        });
+
+    }
+
     private void setupObservers() {
         mViewModel.getmAddress().observe(this, address ->
                 mAdapter.setTxHoldingAddress(address != null ? address.getAddrValue() : null));
+
+        mViewModel.getOpenTxDetail().observe(this, txHash -> {
+            if (txHash != null)
+                toTxDetailActivity(txHash);
+            else
+                showSnackbar(getString(R.string.unexpected_error));
+        });
     }
 
     private void setupRecyclerView() {
@@ -118,6 +143,12 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
 
         mAdapter = new TxAdapter(mViewModel);
         mTxList.setAdapter(mAdapter);
+    }
+
+    private void toTxDetailActivity(String txHash) {
+        Intent intent = new Intent(this, TxDetailActivity.class);
+        intent.putExtra(TxDetailActivity.TX_DETAIL_HASH_EXTRA_KEY, txHash);
+        startActivity(intent);
     }
 
 
@@ -196,5 +227,9 @@ public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffs
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSnackbar(String s) {
+        SnackbarUtils.showSnackbar(findViewById(android.R.id.content), s);
     }
 }

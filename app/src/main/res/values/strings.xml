@@ -40,4 +40,19 @@ Aenean elementum, libero vel mattis efficitur, augue nulla bibendum mi, tempus r
     <string name="eth">ETH</string>
     <string name="click_the_button_above_and_start_tracking_addresses">Click the + button above and start tracking addresses!</string>
     <string name="no_address_added">No Address Added!</string>
+    <string name="token_transfer">Token Transfer</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="transaction_amount">TRANSACTION AMOUNT</string>
+    <string name="txhash_with_colon">TxHash: </string>
+    <string name="transaction_details">Transaction Details</string>
+    <string name="timestamp">Timestamp</string>
+    <string name="status">Status</string>
+    <string name="confirmations">Confirmations</string>
+    <string name="transaction_amount_lower">Transaction Amount</string>
+    <string name="miscellaneous">Miscellaneous</string>
+    <string name="block_number">Block Number</string>
+    <string name="gas_limit">Gas Limit</string>
+    <string name="gas_used">Gas Used</string>
+    <string name="input">Input</string>
 </resources>

@@ -15,14 +15,12 @@ import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionListInfo;
-import io.incepted.cryptoaddresstracker.Network.NetworkService;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TransactionListInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.reactivex.Single;
-import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class TxViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener {
@@ -34,9 +32,18 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
     public String tokenName;
     public String tokenAddress;
 
-    public ObservableArrayList<Operation> mTxOperations = new ObservableArrayList<>();
+    /**
+     * @value boolean fetchEthTx:
+     * Making different API call for 'Ethereum transaction' and 'Token transaction.'
+     * When we need to whow Ethereum transactions, call 'getAddressTransactions' request.
+     * For token transactions, call 'getAddressHistory'.
+     */
+    public boolean fetchEthTx;
+
+    public ObservableArrayList<OperationWrapper> mTxOperations = new ObservableArrayList<>();
     public ObservableBoolean isLoading = new ObservableBoolean(false);
 
+    private MutableLiveData<String> mOpenTxDetail = new MutableLiveData<>();
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
@@ -48,6 +55,7 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
     public void start(int addressId, String tokenName, String tokenAddress) {
         this.tokenName = tokenName;
         this.tokenAddress = tokenAddress;
+        this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
         loadAddress(addressId);
     }
 
@@ -58,37 +66,71 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
 
     @SuppressLint("CheckResult")
     private void loadTransactions(String address, String tokenAddress) {
-        Single<TransactionListInfo> networkCallSingle =
-                NetworkManager.getTransactionListInfoService()
-                        .getTransactionListInfo(address, NetworkManager.API_KEY, tokenAddress);
+        if (fetchEthTx) {
 
-        networkCallSingle.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(transactionListInfo -> {
-                    // onSuccess
-                    isLoading.set(false);
-                    refreshList(transactionListInfo.getOperations());
-                }, throwable -> {
-                    // onError
-                    isLoading.set(false);
-                    handleError(throwable);
-                });
+            // When fetching Ethereum transactions
 
+            Single<List<EthOperation>> networkCallSingle =
+                    NetworkManager.getEthTransactionListInfoService()
+                            .getEthTransactionListInfo(address, NetworkManager.API_KEY);
+
+            networkCallSingle.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(operations -> {
+                        isLoading.set(false);
+                        refreshList(operations);
+                    }, throwable -> {
+                        isLoading.set(false);
+                        handleError(throwable);
+                    });
+
+        } else {
+
+            // When fetching token transactions
+
+            Single<TransactionListInfo> networkCallSingle =
+                    NetworkManager.getTokenTransactionListInfoService()
+                            .getTokenTransactionListInfo(address, NetworkManager.API_KEY, tokenAddress);
+
+            networkCallSingle.subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(transactionListInfo -> {
+                        // onSuccess
+                        isLoading.set(false);
+                        refreshList(transactionListInfo.getOperations());
+                    }, throwable -> {
+                        // onError
+                        isLoading.set(false);
+                        handleError(throwable);
+                    });
+        }
     }
 
-    private void refreshList(List<Operation> operations) {
+    private void refreshList(List<? extends OperationWrapper> operations) {
         mTxOperations.clear();
         mTxOperations.addAll(operations);
     }
 
     public void toTxDetailActivity(String transactionHash) {
         //TODO TxDetailActivity connection
-        Log.d(TAG, "Clicked TxHash: " + transactionHash);
+        mOpenTxDetail.setValue(transactionHash);
     }
 
 
     public MutableLiveData<Address> getmAddress() {
         return mAddress;
+    }
+
+    public MutableLiveData<String> getOpenTxDetail() {
+        return mOpenTxDetail;
+    }
+
+    public MutableLiveData<String> getSnackbarText() {
+        return mSnackbarText;
+    }
+
+    public MutableLiveData<Integer> getSnackbarTextResource() {
+        return mSnackbarTextResource;
     }
 
     @Override

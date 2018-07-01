@@ -4,11 +4,9 @@ import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -22,7 +20,8 @@ import io.incepted.cryptoaddresstracker.Adapters.TokenAdapter;
 import io.incepted.cryptoaddresstracker.Adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.Blockies;
 import io.incepted.cryptoaddresstracker.Utils.NumberUtils;
 
@@ -47,7 +46,7 @@ public class AddressListBindings {
     }
 
     @BindingAdapter({"app:tx_items"})
-    public static void setTxItems(RecyclerView recyclerView, List<Operation> items) {
+    public static void setTxItems(RecyclerView recyclerView, List<OperationWrapper> items) {
         TxAdapter adapter = (TxAdapter) recyclerView.getAdapter();
         if (adapter != null) {
             adapter.replaceData(items);
@@ -75,7 +74,7 @@ public class AddressListBindings {
     }
 
     @BindingAdapter({"app:long_text"})
-    public static void setIntText(TextView textView, long value) {
+    public static void setLongText(TextView textView, long value) {
         textView.setText(String.valueOf(value));
     }
 
@@ -87,6 +86,10 @@ public class AddressListBindings {
 
     @BindingAdapter({"app:timestamp"})
     public static void setTimestampText(TextView textView, Long timestamp) {
+        if (timestamp == null) {
+                textView.setText("");
+            return;
+        }
         Date date = new Date(timestamp * 1000);
         String formattedTimestamp = SimpleDateFormat.getDateInstance().format(date);
         textView.setText(formattedTimestamp);
@@ -94,6 +97,7 @@ public class AddressListBindings {
 
     @BindingAdapter({"app:tx_amount", "app:decimal", "app:from", "app:address"})
     public static void setAmount(TextView textView, String amount, int decimals, String from, String address) {
+
         String formattedAmount = NumberUtils.moveDecimal(amount, decimals);
 
         if (address == null) {
@@ -101,7 +105,7 @@ public class AddressListBindings {
             return;
         }
 
-        boolean sent = address.equals(from);
+        boolean sent = (address.toLowerCase()).equals(from.toLowerCase());
         String result = (sent ? "-" : "+") + formattedAmount;
         String textColor = sent ? "#e65454" : "#3cb271";
 
@@ -120,5 +124,12 @@ public class AddressListBindings {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @BindingAdapter({"app:success"})
+    public static void setSuccess(TextView textView, Boolean success) {
+        if (success == null) return;
+        textView.setText(success ? "Success" : "Pending");
+        textView.setTextColor(Color.parseColor(success ? "#3cb271" : "#e65454"));
     }
 }

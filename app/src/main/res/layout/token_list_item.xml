@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{token.tokenInfo.name}"
+                android:text="@{token.tokenInfo.name == null ? `N/A` : token.tokenInfo.name}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@id/token_item_divider"
                 app:layout_constraintStart_toStartOf="parent"

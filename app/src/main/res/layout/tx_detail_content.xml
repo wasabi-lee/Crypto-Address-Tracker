@@ -1,481 +1,483 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:isScrollContainer="true"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <LinearLayout
+<layout>
+
+    <data>
+
+        <variable
+            name="txInfo"
+            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo" />
+
+    </data>
+
+    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:isScrollContainer="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_large">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-
-            <!--******************************* TRANSACTION DETAIL ******************************** -->
-
-            <TextView
-                android:id="@+id/tx_detail_content_header_tx_detail_dummy"
-                android:layout_width="wrap_content"
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Transaction Details"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="@dimen/spacing_large">
 
 
-            <View
-                android:id="@+id/tx_detail_content_vertical_divider_1"
-                android:layout_width="0.5dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.45"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <!--******************************* TRANSACTION DETAIL ******************************** -->
+
+                <TextView
+                    android:id="@+id/tx_detail_content_header_tx_detail_dummy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_details"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
-            <!--********** TxHash ***********-->
+                <View
+                    android:id="@+id/tx_detail_content_vertical_divider_1"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.45"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_1"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_header_tx_detail_dummy" />
 
-            <TextView
-                android:id="@+id/tx_detail_content_tx_hash_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
+                <!--********** TxHash ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_header_tx_detail_dummy" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_tx_hash_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/txhash"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_1" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_tx_hash"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@{txInfo.hash}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_1" />
+
+
+                <!--********** Timestamp ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_2"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_tx_hash" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_timestamp_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/timestamp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_2" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_timestamp"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_2"
+                    app:timestamp="@{txInfo.timestamp}" />
+
+
+                <!--********** From ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_3"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_timestamp" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_from_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/from"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_3" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_from"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@{txInfo.from}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_3" />
+
+
+                <!--********** To ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_4"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_from" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_to_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/to"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_4" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_to"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@{txInfo.to}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_4" />
+
+
+                <!--********** Success ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_5"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_to" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_status_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/status"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_5" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_status"
+                    style="@style/TextSmallBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:success="@{txInfo.success}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_5" />
+
+
+                <!--********** Confirmation ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_6"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_status" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_confirmation_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/confirmations"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_6" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_confirmation"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:long_text="@{txInfo.confirmations}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_6" />
+
+                <!--********** Success ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_7"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_confirmation" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_tx_amount_dummy"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/transaction_amount_lower"
+                    app:layout_constraintBottom_toBottomOf="@+id/tx_detail_content_tx_amount"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/tx_detail_content_tx_amount" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_tx_amount_symbol"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/eth"
+                    app:layout_constraintBottom_toBottomOf="@+id/tx_detail_content_tx_amount"
+                    app:layout_constraintStart_toStartOf="@id/tx_detail_content_vertical_divider_1" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_tx_amount"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/spacing_xxsmall"
+                    android:layout_marginStart="@dimen/spacing_xxsmall"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:gravity="end"
+                    app:double_text="@{txInfo.value}"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_tx_amount_symbol"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_7" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+            <!-- ************************ Miscellaneous ********************** -->
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="TxHash"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_1" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_tx_hash"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="0x2d2e32a0a7443baa9faf1545486c71b514862bbf6afb9c3fe71014196789b414"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_1" />
-
-
-            <!--********** Timestamp ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_2"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_tx_hash" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_timestamp_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Timestamp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_2" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_timestamp"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="06/12/2018 12:43 PM"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_2" />
-
-
-            <!--********** From ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_3"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_timestamp" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_from_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="From"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_3" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_from"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="0x62009c21abcb4ed3eb3912454b410fe4315279e2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_3" />
-
-
-            <!--********** To ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_4"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_from" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_to_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="To"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_4" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_to"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="0x858513599d4bb6cd128084d0fe9029b4188822dd"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_4" />
-
-
-            <!--********** Success ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_5"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_to" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_status_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Status"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_5" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_status"
-                style="@style/TextSmallBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Success"
-                android:textColor="@color/colorAccent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_5" />
-
-
-            <!--********** Success ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_6"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_status" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_confirmation_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Confirmations"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_6" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_confirmation"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="20,435,32"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_6" />
-
-            <!--********** Success ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_7"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_confirmation" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_tx_amount_dummy"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Transaction Amount"
-                app:layout_constraintBottom_toBottomOf="@+id/tx_detail_content_tx_amount"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/tx_detail_content_tx_amount" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_tx_amount_symbol"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="ETH"
-                android:textColor="@color/colorAccent"
-                app:layout_constraintBottom_toBottomOf="@+id/tx_detail_content_tx_amount"
-                app:layout_constraintStart_toStartOf="@id/tx_detail_content_vertical_divider_1" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_tx_amount"
-                style="@style/TextMediumLargeSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/spacing_xxsmall"
-                android:layout_marginStart="@dimen/spacing_xxsmall"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:gravity="end"
-                android:text="0.00045435"
-                android:textColor="@color/colorAccent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_tx_amount_symbol"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_7" />
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-
-        <!-- ************************ Miscellaneous ********************** -->
-
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/spacing_large">
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_header_misc_dummy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Miscellaneous"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <View
-                android:id="@+id/tx_detail_content_vertical_divider_2"
-                android:layout_width="0.5dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.45"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-
-            <!--********** Block Number ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_8"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_header_misc_dummy" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_block_number_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Block Number"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_block_number"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="543566"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
-
-
-            <!--********** Gas Limit***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_9"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_block_number" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_gas_limit_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Gas Limit"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_gas_limit"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="06/12/2018 12:43 PM"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
-
-
-            <!--********** Gas Used ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_10"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:background="@color/text_color_secondary_gray"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_gas_limit" />
-
-            <TextView
-                android:id="@+id/tx_detail_content_gas_used_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Gas Used"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_10" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_gas_used"
-                style="@style/TextSmallSemiBoldAppearance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="0x62009c21abcb4ed3eb3912454b410fe4315279e2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_10" />
-
-
-            <!--********** Input ***********-->
-
-            <View
-                android:id="@+id/tx_detail_content_horizontal_divider_11"
-                android:layout_width="0dp"
-                android:layout_height="0.5dp"
-                android:background="@color/text_color_secondary_gray"
-                android:layout_marginTop="@dimen/spacing_normal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_gas_used"/>
-
-            <TextView
-                android:id="@+id/tx_detail_content_to_input_dummy"
-                style="@style/TextSecondarySemiBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="To"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_11" />
-
-
-            <TextView
-                android:id="@+id/tx_detail_content_input"
-                style="@style/TextXSmallRegularAppearance"
-                android:background="?attr/overview_card_background"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_normal"
-                android:text="Function: transfer(address _to, uint256 _amount)
-
-MethodID: 0xa9059cbb
-[0]:  0000000000000000000000007845524286b673e92930e6a82ebb76242bb5269d
-[1]:  00000000000000000000000000000000000000000000003635c9adc5dea00000"
-                android:padding="@dimen/spacing_xsmall"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_11"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="@dimen/spacing_xxxlarge"/>
-
-
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-    </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+                android:padding="@dimen/spacing_large">
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_header_misc_dummy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/miscellaneous"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <View
+                    android:id="@+id/tx_detail_content_vertical_divider_2"
+                    android:layout_width="0.5dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.45"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                <!--********** Block Number ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_8"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_header_misc_dummy" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_block_number_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/block_number"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_block_number"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:long_text="@{txInfo.blockNumber}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
+
+
+                <!--********** Gas Limit***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_9"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_block_number" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_gas_limit_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/gas_limit"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_gas_limit"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:long_text="@{txInfo.gasLimit}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
+
+
+                <!--********** Gas Used ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_10"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_gas_limit" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_gas_used_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/gas_used"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_10" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_gas_used"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:long_text="@{txInfo.gasUsed}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_10" />
+
+
+                <!--********** Input ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_11"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_gas_used" />
+
+                <TextView
+                    android:id="@+id/tx_detail_content_to_input_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/input"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_11" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_input"
+                    style="@style/TextXSmallRegularAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_xxxlarge"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="?attr/overview_card_background"
+                    android:padding="@dimen/spacing_xsmall"
+                    android:text="@{txInfo.input}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_11" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</layout>

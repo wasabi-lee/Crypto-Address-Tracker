@@ -7,12 +7,20 @@
     <data>
 
         <variable
+            name="fetchEthTx"
+            type="boolean" />
+
+        <variable
             name="txHolderAddress"
             type="String" />
 
         <variable
-            name="operation"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation" />
+            name="ethOperation"
+            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation" />
+
+        <variable
+            name="tokenOperation"
+            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TokenOperation"/>
 
         <variable
             name="listener"
@@ -27,7 +35,7 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
-        android:onClick="@{() -> listener.onTxItemClicked(operation.transactionHash)}"
+        android:onClick="@{() -> listener.onTxItemClicked(fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
         app:cardElevation="@dimen/card_medium_elevation">
 
@@ -56,7 +64,7 @@
                 android:maxLines="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:timestamp="@{operation.timestamp}" />
+                app:timestamp="@{fetchEthTx ? ethOperation.timestamp : tokenOperation.timestamp}" />
 
             <LinearLayout
                 android:id="@+id/linearLayout2"
@@ -89,7 +97,7 @@
                     android:layout_marginRight="@dimen/spacing_xxxlarge"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{operation.transactionHash}" />
+                    android:text="@{fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash}" />
 
             </LinearLayout>
 
@@ -99,11 +107,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:gravity="end|bottom"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tx_item_divider"
-                android:gravity="end|bottom">
+                app:layout_constraintStart_toEndOf="@+id/tx_item_divider">
 
                 <TextView
                     android:id="@+id/tx_list_item_token_symbol"
@@ -112,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:text="@{`Amount(` + operation.tokenInfo.symbol + `)`}" />
+                    android:text="@{`Amount(` + (fetchEthTx ? `ETH` : tokenOperation.tokenInfo.symbol) + `)`}" />
 
                 <TextView
                     android:id="@+id/tx_list_item_amount_value"
@@ -122,9 +130,9 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     app:address="@{txHolderAddress}"
-                    app:decimal="@{operation.tokenInfo.decimals}"
-                    app:from="@{operation.from}"
-                    app:tx_amount="@{operation.value}" />
+                    app:decimal="@{fetchEthTx ? 0 : tokenOperation.tokenInfo.decimals}"
+                    app:from="@{fetchEthTx? ethOperation.from : tokenOperation.from}"
+                    app:tx_amount="@{fetchEthTx ? ethOperation.value.toString() : tokenOperation.value}" />
 
             </LinearLayout>
         </android.support.constraint.ConstraintLayout>

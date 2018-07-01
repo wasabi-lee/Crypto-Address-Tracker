@@ -10,6 +10,7 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
+import io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
@@ -54,6 +55,9 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
             return (T) new TxViewModel(mApplication, mRepository);
+        } else if (modelClass.isAssignableFrom(TxDetailViewModel.class)) {
+            //noinspection unchecked
+            return (T) new TxDetailViewModel(mApplication, mRepository);
         }
         return super.create(modelClass);
     }

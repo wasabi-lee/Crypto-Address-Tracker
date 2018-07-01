@@ -9,6 +9,7 @@ import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
@@ -104,6 +105,8 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
         // show the 'no data' layout
         if (addresses.size() == 0) {
             addressesExist.set(false);
+            isDataLoading.set(false);
+            populateAddressListView(new ArrayList<>());
             return;
         }
 
