@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
@@ -25,6 +26,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
     private String mTxHash;
 
     public ObservableField<TransactionInfo> mTxInfo = new ObservableField<>();
+    public ObservableBoolean isLoading = new ObservableBoolean();
     public CopyListener mListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
@@ -44,12 +46,16 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
     @SuppressLint("CheckResult")
     private void loadTransactionInfo(String txHash) {
+
+        isLoading.set(true);
+
         Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
                 .getTransactionDetail(txHash, NetworkManager.API_KEY);
 
         txInfoSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
+                            isLoading.set(false);
                             mTxInfo.set(result);
                             mTxInfo.notifyChange();
                         }

@@ -64,7 +64,9 @@ public class TokenTransferAdapter extends RecyclerView.Adapter<TokenTransferAdap
     }
 
     private void setList(List<Operation> operations) {
-        this.mOperations = operations;
+        this.mOperations.clear();
+        this.mOperations.add(new Operation()); // dummy data for header
+        this.mOperations.addAll(operations);
         notifyDataSetChanged();
     }
 

@@ -12,7 +12,8 @@
         <item name="overview_card_background">@color/overview_card_background_light</item>
         <item name="default_card_background">@color/window_background_light</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_light</item>
-
+        <item name="rounded_background">@drawable/rounded_background_light</item>
+        <item name="top_rounded_background">@drawable/top_rounded_background_light</item>
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -27,13 +28,16 @@
         <item name="overview_card_background">@color/overview_card_background_dark</item>
         <item name="default_card_background">@color/window_background_dark</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_dark</item>
-
+        <item name="rounded_background">@drawable/rounded_background_dark</item>
+        <item name="top_rounded_background">@drawable/top_rounded_background_dark</item>
 
     </style>
 
     <attr name="overview_card_background" format="reference" />
     <attr name="default_card_background" format="reference" />
     <attr name="bottom_sheet_background" format="reference" />
+    <attr name="top_rounded_background" format="reference" />
+    <attr name="rounded_background" format="reference" />
 
 
     <!-- ****************** Text appearance ******************* -->

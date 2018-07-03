@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="@{txInfo.hash.substring(0, 25) + `...`}"
+                android:text="@{txInfo.hash == null ? `...` : txInfo.hash.substring(0, 25) + `...`}"
                 android:textColor="@android:color/white" />
 
             <ImageView

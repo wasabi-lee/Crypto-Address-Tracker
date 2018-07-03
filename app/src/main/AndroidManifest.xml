@@ -3,6 +3,7 @@
     package="io.incepted.cryptoaddresstracker">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -28,7 +29,8 @@
         <activity android:name=".Activities.TokenAddressActivity" />
         <activity android:name=".Activities.TxDetailActivity" />
         <activity android:name=".Activities.NewAddressActivity" />
-        <activity android:name=".Activities.TokenTransferActivity"></activity>
+        <activity android:name=".Activities.TokenTransferActivity" />
+        <activity android:name=".Activities.QRScanActivity"></activity>
     </application>
 
 </manifest>

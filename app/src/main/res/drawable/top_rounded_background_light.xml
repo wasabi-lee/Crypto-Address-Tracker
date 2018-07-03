@@ -4,9 +4,10 @@
         <shape
             android:shape="rectangle">
             <corners
-                android:radius="@dimen/card_small_radius"/>
+                android:topLeftRadius="@dimen/card_medium_radius"
+                android:topRightRadius="@dimen/card_medium_radius"/>
             <solid
-                android:color="@color/state_fail_color"/>
+                android:color="@color/overview_card_background_light"/>
         </shape>
     </item>
 </selector>

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
             name="viewmodel"
             type="io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel" />
     </data>
 
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Activities.TxDetailActivity">
@@ -56,6 +58,15 @@
         <include layout="@layout/tx_detail_content"
             app:txInfo="@{viewmodel.mTxInfo}"
             app:viewmodel="@{viewmodel}"/>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:visibility="@{viewmodel.isLoading ? View.VISIBLE : View.GONE}"/>
 
         <!--<include-->
             <!--layout="@layout/tx_detail_bottom_sheet_content"-->

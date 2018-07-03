@@ -4,6 +4,9 @@
 
     <data>
 
+        <import
+            type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel" />
@@ -110,7 +113,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/progressBarStyleHorizontal"
-            android:visibility="gone"
+            android:visibility="@{viewmodel.isLoading ? View.VISIBLE : View.GONE}"
             android:indeterminate="true" />
 
         <android.support.v4.view.ViewPager

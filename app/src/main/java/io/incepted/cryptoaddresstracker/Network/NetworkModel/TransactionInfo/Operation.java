@@ -8,7 +8,7 @@ public class Operation {
     private Long timestamp;
     private String transactionHash;
     private String value;
-    private Long intValue;
+    private Double intValue;
     private String type;
     private Integer priority;
     private String from;
@@ -41,11 +41,11 @@ public class Operation {
         this.value = value;
     }
 
-    public Long getIntValue() {
+    public Double getIntValue() {
         return intValue;
     }
 
-    public void setIntValue(Long intValue) {
+    public void setIntValue(Double intValue) {
         this.intValue = intValue;
     }
 

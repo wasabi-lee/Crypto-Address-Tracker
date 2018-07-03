@@ -42,6 +42,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
+    public ObservableField<Boolean> isLoading = new ObservableField<>();
+
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
     private MutableLiveData<TxExtraWrapper> mOpenTokenTransactions = new MutableLiveData<>();
@@ -60,6 +62,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     }
 
     private void loadAddress(int addressId) {
+        isLoading.set(true); // Show progress bar
         this.mAddressRepository.getAddress(addressId, this);
     }
 
@@ -135,6 +138,9 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
             updateTokenList(remoteAddressInfo.getTokens());
         }
         updateAddressInfo(remoteAddressInfo);
+
+        // hide progress bar
+        isLoading.set(false);
     }
 
     private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {

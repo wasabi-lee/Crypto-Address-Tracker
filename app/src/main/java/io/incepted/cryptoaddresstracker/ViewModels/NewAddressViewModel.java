@@ -25,6 +25,7 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private MutableLiveData<Void> openQRScanActivity = new MutableLiveData<>();
     private MutableLiveData<AddressStateNavigator> mAddressState = new MutableLiveData<>();
 
     public NewAddressViewModel(Application application, AddressRepository repository) {
@@ -34,11 +35,23 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
 
     public void saveAddress() {
         mAddressState.setValue(AddressStateNavigator.SAVE_IN_PROGRESS);
-        mAddressRepository.saveAddress(new Address(name.get(), address.get(), getCurrentTimestamp()), this);
+
+        try {
+            String nameInput = name.get().equals("") ? address.get() : name.get();
+            String addressInput = address.get().trim();
+            mAddressRepository.saveAddress(new Address(nameInput, addressInput, getCurrentTimestamp()), this);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            mSnackbarTextResource.setValue(R.string.unexpected_error);
+        }
     }
 
     public Date getCurrentTimestamp() {
         return Calendar.getInstance().getTime();
+    }
+
+    public void toQRScanActivity() {
+        openQRScanActivity.setValue(null);
     }
 
 
@@ -56,6 +69,9 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
         return mAddressState;
     }
 
+    public MutableLiveData<Void> getOpenQRScanActivity() {
+        return openQRScanActivity;
+    }
 
     // ------------- Callbacks
 

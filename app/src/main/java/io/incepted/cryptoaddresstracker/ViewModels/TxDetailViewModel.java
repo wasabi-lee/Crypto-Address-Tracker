@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
+import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -30,11 +31,10 @@ public class TxDetailViewModel extends AndroidViewModel {
     private AddressRepository mAddressRepository;
     private String txHash;
 
-//    public BottomSheetActionListener mBottomSheetActionListener = this::bottomSheetClicked;
     public ObservableField<TransactionInfo> mTxInfo = new ObservableField<>();
+    public ObservableBoolean isLoading = new ObservableBoolean();
     public CopyListener mListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
-//    private MutableLiveData<Void> mExpandBottomSheet = new MutableLiveData<>();
     private MutableLiveData<String> openTokenOperations = new MutableLiveData<>();
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
@@ -52,12 +52,18 @@ public class TxDetailViewModel extends AndroidViewModel {
 
     @SuppressLint("CheckResult")
     private void fetchTxDetail(String txHash) {
+
+        // show progress bar
+        isLoading.set(true);
+
         Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
                 .getTransactionDetail(txHash, NetworkManager.API_KEY);
 
         txInfoSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(result -> {
+                            // hide progress bar
+                            isLoading.set(false);
                             mTxInfo.set(result);
                             mTxInfo.notifyChange();
                         }
@@ -65,13 +71,6 @@ public class TxDetailViewModel extends AndroidViewModel {
 
     }
 
-//    private void bottomSheetClicked() {
-//        mExpandBottomSheet.setValue(null);
-//    }
-//
-//    public MutableLiveData<Void> getExpandBottomSheet() {
-//        return mExpandBottomSheet;
-//    }
 
 
     public MutableLiveData<String> getOpenTokenOperations() {

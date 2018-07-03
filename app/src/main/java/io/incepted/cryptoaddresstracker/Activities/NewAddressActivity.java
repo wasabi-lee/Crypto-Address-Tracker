@@ -1,6 +1,7 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -38,6 +39,8 @@ public class NewAddressActivity extends AppCompatActivity {
 
     private NewAddressViewModel mViewModel;
 
+    private static final int QR_SCAN_ACTIVITY_REQUEST_CODE = 132;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +52,7 @@ public class NewAddressActivity extends AppCompatActivity {
 
         initToolbar();
         setupAddressStateObserver();
+        setupObservers();
         setupSnackbar();
 
     }
@@ -84,6 +88,10 @@ public class NewAddressActivity extends AppCompatActivity {
         });
     }
 
+    private void setupObservers() {
+        mViewModel.getOpenQRScanActivity().observe(this, aVoid -> toQRScanActivity());
+    }
+
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
@@ -94,6 +102,11 @@ public class NewAddressActivity extends AppCompatActivity {
 
     }
 
+
+    private void toQRScanActivity() {
+        Intent intent = new Intent(this, QRScanActivity.class);
+        startActivityForResult(intent, QR_SCAN_ACTIVITY_REQUEST_CODE);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
