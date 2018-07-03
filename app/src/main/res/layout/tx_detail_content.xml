@@ -82,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@{txInfo.hash}"
+                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(txInfo.hash)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
                     app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_1" />
@@ -152,6 +153,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@{txInfo.from}"
+                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(txInfo.from)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
                     app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_3" />
@@ -187,6 +189,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@{txInfo.to}"
+                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(txInfo.to)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
                     app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_4" />
@@ -401,6 +404,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_normal"
                     app:long_text="@{txInfo.blockNumber}"
+                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(String.valueOf(txInfo.blockNumber))}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
                     app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
@@ -509,6 +513,7 @@
                     android:background="?attr/overview_card_background"
                     android:padding="@dimen/spacing_xsmall"
                     android:text="@{txInfo.input}"
+                    android:onClick="@{@{() -> viewmodel.mListener.onCopyRequested(txInfo.input)}}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

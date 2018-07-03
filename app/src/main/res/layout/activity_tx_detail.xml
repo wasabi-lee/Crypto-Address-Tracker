@@ -35,7 +35,8 @@
                 app:titleEnabled="false">
 
                 <include layout="@layout/tx_detail_header"
-                    app:txInfo="@{viewmodel.mTxInfo}"/>
+                    app:txInfo="@{viewmodel.mTxInfo}"
+                    app:copylistener="@{viewmodel.mListener}"/>
 
                 <android.support.v7.widget.Toolbar
                     android:id="@+id/tx_detail_toolbar"

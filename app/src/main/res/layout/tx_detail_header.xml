@@ -7,6 +7,10 @@
         <variable
             name="txInfo"
             type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo" />
+
+        <variable
+            name="copylistener"
+            type="io.incepted.cryptoaddresstracker.Listeners.CopyListener" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -120,6 +124,7 @@
                 android:layout_height="14dp"
                 android:layout_marginLeft="@dimen/spacing_xsmall"
                 android:layout_marginStart="@dimen/spacing_xsmall"
+                android:onClick="@{() -> copylistener.onCopyRequested(txInfo.hash)}"
                 android:src="@drawable/ic_content_copy" />
 
         </LinearLayout>
