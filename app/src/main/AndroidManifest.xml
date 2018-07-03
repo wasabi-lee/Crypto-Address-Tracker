@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.incepted.cryptoaddresstracker">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +27,8 @@
         <activity android:name=".Activities.TxActivity" />
         <activity android:name=".Activities.TokenAddressActivity" />
         <activity android:name=".Activities.TxDetailActivity" />
-        <activity android:name=".Activities.NewAddressActivity"></activity>
+        <activity android:name=".Activities.NewAddressActivity" />
+        <activity android:name=".Activities.TokenTransferActivity"></activity>
     </application>
 
 </manifest>

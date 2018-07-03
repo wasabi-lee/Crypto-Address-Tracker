@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="viewmodel"
+            type="io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel" />
 
         <variable
             name="txInfo"
@@ -10,9 +16,7 @@
 
     </data>
 
-    <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:isScrollContainer="true"
@@ -188,7 +192,7 @@
                     app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_4" />
 
 
-                <!--********** Success ***********-->
+                <!--********** Token transfers ***********-->
 
                 <View
                     android:id="@+id/tx_detail_content_horizontal_divider_5"
@@ -201,6 +205,42 @@
                     app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_to" />
 
                 <TextView
+                    android:id="@+id/tx_detail_content_token_transfers_dummy"
+                    style="@style/TextSecondarySemiBoldAppearance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:text="@string/token_transfers"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_5" />
+
+
+                <TextView
+                    android:id="@+id/tx_detail_content_token_transfers"
+                    style="@style/TextSmallSemiBoldAppearance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    app:token_transfer_exists="@{txInfo.operations.size()}"
+                    android:onClick="@{() -> viewmodel.toTokenTransferActivity(txInfo.hash)}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_5" />
+
+
+                <!--********** Success ***********-->
+
+                <View
+                    android:id="@+id/tx_detail_content_horizontal_divider_6"
+                    android:layout_width="0dp"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/spacing_normal"
+                    android:background="@color/text_color_secondary_gray"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_token_transfers" />
+
+                <TextView
                     android:id="@+id/tx_detail_content_status_dummy"
                     style="@style/TextSecondarySemiBoldAppearance"
                     android:layout_width="wrap_content"
@@ -208,7 +248,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/status"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_5" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_6" />
 
 
                 <TextView
@@ -220,13 +260,13 @@
                     app:success="@{txInfo.success}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_5" />
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_6" />
 
 
                 <!--********** Confirmation ***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_6"
+                    android:id="@+id/tx_detail_content_horizontal_divider_7"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -243,7 +283,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/confirmations"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_6" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_7" />
 
 
                 <TextView
@@ -255,12 +295,12 @@
                     app:long_text="@{txInfo.confirmations}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_1"
-                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_6" />
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_7" />
 
                 <!--********** Success ***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_7"
+                    android:id="@+id/tx_detail_content_horizontal_divider_8"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -300,7 +340,7 @@
                     android:gravity="end"
                     app:double_text="@{txInfo.value}"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_tx_amount_symbol"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_7" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
 
 
             </android.support.constraint.ConstraintLayout>
@@ -337,7 +377,7 @@
                 <!--********** Block Number ***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_8"
+                    android:id="@+id/tx_detail_content_horizontal_divider_9"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -352,7 +392,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/block_number"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
 
                 <TextView
                     android:id="@+id/tx_detail_content_block_number"
@@ -363,13 +403,13 @@
                     app:long_text="@{txInfo.blockNumber}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
 
 
                 <!--********** Gas Limit***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_9"
+                    android:id="@+id/tx_detail_content_horizontal_divider_10"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -386,7 +426,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/gas_limit"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_10" />
 
 
                 <TextView
@@ -398,13 +438,13 @@
                     app:long_text="@{txInfo.gasLimit}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_9" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_10" />
 
 
                 <!--********** Gas Used ***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_10"
+                    android:id="@+id/tx_detail_content_horizontal_divider_11"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -421,7 +461,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/gas_used"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_10" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_11" />
 
 
                 <TextView
@@ -433,13 +473,13 @@
                     app:long_text="@{txInfo.gasUsed}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_10" />
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_11" />
 
 
                 <!--********** Input ***********-->
 
                 <View
-                    android:id="@+id/tx_detail_content_horizontal_divider_11"
+                    android:id="@+id/tx_detail_content_horizontal_divider_12"
                     android:layout_width="0dp"
                     android:layout_height="0.5dp"
                     android:layout_marginTop="@dimen/spacing_normal"
@@ -456,7 +496,7 @@
                     android:layout_marginTop="@dimen/spacing_normal"
                     android:text="@string/input"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_11" />
+                    app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_12" />
 
 
                 <TextView
@@ -464,15 +504,15 @@
                     style="@style/TextXSmallRegularAppearance"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xsmall"
                     android:layout_marginBottom="@dimen/spacing_xxxlarge"
-                    android:layout_marginTop="@dimen/spacing_normal"
                     android:background="?attr/overview_card_background"
                     android:padding="@dimen/spacing_xsmall"
                     android:text="@{txInfo.input}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/tx_detail_content_vertical_divider_2"
-                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_horizontal_divider_11" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tx_detail_content_to_input_dummy"/>
 
 
             </android.support.constraint.ConstraintLayout>

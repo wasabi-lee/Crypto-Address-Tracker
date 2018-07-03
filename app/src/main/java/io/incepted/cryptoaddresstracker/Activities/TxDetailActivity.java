@@ -2,6 +2,7 @@ package io.incepted.cryptoaddresstracker.Activities;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import butterknife.BindView;
@@ -29,9 +31,9 @@ public class TxDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.tx_detail_toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.tx_detail_bottom_sheet)
-    LinearLayout bottomSheet;
-    private BottomSheetBehavior mBehavior;
+//    @BindView(R.id.tx_detail_bottom_sheet)
+//    LinearLayout bottomSheet;
+//    private BottomSheetBehavior mBehavior;
 
     private TxDetailViewModel mViewModel;
 
@@ -50,7 +52,7 @@ public class TxDetailActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: TxHash:" + mTxHash);
 
         initToolbar();
-        setupBottomSheet();
+//        setupBottomSheet();
         setupSnackbar();
         setupObservers();
     }
@@ -70,9 +72,9 @@ public class TxDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void setupBottomSheet() {
-        mBehavior = BottomSheetBehavior.from(bottomSheet);
-    }
+//    private void setupBottomSheet() {
+//        mBehavior = BottomSheetBehavior.from(bottomSheet);
+//    }
 
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, message -> {
@@ -88,12 +90,31 @@ public class TxDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-        mViewModel.getExpandBottomSheet().observe(this, aVoid -> toggleBottomSheetState());
+//        mViewModel.getExpandBottomSheet().observe(this, aVoid -> toggleBottomSheetState());
+        mViewModel.getOpenTokenOperations().observe(this, this::toTokenTransferActivity);
     }
 
-    private void toggleBottomSheetState() {
-        boolean expanded = mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
-        mBehavior.setState(expanded ? BottomSheetBehavior.STATE_COLLAPSED : BottomSheetBehavior.STATE_EXPANDED);
+    private void toTokenTransferActivity(String txHash) {
+        Intent intent = new Intent(this, TokenTransferActivity.class);
+        intent.putExtra(TokenTransferActivity.TOKEN_TRANSFER_TX_HASH_EXTRA_KEY, txHash);
+        startActivity(intent);
+    }
+
+
+//    private void toggleBottomSheetState() {
+//        boolean expanded = mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
+//        mBehavior.setState(expanded ? BottomSheetBehavior.STATE_COLLAPSED : BottomSheetBehavior.STATE_EXPANDED);
+//    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

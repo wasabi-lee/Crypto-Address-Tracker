@@ -84,7 +84,7 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
-    <style name="TexMediumBoldAppearance">
+    <style name="TextMediumBoldAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/roboto_bold</item>
     </style>
@@ -137,6 +137,11 @@
         <item name="android:textColor">@color/text_color_secondary_gray</item>
     </style>
 
+    <style name="TextSecondarySemiBoldAppearance.">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textColor">@color/text_color_secondary_gray</item>
+    </style>
     <style name="TextSecondaryAppearance">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/roboto</item>

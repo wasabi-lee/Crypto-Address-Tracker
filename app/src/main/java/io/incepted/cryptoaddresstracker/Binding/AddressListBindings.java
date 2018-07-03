@@ -4,6 +4,8 @@ import android.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,9 +19,11 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.incepted.cryptoaddresstracker.Adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.Adapters.TokenAdapter;
+import io.incepted.cryptoaddresstracker.Adapters.TokenTransferAdapter;
 import io.incepted.cryptoaddresstracker.Adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.Blockies;
@@ -53,6 +57,20 @@ public class AddressListBindings {
         }
     }
 
+    @BindingAdapter({"app:token_transfer_info"})
+    public static void setTokenTransferInfo(RecyclerView recyclerView, TransactionInfo txInfo) {
+        TokenTransferAdapter adapter = (TokenTransferAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            // Setting txInfo object itself to populate header content rather than passing the list only.
+            adapter.replaceData(txInfo);
+        }
+    }
+
+    @BindingAdapter({"app:int_text"})
+    public static void setIntText(TextView textView, int value) {
+        textView.setText(String.valueOf(value));
+    }
+
     @BindingAdapter({"app:double_text"})
     public static void setDoubleText(TextView textView, double value) {
         if ((Double.isNaN(value))) {
@@ -72,6 +90,11 @@ public class AddressListBindings {
             textView.setText(NumberUtils.formatDouble(editedValue));
         }
     }
+    @BindingAdapter({"app:tx_amount", "app:decimal"})
+    public static void setDoubleText(TextView textView, String amount, int decimals) {
+        String formattedAmount = NumberUtils.moveDecimal(amount, decimals);
+        textView.setText(formattedAmount);
+    }
 
     @BindingAdapter({"app:long_text"})
     public static void setLongText(TextView textView, long value) {
@@ -87,7 +110,7 @@ public class AddressListBindings {
     @BindingAdapter({"app:timestamp"})
     public static void setTimestampText(TextView textView, Long timestamp) {
         if (timestamp == null) {
-                textView.setText("");
+            textView.setText("");
             return;
         }
         Date date = new Date(timestamp * 1000);
@@ -131,5 +154,23 @@ public class AddressListBindings {
         if (success == null) return;
         textView.setText(success ? "Success" : "Pending");
         textView.setTextColor(Color.parseColor(success ? "#3cb271" : "#e65454"));
+    }
+
+    @BindingAdapter({"app:token_transfer_exists"})
+    public static void setTokenTransfer(TextView textView, int transfers) {
+
+        boolean noTransfer = transfers == 0;
+
+        textView.setTextColor(Color.parseColor(noTransfer ?"#ababab" : "#3cb271"));
+
+        String text = noTransfer ? "No token transfer found" : transfers + " token transfers found (click to see details)";
+
+        if (noTransfer) {
+            textView.setText(text);
+        } else {
+            SpannableString content = new SpannableString(text);
+            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+            textView.setText(content);
+        }
     }
 }

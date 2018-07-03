@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="txInfo"
+            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo" />
+
+        <variable
+            name="listener"
+            type="io.incepted.cryptoaddresstracker.Listeners.CopyListener" />
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/overview_card_background"
+        android:padding="@dimen/spacing_normal">
+
+        <View
+            android:id="@+id/token_transfer_header_divider"
+            android:layout_width="0.5dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_detail_dummy"
+            style="@style/TextMediumBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/token_transfer_detail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_num_tx_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="21dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/number_of_transfers"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_header_detail_dummy" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_timestamp_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/timestamp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_header_num_tx" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_tx_hash_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/txhash"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_header_timestamp" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_num_tx"
+            style="@style/TextSmallSemiBoldAppearance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="end"
+            app:int_text="@{txInfo.operations.size()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/token_transfer_header_divider"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_header_detail_dummy" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_timestamp"
+            style="@style/TextSmallSemiBoldAppearance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/token_transfer_header_divider"
+            app:layout_constraintTop_toTopOf="@+id/token_transfer_header_timestamp_dummy"
+            app:timestamp="@{txInfo.timestamp}" />
+
+        <TextView
+            android:id="@+id/token_transfer_header_tx_hash"
+            style="@style/TextSmallSemiBoldAppearance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="@{txInfo.hash}"
+            android:onClick="@{() -> listener.onCopyRequested(txInfo.hash)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/token_transfer_header_divider"
+            app:layout_constraintTop_toTopOf="@+id/token_transfer_header_tx_hash_dummy" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

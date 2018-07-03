@@ -21,8 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/gradient_background"
-            android:fitsSystemWindows="true"
-            app:elevation="0dp">
+            android:fitsSystemWindows="true">
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/tx_detail_collapsing_toolbar_layout"
@@ -46,7 +45,7 @@
                     android:background="@android:color/transparent"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark"
                     app:layout_anchor="@id/detail_collapsing_toolbar_layout"
-                    app:layout_collapseMode="pin" />
+                    app:layout_collapseMode="pin"/>
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
@@ -54,12 +53,13 @@
         </android.support.design.widget.AppBarLayout>
 
         <include layout="@layout/tx_detail_content"
-            app:txInfo="@{viewmodel.mTxInfo}"/>
-
-        <include
-            layout="@layout/tx_detail_bottom_sheet_content"
             app:txInfo="@{viewmodel.mTxInfo}"
-            app:listener="@{viewmodel.mBottomSheetActionListener}" />
+            app:viewmodel="@{viewmodel}"/>
+
+        <!--<include-->
+            <!--layout="@layout/tx_detail_bottom_sheet_content"-->
+            <!--app:txInfo="@{viewmodel.mTxInfo}"-->
+            <!--app:listener="@{viewmodel.mBottomSheetActionListener}" />-->
 
     </android.support.design.widget.CoordinatorLayout>
 </layout>

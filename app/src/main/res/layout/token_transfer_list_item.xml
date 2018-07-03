@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="operation"
+            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation" />
+
+        <variable
+            name="listener"
+            type="io.incepted.cryptoaddresstracker.Listeners.CopyListener" />
+    </data>
+
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/spacing_normal">
+
+        <TextView
+            android:id="@+id/token_transfer_item_from_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/token_transfer_item_from"
+            style="@style/TextSmallSemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxsmall"
+            android:onClick="@{() -> listener.onCopyRequested(operation.from)}"
+            android:text="@{operation.from}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_item_from_dummy" />
+
+
+        <TextView
+            android:id="@+id/token_transfer_item_to_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:text="@string/to"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/token_transfer_item_from" />
+
+        <TextView
+            android:id="@+id/token_transfer_item_to"
+            style="@style/TextSmallSemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxsmall"
+            android:onClick="@{() -> listener.onCopyRequested(operation.to)}"
+            android:text="@{operation.to}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/token_transfer_item_to_dummy" />
+        
+        <TextView
+            android:id="@+id/token_transfer_item_amount_dummy"
+            style="@style/TextSecondarySemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xsmall"
+            android:text="@string/amount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/token_transfer_item_to" />
+
+        <TextView
+            android:id="@+id/token_transfer_item_amount"
+            style="@style/TextMediumLargeSemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxsmall"
+            android:textColor="@color/colorAccent"
+            app:decimal="@{operation.tokenInfo.decimals}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/token_transfer_item_amount_dummy"
+            app:tx_amount="@{operation.value}" />
+
+        <TextView
+            android:id="@+id/token_transfer_item_amount_symbol"
+            style="@style/TextMediumSemiBoldAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_xsmall"
+            android:layout_marginRight="@dimen/spacing_xsmall"
+            android:text="@{operation.tokenInfo.symbol}"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="@+id/token_transfer_item_amount"
+            app:layout_constraintEnd_toStartOf="@id/token_transfer_item_amount" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

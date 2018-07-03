@@ -23,7 +23,7 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
     private static final String TAG = TxAdapter.class.getSimpleName();
 
     private TxViewModel mViewModel;
-    List<OperationWrapper> mOperations;
+    private List<OperationWrapper> mOperations;
     private TxItemActionListener mListener;
 
     private String mTxHoldingAddress;
