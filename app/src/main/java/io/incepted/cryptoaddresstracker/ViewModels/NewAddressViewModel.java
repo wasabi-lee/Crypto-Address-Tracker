@@ -5,6 +5,8 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
 
+import com.google.zxing.integration.android.IntentResult;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -52,6 +54,17 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
 
     public void toQRScanActivity() {
         openQRScanActivity.setValue(null);
+    }
+
+    public void handleActivityResult(IntentResult result) {
+        if (result.getContents() == null) {
+            // Cancel
+            mSnackbarTextResource.setValue(R.string.scan_qr_code);
+        } else {
+            // Scanned successfully
+            String scannedText = result.getContents();
+            address.set(scannedText);
+        }
     }
 
 

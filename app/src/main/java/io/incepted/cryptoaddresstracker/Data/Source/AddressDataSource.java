@@ -39,7 +39,7 @@ public interface AddressDataSource {
     }
 
     interface OnAddressUpdatedListener {
-        void onAddressUpdated();
+        void onAddressUpdated(Address updatedAddress);
 
         void onUpdateNotAvailable();
     }

@@ -31,9 +31,6 @@ public class TxDetailActivity extends AppCompatActivity {
 
     @BindView(R.id.tx_detail_toolbar)
     Toolbar mToolbar;
-//    @BindView(R.id.tx_detail_bottom_sheet)
-//    LinearLayout bottomSheet;
-//    private BottomSheetBehavior mBehavior;
 
     private TxDetailViewModel mViewModel;
 
@@ -52,7 +49,6 @@ public class TxDetailActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate: TxHash:" + mTxHash);
 
         initToolbar();
-//        setupBottomSheet();
         setupSnackbar();
         setupObservers();
     }
@@ -72,10 +68,6 @@ public class TxDetailActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-//    private void setupBottomSheet() {
-//        mBehavior = BottomSheetBehavior.from(bottomSheet);
-//    }
-
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, message -> {
             if (message != null)
@@ -90,7 +82,6 @@ public class TxDetailActivity extends AppCompatActivity {
     }
 
     private void setupObservers() {
-//        mViewModel.getExpandBottomSheet().observe(this, aVoid -> toggleBottomSheetState());
         mViewModel.getOpenTokenOperations().observe(this, this::toTokenTransferActivity);
     }
 
@@ -99,13 +90,6 @@ public class TxDetailActivity extends AppCompatActivity {
         intent.putExtra(TokenTransferActivity.TOKEN_TRANSFER_TX_HASH_EXTRA_KEY, txHash);
         startActivity(intent);
     }
-
-
-//    private void toggleBottomSheetState() {
-//        boolean expanded = mBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED;
-//        mBehavior.setState(expanded ? BottomSheetBehavior.STATE_COLLAPSED : BottomSheetBehavior.STATE_EXPANDED);
-//    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

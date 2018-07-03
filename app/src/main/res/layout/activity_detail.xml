@@ -4,8 +4,7 @@
 
     <data>
 
-        <import
-            type="android.view.View" />
+        <import type="android.view.View" />
 
         <variable
             name="viewmodel"
@@ -53,7 +52,8 @@
                         android:layout_height="60dp"
                         android:layout_gravity="top|center_horizontal"
                         android:layout_marginBottom="@dimen/spacing_xxsmall"
-                        app:blockies="@{viewmodel.mAddress.addrValue}"/>
+                        app:blockies="@{viewmodel.mAddress.addrValue}" />
+
 
                     <TextView
                         style="@style/TextLargeSemiBoldAppearance"
@@ -61,7 +61,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:gravity="bottom|center_horizontal"
-                        android:text="@{viewmodel.mAddress.name}"/>
+                        android:text="@{viewmodel.mAddress.name}" />
+
 
                     <TextView
                         style="@style/TextSecondaryAppearance"
@@ -69,8 +70,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="@dimen/spacing_xxsmall"
-                        android:text="@{viewmodel.mAddress.addrValue}"
-                        android:onClick="@{() -> viewmodel.copyListener.onCopyRequested(viewmodel.mAddress.addrValue)}"/>
+                        android:onClick="@{() -> viewmodel.copyListener.onCopyRequested(viewmodel.mAddress.addrValue)}"
+                        android:text="@{viewmodel.mAddress.addrValue}" />
+
+
                 </LinearLayout>
 
                 <android.support.v7.widget.Toolbar
@@ -110,11 +113,11 @@
 
         <ProgressBar
             android:id="@+id/detail_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:visibility="@{viewmodel.isLoading ? View.VISIBLE : View.GONE}"
-            android:indeterminate="true" />
+            android:indeterminate="true"
+            android:visibility="@{viewmodel.isLoading ? View.VISIBLE : View.GONE}" />
 
         <android.support.v4.view.ViewPager
             android:id="@+id/detail_view_pager"

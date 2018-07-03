@@ -14,6 +14,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
@@ -104,8 +107,22 @@ public class NewAddressActivity extends AppCompatActivity {
 
 
     private void toQRScanActivity() {
-        Intent intent = new Intent(this, QRScanActivity.class);
-        startActivityForResult(intent, QR_SCAN_ACTIVITY_REQUEST_CODE);
+//        Intent intent = new Intent(this, QRScanActivity.class);
+//        startActivityForResult(intent, QR_SCAN_ACTIVITY_REQUEST_CODE);
+        IntentIntegrator intentIntegrator = new IntentIntegrator(this);
+        intentIntegrator.setPrompt("Scan a QR code");
+        intentIntegrator.setBeepEnabled(true);
+        intentIntegrator.initiateScan();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            mViewModel.handleActivityResult(result);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

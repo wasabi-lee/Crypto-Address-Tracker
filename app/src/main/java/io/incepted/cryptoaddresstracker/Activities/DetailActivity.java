@@ -3,6 +3,7 @@ package io.incepted.cryptoaddresstracker.Activities;
 import android.app.AlertDialog;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.Nullable;
@@ -14,10 +15,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -255,6 +258,9 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
             case android.R.id.home:
                 onBackPressed();
                 break;
+            case R.id.menu_detail_edit:
+                launchEditDialog();
+                break;
             case R.id.menu_detail_delete:
                 launchDeletionDialog();
                 break;
@@ -264,17 +270,34 @@ public class DetailActivity extends AppCompatActivity implements AppBarLayout.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void launchDeletionDialog() {
+    private void launchEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Are you sure?");
-        builder.setMessage("This address will be deleted from your watchlist and cannot be revoked");
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            dialog.dismiss();
-            mViewModel.deleteAddress();
-        });
-        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
-        builder.create().show();
+        final View dialogView = getLayoutInflater().inflate(R.layout.address_name_edit_dialog, null);
+        builder.setView(dialogView);
+
+        final EditText nameEdit = dialogView.findViewById(R.id.address_name_edit);
+        builder.setTitle("Edit Address Name")
+                .setPositiveButton("DONE", (dialog, which) -> {
+                    mViewModel.updateAddressNewName(nameEdit.getText().toString());
+                    dialog.dismiss();
+                })
+                .setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss())
+                .create()
+                .show();
+
+    }
+
+    private void launchDeletionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false)
+                .setTitle("Are you sure?")
+                .setMessage("This address wil be deleted from your watchlist and cannot be revoked")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    dialog.dismiss();
+                    mViewModel.deleteAddress();
+                })
+                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                .create().show();
     }
 
 

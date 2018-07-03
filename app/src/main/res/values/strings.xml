@@ -15,6 +15,7 @@
     <string name="balance_eth">Balance (ETH)</string>
 
     <string name="unexpected_error">Unexpected error occurred. Please try again later!</string>
+    <style name="qr_scan_error">Error occurred while scanning QR code. Please try again later!</style>
     <string name="address_loading_error">"Error occurred while loading the address info. Please try again later!"</string>
     <string name="delete">Delete</string>
     <string name="total_received">Total Received</string>
@@ -51,4 +52,9 @@
     <string name="yes">YES</string>
     <string name="try_again">Try Again</string>
     <string name="is_this_the_right_address">Is this the right address?</string>
+    <string name="edit_address_name">Edit Address Name</string>
+    <string name="enter_the_new_address_name">Enter the new address name</string>
+    <string name="address_name">Address Name</string>
+    <string name="address_edit_successful">Successfully Updated</string>
+    <string name="balance">Balance</string>
 </resources>

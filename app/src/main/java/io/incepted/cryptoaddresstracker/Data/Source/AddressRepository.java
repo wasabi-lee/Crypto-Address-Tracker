@@ -77,7 +77,17 @@ public class AddressRepository implements AddressDataSource {
     public void updateAddress(@NonNull Address address, @NonNull OnAddressUpdatedListener callback) {
         try {
             mAddressDao.update(address);
-            callback.onAddressUpdated();
+            getAddress(address.get_id(), new OnAddressLoadedListener() {
+                @Override
+                public void onAddressLoaded(Address updatedAddress) {
+                    callback.onAddressUpdated(updatedAddress);
+                }
+
+                @Override
+                public void onAddressNotAvailable() {
+                    callback.onUpdateNotAvailable();
+                }
+            });
         } catch (Exception e) {
             callback.onUpdateNotAvailable();
         }

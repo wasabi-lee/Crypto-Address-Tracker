@@ -31,7 +31,7 @@ import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener, AddressDataSource.OnAddressDeletedListener {
+public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener, AddressDataSource.OnAddressDeletedListener, AddressDataSource.OnAddressUpdatedListener {
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
 
@@ -64,6 +64,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     private void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         this.mAddressRepository.getAddress(addressId, this);
+    }
+
+    public void updateAddressNewName(String newName) {
+        Address newAddress = mAddress.get();
+        newAddress.setName(newName);
+        mAddressRepository.updateAddress(newAddress, this);
+
     }
 
     public void deleteAddress() {
@@ -115,6 +122,20 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     @Override
     public void onAddressNotAvailable() {
         Log.d(TAG, "onDataNotAvailable: Failed to load address with id: " + mAddressId);
+    }
+
+    @Override
+    public void onAddressUpdated(Address updatedAddress) {
+        mSnackbarTextResource.setValue(R.string.address_edit_successful);
+        Address update = mAddress.get();
+        update.setName(updatedAddress.getName());
+        mAddress.set(update);
+        mAddress.notifyChange();
+    }
+
+    @Override
+    public void onUpdateNotAvailable() {
+        Log.d(TAG, "onUpdateNotAvailable: Failed to update data with id: " + mAddressId);
     }
 
     @Override
@@ -180,6 +201,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         mAddress.set(updatedAddress);
         mAddress.notifyChange();
     }
+
 
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
