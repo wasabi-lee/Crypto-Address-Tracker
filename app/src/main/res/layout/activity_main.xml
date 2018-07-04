@@ -26,7 +26,8 @@
 
             <include
                 android:id="@+id/content_main_navigation_layout"
-                layout="@layout/content_main_navigation" />
+                layout="@layout/content_main_navigation"
+                bind:viewmodel="@{viewmodel}"/>
 
         </android.support.design.widget.NavigationView>
 

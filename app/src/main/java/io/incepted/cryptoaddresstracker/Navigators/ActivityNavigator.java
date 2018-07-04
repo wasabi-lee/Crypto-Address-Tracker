@@ -10,6 +10,7 @@ public enum ActivityNavigator {
      */
 
     NEW_ADDRESS, // NewAddressActivity
+    TX_SCAN, // Tx scan activity
     ADDRESS_DETAIL, // DetailActivity
     TOKEN_ADDRESS, // TokenAddressActivity
     TRANSACTIONS, // TxActivity

@@ -12,6 +12,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -27,6 +28,8 @@ import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.main_toolbar)
     Toolbar mToolbar;
@@ -94,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
                     case TOKEN_ADDRESS:
                         toTokenAddressActivity();
                         break;
+                    case TX_SCAN:
+                        toTxScanActivity();
+                        break;
                     case SETTINGS:
                         toSettingsActivity();
                         break;
@@ -121,11 +127,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void toTokenAddressActivity() {
-        Intent intent = new Intent(this, TokenAddressActivity.class);
-        startActivity(intent);
+        Log.d(TAG, "toTokenAddressActivity: ");
+//        Intent intent = new Intent(this, TokenAddressActivity.class);
+//        startActivity(intent);
+    }
+
+    private void toTxScanActivity() {
+        Log.d(TAG, "toTxScanActivity: ");
     }
 
     private void toSettingsActivity() {
+        Log.d(TAG, "toSettingsActivity: ");
 //        Intent intent = new Intent(this, SettingsActivity.class);
 //        startActivity(intent);
     }

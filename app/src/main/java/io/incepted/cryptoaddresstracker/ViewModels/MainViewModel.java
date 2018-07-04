@@ -75,6 +75,9 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
         mActivityNavigator.setValue(ActivityNavigator.TOKEN_ADDRESS);
     }
 
+    public void toTxScan() {
+        mActivityNavigator.setValue(ActivityNavigator.TX_SCAN);
+    }
 
     // ----------------------- Getters -------------------
 

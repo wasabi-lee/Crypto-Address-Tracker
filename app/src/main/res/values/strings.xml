@@ -58,4 +58,7 @@
     <string name="address_edit_successful">Successfully Updated</string>
     <string name="balance">Balance</string>
     <string name="explore">Explore</string>
+    <string name="erc20_token_addresses">ERC20 Token Addresses</string>
+    <string name="scan_a_transaction">Scan A Transaction</string>
+    <string name="settings">Settings</string>
 </resources>
