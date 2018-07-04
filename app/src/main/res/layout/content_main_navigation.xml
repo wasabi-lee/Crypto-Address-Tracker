@@ -92,7 +92,7 @@
             android:id="@+id/nav_content_header_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Addresses"
+            android:text="@string/explore"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="8dp"
@@ -121,64 +121,15 @@
 
 
         <TextView
-            android:id="@+id/nav_content_item_exchange_addresses"
+            android:id="@+id/nav_content_item_scan_tx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Exchange Addresses"
+            android:text="Scan A Transaction"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_content_item_token_addresses"
-            style="@style/TextMediumBoldAppearance" />
-
-
-
-
-        <TextView
-            android:id="@+id/nav_content_header_help_us"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Help us"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="16dp"
-            style="@style/TextSmallBoldAppearance"
-            app:layout_constraintTop_toBottomOf="@id/nav_content_item_exchange_addresses" />
-
-        <View
-            android:id="@+id/nav_divider_line_2"
-            android:layout_width="100dp"
-            android:layout_height="0.5dp"
-            android:background="@color/text_color_secondary_gray"
-            app:layout_constraintTop_toBottomOf="@id/nav_content_header_help_us"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_margin="8dp"/>
-
-        <TextView
-            android:id="@+id/nav_content_item_feedback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Feedback"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_2"
-            style="@style/TextMediumBoldAppearance"/>
-
-
-        <TextView
-            android:id="@+id/nav_content_item_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Rate This App"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nav_content_item_feedback"
+            app:layout_constraintTop_toBottomOf="@id/nav_content_item_token_addresses"
             style="@style/TextMediumBoldAppearance"/>
 
 
@@ -187,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Settings"
-            app:layout_constraintTop_toBottomOf="@id/nav_content_item_rate"
+            app:layout_constraintTop_toBottomOf="@id/nav_content_item_scan_tx"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"

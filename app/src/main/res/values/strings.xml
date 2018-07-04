@@ -57,4 +57,5 @@
     <string name="address_name">Address Name</string>
     <string name="address_edit_successful">Successfully Updated</string>
     <string name="balance">Balance</string>
+    <string name="explore">Explore</string>
 </resources>
