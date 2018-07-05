@@ -15,7 +15,10 @@
     <string name="balance_eth">Balance (ETH)</string>
 
     <string name="unexpected_error">Unexpected error occurred. Please try again later!</string>
-    <style name="qr_scan_error">Error occurred while scanning QR code. Please try again later!</style>
+
+    <string name="qr_scan_error">Error occurred while scanning QR code. Please try again
+        later!</string>
+
     <string name="address_loading_error">"Error occurred while loading the address info. Please try again later!"</string>
     <string name="delete">Delete</string>
     <string name="total_received">Total Received</string>
@@ -61,4 +64,6 @@
     <string name="erc20_token_addresses">ERC20 Token Addresses</string>
     <string name="scan_a_transaction">Scan A Transaction</string>
     <string name="settings">Settings</string>
+    <string name="scan">SCAN</string>
+    <string name="transaction_hash">Transaction Hash</string>
 </resources>

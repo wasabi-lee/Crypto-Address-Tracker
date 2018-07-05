@@ -32,11 +32,12 @@
         <activity android:name=".Activities.TxDetailActivity" />
         <activity android:name=".Activities.NewAddressActivity" />
         <activity android:name=".Activities.TokenTransferActivity" />
-        <activity android:name=".Activities.QRScanActivity"></activity>
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
+        <activity android:name=".Activities.TxScanActivity" />
+        <activity android:name=".Activities.SettingsActivity"></activity>
     </application>
 
 </manifest>

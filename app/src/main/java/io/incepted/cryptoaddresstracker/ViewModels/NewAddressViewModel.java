@@ -4,6 +4,7 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableField;
+import android.util.Log;
 
 import com.google.zxing.integration.android.IntentResult;
 
@@ -59,7 +60,7 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
     public void handleActivityResult(IntentResult result) {
         if (result.getContents() == null) {
             // Cancel
-            mSnackbarTextResource.setValue(R.string.scan_qr_code);
+            Log.d(TAG, "handleActivityResult: Scan cancelled");
         } else {
             // Scanned successfully
             String scannedText = result.getContents();

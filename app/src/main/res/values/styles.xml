@@ -14,6 +14,7 @@
         <item name="bottom_sheet_background">@color/bottom_sheet_background_light</item>
         <item name="rounded_background">@drawable/rounded_background_light</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_light</item>
+        <item name="button_style">@style/button_style_light</item>
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -30,7 +31,7 @@
         <item name="bottom_sheet_background">@color/bottom_sheet_background_dark</item>
         <item name="rounded_background">@drawable/rounded_background_dark</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_dark</item>
-
+        <item name="button_style">@style/button_style_dark</item>
     </style>
 
     <attr name="overview_card_background" format="reference" />
@@ -38,6 +39,7 @@
     <attr name="bottom_sheet_background" format="reference" />
     <attr name="top_rounded_background" format="reference" />
     <attr name="rounded_background" format="reference" />
+    <attr name="button_style" format="reference" />
 
 
     <!-- ****************** Text appearance ******************* -->
@@ -156,6 +158,24 @@
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/text_color_secondary_gray</item>
+    </style>
+
+
+    <!-- *********************** Button styles ************************** -->
+
+    <style name="button_style_light">
+        <item name="android:background">@drawable/rounded_background_light</item>
+        <item name="android:textColor">@color/text_color_light</item>
+    </style>
+    <style name="button_style_dark">
+        <item name="android:background">@drawable/rounded_background_dark</item>
+        <item name="android:textColor">@color/text_color_dark</item>
+    </style>
+
+    <style name="edittext_style" parent="Base.V7.Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/text_color_secondary_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
 
 

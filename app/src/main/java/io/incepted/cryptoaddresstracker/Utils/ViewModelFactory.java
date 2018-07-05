@@ -5,14 +5,13 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import io.incepted.cryptoaddresstracker.Activities.MainActivity;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
-import io.incepted.cryptoaddresstracker.ViewModels.QRScanViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.TokenTransferViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel;
+import io.incepted.cryptoaddresstracker.ViewModels.TxScanViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
 
 public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
@@ -63,9 +62,9 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         } else if (modelClass.isAssignableFrom(TokenTransferViewModel.class)) {
             //noinspection unchecked
             return (T) new TokenTransferViewModel(mApplication, mRepository);
-        } else if (modelClass.isAssignableFrom(QRScanViewModel.class)) {
+        } else if (modelClass.isAssignableFrom(TxScanViewModel.class)) {
             //noinspection unchecked
-            return (T) new QRScanViewModel(mApplication, mRepository);
+            return (T) new TxScanViewModel(mApplication, mRepository);
         }
         return super.create(modelClass);
     }

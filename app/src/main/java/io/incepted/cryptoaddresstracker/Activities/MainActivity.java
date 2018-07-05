@@ -128,12 +128,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void toTokenAddressActivity() {
         Log.d(TAG, "toTokenAddressActivity: ");
-//        Intent intent = new Intent(this, TokenAddressActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, TokenAddressActivity.class);
+        startActivity(intent);
     }
 
     private void toTxScanActivity() {
         Log.d(TAG, "toTxScanActivity: ");
+        Intent intent = new Intent(this, TxScanActivity.class);
+        startActivity(intent);
     }
 
     private void toSettingsActivity() {
