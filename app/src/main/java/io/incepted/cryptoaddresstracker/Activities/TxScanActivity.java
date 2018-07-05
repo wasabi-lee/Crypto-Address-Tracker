@@ -20,7 +20,7 @@ import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.TxScanViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTxScanBinding;
 
-public class TxScanActivity extends AppCompatActivity {
+public class TxScanActivity extends BaseActivity {
 
     private static final String TAG = TxScanActivity.class.getSimpleName();
 

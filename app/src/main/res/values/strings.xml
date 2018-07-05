@@ -73,6 +73,7 @@
     <string name="enable_dark_theme">Enable Dark Theme</string>
     <string name="help_us">Help Us</string>
     <string name="feedback">Feedback</string>
+    <string name="shared_pref_file_key">shared_pref_file_key_io.incepted.cryptoaddresstracker</string>
     <string name="pref_key_rate_app">pref_key_rate_app</string>
     <string name="pref_key_feedback">pref_key_feedback</string>
     <string name="rate_this_app">Rate This App</string>

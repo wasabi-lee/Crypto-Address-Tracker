@@ -37,7 +37,7 @@ import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityDetailBinding;
 
-public class DetailActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private static final String TAG = DetailActivity.class.getSimpleName();
 

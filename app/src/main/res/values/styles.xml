@@ -12,7 +12,6 @@
         <item name="overview_card_background">@color/overview_card_background_light</item>
         <item name="default_card_background">@color/window_background_light</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_light</item>
-        <item name="rounded_background">@drawable/rounded_background_light</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_light</item>
         <item name="button_style">@style/button_style_light</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
@@ -30,7 +29,6 @@
         <item name="overview_card_background">@color/overview_card_background_dark</item>
         <item name="default_card_background">@color/window_background_dark</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_dark</item>
-        <item name="rounded_background">@drawable/rounded_background_dark</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_dark</item>
         <item name="button_style">@style/button_style_dark</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>

@@ -25,7 +25,7 @@ import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityNewAddressBinding;
 
-public class NewAddressActivity extends AppCompatActivity {
+public class NewAddressActivity extends BaseActivity {
 
     private static final String TAG = NewAddressViewModel.class.getSimpleName();
 

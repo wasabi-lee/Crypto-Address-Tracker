@@ -30,7 +30,7 @@ import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
 
-public class TxActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
     private static final String TAG = TxActivity.class.getSimpleName();
 

@@ -38,7 +38,8 @@
             tools:replace="screenOrientation" />
         <activity android:name=".Activities.TxScanActivity" />
         <activity android:name=".Activities.SettingsActivity" />
-        <activity android:name=".Activities.FeedbackActivity"></activity>
+        <activity android:name=".Activities.FeedbackActivity" />
+        <activity android:name=".Activities.BaseActivity"></activity>
     </application>
 
 </manifest>

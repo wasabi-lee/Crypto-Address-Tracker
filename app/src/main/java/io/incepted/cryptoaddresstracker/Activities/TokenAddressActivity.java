@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import io.incepted.cryptoaddresstracker.R;
 
-public class TokenAddressActivity extends AppCompatActivity implements AppBarLayout.OnOffsetChangedListener {
+public class TokenAddressActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
 
     private static final String TAG = TokenAddressActivity.class.getSimpleName();

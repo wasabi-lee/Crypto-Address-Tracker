@@ -22,7 +22,7 @@ import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.TokenTransferViewModel;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTokenTransferBinding;
 
-public class TokenTransferActivity extends AppCompatActivity {
+public class TokenTransferActivity extends BaseActivity {
 
     private static final String TAG = TokenTransferActivity.class.getSimpleName();
 
