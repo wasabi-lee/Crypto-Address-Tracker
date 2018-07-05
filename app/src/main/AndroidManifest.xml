@@ -37,7 +37,8 @@
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
         <activity android:name=".Activities.TxScanActivity" />
-        <activity android:name=".Activities.SettingsActivity"></activity>
+        <activity android:name=".Activities.SettingsActivity" />
+        <activity android:name=".Activities.FeedbackActivity"></activity>
     </application>
 
 </manifest>

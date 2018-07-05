@@ -140,8 +140,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void toSettingsActivity() {
         Log.d(TAG, "toSettingsActivity: ");
-//        Intent intent = new Intent(this, SettingsActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
 

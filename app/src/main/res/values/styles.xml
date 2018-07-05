@@ -15,6 +15,7 @@
         <item name="rounded_background">@drawable/rounded_background_light</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_light</item>
         <item name="button_style">@style/button_style_light</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -32,6 +33,7 @@
         <item name="rounded_background">@drawable/rounded_background_dark</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_dark</item>
         <item name="button_style">@style/button_style_dark</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
     </style>
 
     <attr name="overview_card_background" format="reference" />
@@ -40,6 +42,7 @@
     <attr name="top_rounded_background" format="reference" />
     <attr name="rounded_background" format="reference" />
     <attr name="button_style" format="reference" />
+
 
 
     <!-- ****************** Text appearance ******************* -->
