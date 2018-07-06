@@ -116,7 +116,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateViews,
-                        this::handleError);
+                        throwable -> {
+                            isLoading.set(false);
+                            handleError(throwable);
+                        });
     }
 
     @Override
@@ -135,6 +138,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     @Override
     public void onUpdateNotAvailable() {
+        isLoading.set(false);
         Log.d(TAG, "onUpdateNotAvailable: Failed to update data with id: " + mAddressId);
     }
 
@@ -145,6 +149,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     @Override
     public void onDeletionNotAvailable() {
+        isLoading.set(false);
         mDeletionState.setValue(DeletionStateNavigator.DELETION_FAILED);
         mSnackbarTextResource.setValue(R.string.unexpected_error);
         Log.d(TAG, "onDeletionNotAvailable: Failed to delete address with id: " + mAddressId);

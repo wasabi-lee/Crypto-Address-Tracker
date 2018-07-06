@@ -87,7 +87,7 @@
                     android:contentDescription="@string/scan_qr_code"
                     android:padding="@dimen/spacing_xsmall"
                     android:onClick="@{() -> viewmodel.initiateScan()}"
-                    android:src="@drawable/ic_camera_alt_black"
+                    android:src="?attr/qr_scan_icon"
                     app:layout_constraintBottom_toBottomOf="@+id/tx_scan_tx_hash_edit_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tx_scan_tx_hash_edit_text" />

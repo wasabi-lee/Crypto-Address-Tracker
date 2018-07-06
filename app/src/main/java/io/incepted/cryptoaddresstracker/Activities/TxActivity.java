@@ -100,8 +100,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black);
-            //TODO Change back button icon based on the theme
         }
     }
 

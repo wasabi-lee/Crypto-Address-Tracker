@@ -57,7 +57,7 @@
 
                 <EditText
                     android:id="@+id/new_addr_name_edit_text"
-                    style="@style/TextMediumRegularAppearance"
+                    style="@style/edittext_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -98,7 +98,7 @@
 
                 <EditText
                     android:id="@+id/new_addr_addr_edit_text"
-                    style="@style/TextMediumRegularAppearance"
+                    style="@style/edittext_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -121,7 +121,7 @@
                     android:padding="@dimen/spacing_xsmall"
                     android:contentDescription="@string/scan_qr_code"
                     android:onClick="@{() -> viewmodel.toQRScanActivity()}"
-                    android:src="@drawable/ic_camera_alt_black"
+                    android:src="?attr/qr_scan_icon"
                     app:layout_constraintBottom_toBottomOf="@+id/new_addr_addr_edit_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/new_addr_addr_edit_text" />
@@ -142,12 +142,12 @@
 
                 <TextView
                     android:id="@+id/new_addr_save_button"
+                    style="?attr/button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginTop="@dimen/spacing_normal"
-                    android:background="@color/colorPrimary"
                     android:gravity="center"
                     android:paddingBottom="@dimen/spacing_small"
                     android:paddingLeft="60dp"
@@ -155,7 +155,6 @@
                     android:paddingTop="@dimen/spacing_small"
                     android:text="@string/save"
                     android:onClick="@{() -> viewmodel.saveAddress()}"
-                    android:textColor="@android:color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/new_addr_required_field_dummy" />
 

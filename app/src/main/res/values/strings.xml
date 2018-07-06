@@ -67,8 +67,6 @@
     <string name="scan">SCAN</string>
     <string name="transaction_hash">Transaction Hash</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="pref_key_dark_theme">pref_key_dark_theme</string>
     <string name="enable_dark_theme">Enable Dark Theme</string>
     <string name="help_us">Help Us</string>

@@ -72,6 +72,7 @@
                     android:id="@+id/tx_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
+                    android:theme="?attr/transparent_toolbar_style"
                     app:layout_collapseMode="pin">
 
                     <TextView

@@ -32,6 +32,7 @@ import io.incepted.cryptoaddresstracker.Fragments.OverviewFragment;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Fragments.TokenFragment;
 import io.incepted.cryptoaddresstracker.Adapters.ViewPagerAdapter;
+import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.Utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
@@ -106,8 +107,6 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black);
-            //TODO Change back button icon based on the theme
         }
     }
 
@@ -288,6 +287,10 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     }
 
     private void launchDeletionDialog() {
+
+//        boolean isDarkMode = SharedPreferenceHelper.getThemeFlag(this);
+//        int style = isDarkMode ? R.style.dialog_theme_dark : R.style.dialog_theme_light;
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
                 .setTitle("Are you sure?")

@@ -78,7 +78,7 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
 
     public void openAddressDetail(int addressId) {
         mOpenAddressDetail.setValue(addressId);
-        resetActivityNav();
+        mOpenAddressDetail.setValue(null);
     }
 
     public void toSettings() {
