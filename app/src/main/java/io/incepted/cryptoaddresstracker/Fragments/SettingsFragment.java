@@ -53,6 +53,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        mCallback.onThemeChanged();
+        mCallback.onThemeChanged(sharedPreferences.getBoolean(key, false));
     }
 }

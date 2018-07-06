@@ -22,6 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.Adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.Utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
@@ -32,8 +33,6 @@ public class MainActivity extends BaseActivity {
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final int SETTINGS_REQUEST_CODE = 34;
 
-    public static final String IS_THEME_CHANGED_EXTRA_KEY = "is_theme_changed_extra_key";
-
     @BindView(R.id.main_toolbar)
     Toolbar mToolbar;
     @BindView(R.id.main_drawer_layout)
@@ -42,16 +41,20 @@ public class MainActivity extends BaseActivity {
     RecyclerView mAddressList;
 
     private MainViewModel mViewModel;
+    private boolean mIsDarkMode;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate: ");
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mViewModel = obtainViewModel(this);
         binding.setViewmodel(mViewModel);
 
         ButterKnife.bind(this);
+
+        mIsDarkMode = SharedPreferenceHelper.getThemeFlag(this);
 
         initToolbar();
         setupTransitionObservers();
@@ -82,7 +85,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupSnackbar() {
-        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
+        mViewModel.getSnackbarText().observe(this, message -> {
+            if (message != null)
+                showSnackbar(message);
+        });
 
         mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
             if (stringResource != null)
@@ -130,23 +136,19 @@ public class MainActivity extends BaseActivity {
     }
 
     private void toTokenAddressActivity() {
-        Log.d(TAG, "toTokenAddressActivity: ");
         Intent intent = new Intent(this, TokenAddressActivity.class);
         startActivity(intent);
     }
 
     private void toTxScanActivity() {
-        Log.d(TAG, "toTxScanActivity: ");
         Intent intent = new Intent(this, TxScanActivity.class);
         startActivity(intent);
     }
 
     private void toSettingsActivity() {
-        Log.d(TAG, "toSettingsActivity: ");
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
     }
-
 
     @Override
     protected void onResume() {
@@ -179,9 +181,9 @@ public class MainActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                boolean isthemechanged = data.getBooleanExtra(IS_THEME_CHANGED_EXTRA_KEY, false);
-                Log.d(TAG, "onActivityResult: Theme changed? : "+ isthemechanged);
-                if (isthemechanged) {
+                boolean isDarkModeUpdated = SharedPreferenceHelper.getThemeFlag(this);
+                boolean isThemeChanged = (mIsDarkMode != isDarkModeUpdated);
+                if (isThemeChanged) {
                     recreate();
                 }
             }

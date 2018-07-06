@@ -8,6 +8,7 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,24 +60,40 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
 
     // ----------------------- Activity transition ------------------
 
+    // Resetting the value of the navigator back to null after the assignment
+    // to prevent unnecessary activity transition call after recreating MainActivity.
+    // This behavior occurs because when MutableLiveData.observe() method is called in MainActivity's OnCreate(),
+    // and when the data already exists in that LiveData, that data gets delivered immediately to the activity
+    // causing the transition to another activity even without the user click.
+    // Resetting the navigator's value to null prevents this behavior.
+
+    private void resetActivityNav() {
+        mActivityNavigator.setValue(null);
+    }
+
     public void addNewAddress() {
         mActivityNavigator.setValue(ActivityNavigator.NEW_ADDRESS);
+        resetActivityNav();
     }
 
     public void openAddressDetail(int addressId) {
         mOpenAddressDetail.setValue(addressId);
+        resetActivityNav();
     }
 
     public void toSettings() {
         mActivityNavigator.setValue(ActivityNavigator.SETTINGS);
+        resetActivityNav();
     }
 
     public void toTokenAddresses() {
         mActivityNavigator.setValue(ActivityNavigator.TOKEN_ADDRESS);
+        resetActivityNav();
     }
 
     public void toTxScan() {
         mActivityNavigator.setValue(ActivityNavigator.TX_SCAN);
+        resetActivityNav();
     }
 
     // ----------------------- Getters -------------------
@@ -147,7 +164,9 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
                         // OnError
                         throwable -> {
                             throwable.printStackTrace();
+                            isDataLoading.set(false);
                             mSnackbarTextResource.setValue(R.string.unexpected_error);
+                            mSnackbarTextResource.setValue(null); // resetting the value
                         },
                         // OnComplete. Updating the RecyclerView.
                         () -> {

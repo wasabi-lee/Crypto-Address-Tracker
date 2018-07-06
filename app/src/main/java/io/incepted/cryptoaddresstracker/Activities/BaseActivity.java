@@ -17,5 +17,6 @@ public class BaseActivity extends AppCompatActivity {
 
         boolean isDarkTheme = SharedPreferenceHelper.getThemeFlag(this);
         setTheme(isDarkTheme ? R.style.AppTheme_dark : R.style.AppTheme_light);
+
     }
 }
