@@ -118,7 +118,6 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
     }
 
     public void toTxDetailActivity(String transactionHash) {
-        //TODO TxDetailActivity connection
         mOpenTxDetail.setValue(transactionHash);
     }
 

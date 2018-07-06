@@ -162,8 +162,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     private void updateViews(RemoteAddressInfo remoteAddressInfo) {
         if (remoteAddressInfo.getContractInfo() != null) {
-            // TODO Contract address!
-            // Show placeholder screen
             isContractAddress.set(true);
 
         } else {
