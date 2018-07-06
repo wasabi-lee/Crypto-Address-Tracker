@@ -2,6 +2,7 @@ package io.incepted.cryptoaddresstracker.Network;
 
 import java.util.List;
 
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
@@ -26,6 +27,10 @@ public interface NetworkService {
     Observable<RemoteAddressInfo> getDetailedAddressInfo(@Path("address") String address,
                                                          @Query("apiKey") String apiKey,
                                                          @Query("showETHTotals") boolean showEthTotals);
+
+    @GET("getTokenHistory/{address}")
+    Single<TransactionListInfo> getContractTokenTransactionListInfo(@Path("address") String address,
+                                                                        @Query("apiKey") String apiKey);
 
     @GET("getAddressHistory/{address}")
     Single<TransactionListInfo> getTokenTransactionListInfo(@Path("address") String address,

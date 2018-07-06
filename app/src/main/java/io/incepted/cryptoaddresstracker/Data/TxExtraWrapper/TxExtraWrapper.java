@@ -12,11 +12,19 @@ public class TxExtraWrapper {
     private int addressId;
     private String tokenName;
     private String tokenAddress;
+    private boolean isContractAddress;
 
     public TxExtraWrapper(int addressId, String tokenName, String tokenAddress) {
         this.addressId = addressId;
         this.tokenName = tokenName;
         this.tokenAddress = tokenAddress;
+    }
+
+    public TxExtraWrapper(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
+        this.addressId = addressId;
+        this.tokenName = tokenName;
+        this.tokenAddress = tokenAddress;
+        this.isContractAddress = isContractAddress;
     }
 
     public int getAddressId() {
@@ -41,5 +49,13 @@ public class TxExtraWrapper {
 
     public void setTokenAddress(String tokenAddress) {
         this.tokenAddress = tokenAddress;
+    }
+
+    public boolean isContractAddress() {
+        return isContractAddress;
+    }
+
+    public void setContractAddress(boolean contractAddress) {
+        isContractAddress = contractAddress;
     }
 }

@@ -31,6 +31,7 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
     public MutableLiveData<Address> mAddress = new MutableLiveData<>();
     public String tokenName;
     public String tokenAddress;
+    public boolean isContractAddress;
 
     /**
      * @value boolean fetchEthTx:
@@ -52,9 +53,10 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
         this.mAddressRepository = repository;
     }
 
-    public void start(int addressId, String tokenName, String tokenAddress) {
+    public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
         this.tokenName = tokenName;
         this.tokenAddress = tokenAddress;
+        this.isContractAddress = isContractAddress;
         this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
         loadAddress(addressId);
     }
@@ -87,8 +89,12 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
         } else {
 
             // When fetching token transactions
-
-            Single<TransactionListInfo> networkCallSingle =
+            Single<TransactionListInfo> networkCallSingle = isContractAddress ?
+                    // Using 'getTokenHistory' API call for the contract address
+                    NetworkManager.getContractTokenTransactionListInfoService()
+                            .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY)
+                    :
+                    // Using 'getAddressHistory' API call for the normal address
                     NetworkManager.getTokenTransactionListInfoService()
                             .getTokenTransactionListInfo(address, NetworkManager.API_KEY, tokenAddress);
 

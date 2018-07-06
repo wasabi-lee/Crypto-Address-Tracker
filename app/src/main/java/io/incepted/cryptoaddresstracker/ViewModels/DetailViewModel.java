@@ -23,6 +23,7 @@ import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ContractInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
@@ -43,6 +44,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
     public ObservableField<Boolean> isLoading = new ObservableField<>();
+    public ObservableField<Boolean> isContractAddress = new ObservableField<>();
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
@@ -79,10 +81,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     }
 
     public void toTxActivity(String tokenName, String tokenAddress) {
-        TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId, tokenName, tokenAddress);
-        mOpenTokenTransactions.setValue(wrapper);
+        try {
+            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId, tokenName, tokenAddress, isContractAddress.get());
+            mOpenTokenTransactions.setValue(wrapper);
+        } catch (NullPointerException e) {
+            handleError(e);
+        }
     }
-
 
     // ----------------------------- Getters ---------------------------
 
@@ -159,7 +164,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         if (remoteAddressInfo.getContractInfo() != null) {
             // TODO Contract address!
             // Show placeholder screen
+            isContractAddress.set(true);
+
         } else {
+            isContractAddress.set(false);
             realignTokenList(remoteAddressInfo);
             updateTokenList(remoteAddressInfo.getTokens());
         }

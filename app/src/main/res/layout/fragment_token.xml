@@ -5,19 +5,57 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel" />
     </data>
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/token_frag_recycler_view"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:token_items="@{viewmodel.mTokens}"
-        tools:context=".Fragments.TokenFragment" />
+        tools:context=".Fragments.TokenFragment">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="30dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{viewmodel.isContractAddress ? View.VISIBLE : View.GONE}">
 
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:src="@drawable/thinking_emoji"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/seems_like_this_is_a_contract_address"
+                style="@style/TextMediumRegularAppearance"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@{`Click here to view ` + viewmodel.mAddress.remoteAddressInfo.tokenInfo.name + ` transactions`}"
+                android:onClick="@{() -> viewmodel.toTxActivity(viewmodel.mAddress.remoteAddressInfo.tokenInfo.name, viewmodel.mAddress.remoteAddressInfo.tokenInfo.address)}"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/token_frag_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:token_items="@{viewmodel.mTokens}"
+            android:visibility="@{viewmodel.isContractAddress ? View.GONE : View.VISIBLE}"/>
+
+    </FrameLayout>
 </layout>

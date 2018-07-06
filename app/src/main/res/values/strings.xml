@@ -76,4 +76,5 @@
     <string name="pref_key_feedback">pref_key_feedback</string>
     <string name="rate_this_app">Rate This App</string>
     <string name="theme">Theme</string>
+    <string name="seems_like_this_is_a_contract_address">Hmm... seems like this is a contract address...</string>
 </resources>

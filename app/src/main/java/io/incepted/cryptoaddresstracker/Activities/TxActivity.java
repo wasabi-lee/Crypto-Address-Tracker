@@ -37,6 +37,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     public static final String TX_ADDRESS_ID_EXTRA_KEY = "tx_address_id_extra_key";
     public static final String TX_TOKEN_NAME_EXTRA_KEY = "tx_token_name_extra_key";
     public static final String TX_TOKEN_ADDRESS_EXTRA_KEY = "tx_token_address_extra_key";
+    public static final String TX_IS_CONTRACT_ADDRESS_EXTRA_KEY = "tx_is_contract_address_extra_key";
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
@@ -62,6 +63,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private int mAddressId;
     private String mTokenName;
     private String mTokenAddress;
+    private boolean mIsContractAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +95,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mAddressId = getIntent().getIntExtra(TX_ADDRESS_ID_EXTRA_KEY, 0);
         mTokenName = getIntent().getStringExtra(TX_TOKEN_NAME_EXTRA_KEY);
         mTokenAddress = getIntent().getStringExtra(TX_TOKEN_ADDRESS_EXTRA_KEY);
+        mIsContractAddress = getIntent().getBooleanExtra(TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, false);
     }
 
     private void initToolbar() {
@@ -214,7 +217,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     @Override
     protected void onResume() {
         super.onResume();
-        mViewModel.start(mAddressId, mTokenName, mTokenAddress);
+        mViewModel.start(mAddressId, mTokenName, mTokenAddress, mIsContractAddress);
     }
 
     @Override

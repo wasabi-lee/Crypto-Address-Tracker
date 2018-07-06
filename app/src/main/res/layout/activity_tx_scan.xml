@@ -62,7 +62,7 @@
 
                 <EditText
                     android:id="@+id/tx_scan_tx_hash_edit_text"
-                    style="@style/edittext_style"
+                    style="?attr/edit_text_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

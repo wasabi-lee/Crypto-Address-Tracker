@@ -57,7 +57,7 @@
 
                 <EditText
                     android:id="@+id/new_addr_name_edit_text"
-                    style="@style/edittext_style"
+                    style="?attr/edit_text_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -98,7 +98,7 @@
 
                 <EditText
                     android:id="@+id/new_addr_addr_edit_text"
-                    style="@style/edittext_style"
+                    style="?attr/edit_text_style"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"

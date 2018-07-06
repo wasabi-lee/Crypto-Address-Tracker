@@ -21,6 +21,7 @@
         <item name="transparent_toolbar_style">@style/transparent_toolbar_style_light</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:alertDialogTheme">@style/dialog_theme_light</item>
+        <item name="edit_text_style">@style/edittext_style_light</item>
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -44,6 +45,7 @@
         <item name="transparent_toolbar_style">@style/transparent_toolbar_style_dark</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:alertDialogTheme">@style/dialog_theme_dark</item>
+        <item name="edit_text_style">@style/edittext_style_dark</item>
     </style>
 
     <attr name="overview_card_background" format="reference" />
@@ -57,7 +59,7 @@
     <attr name="transparent_toolbar_style" format="reference" />
     <attr name="edit_icon" format="reference" />
     <attr name="delete_icon" format="reference" />
-
+    <attr name="edit_text_style" format="reference" />
 
 
     <!-- ****************** Text appearance ******************* -->
@@ -155,6 +157,7 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/text_color_secondary_gray</item>
     </style>
+
     <style name="TextSecondarySemiBoldAppearance">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
@@ -166,6 +169,7 @@
         <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="android:textColor">@color/text_color_secondary_gray</item>
     </style>
+
     <style name="TextSecondaryAppearance">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@font/roboto</item>
@@ -185,14 +189,23 @@
         <item name="android:background">@drawable/rounded_background_light</item>
         <item name="android:textColor">@color/text_color_light</item>
     </style>
+
     <style name="button_style_dark">
         <item name="android:background">@drawable/rounded_background_dark</item>
         <item name="android:textColor">@color/text_color_dark</item>
     </style>
 
-    <style name="edittext_style" parent="Base.V7.Widget.AppCompat.EditText">
+    <style name="edittext_style_light" parent="Base.V7.Widget.AppCompat.EditText">
         <item name="android:textColorHint">@color/text_color_secondary_gray</item>
         <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+    <style name="edittext_style_dark" parent="Base.V7.Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/text_color_secondary_gray</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">@font/roboto</item>
     </style>
 
@@ -201,6 +214,7 @@
         <item name="tabSelectedTextColor">@color/colorAccent</item>
         <item name="tabIndicatorColor">@color/colorAccent</item>
     </style>
+
     <style name="tab_layout_style_dark" parent="Base.Widget.Design.TabLayout">
         <item name="tabTextColor">@android:color/white</item>
         <item name="tabSelectedTextColor">@color/colorAccent</item>
