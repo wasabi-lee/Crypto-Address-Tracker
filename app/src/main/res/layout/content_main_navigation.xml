@@ -117,18 +117,21 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/nav_content_header_address" />
 
-            <TextView
-                android:id="@+id/nav_content_item_token_addresses"
-                style="@style/TextMediumBoldAppearance"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:onClick="@{()->viewmodel.toTokenAddresses()}"
-                android:text="@string/erc20_token_addresses"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_1" />
+
+            <!-- TODO Enable this item after getting an approval from the api provider -->
+
+            <!--<TextView-->
+                <!--android:id="@+id/nav_content_item_token_addresses"-->
+                <!--style="@style/TextMediumBoldAppearance"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:onClick="@{()->viewmodel.toTokenAddresses()}"-->
+                <!--android:text="@string/erc20_token_addresses"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/nav_divider_line_1" />-->
 
 
             <TextView
@@ -142,7 +145,7 @@
                 android:onClick="@{()->viewmodel.toTxScan()}"
                 android:text="@string/scan_a_transaction"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nav_content_item_token_addresses" />
+                app:layout_constraintTop_toBottomOf="@id/nav_divider_line_1" />
 
 
             <TextView

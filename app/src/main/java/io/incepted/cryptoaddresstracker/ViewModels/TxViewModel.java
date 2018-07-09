@@ -7,7 +7,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableBoolean;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 
@@ -74,7 +73,7 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
 
             Single<List<EthOperation>> networkCallSingle =
                     NetworkManager.getEthTransactionListInfoService()
-                            .getEthTransactionListInfo(address, NetworkManager.API_KEY);
+                            .getEthTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER);
 
             networkCallSingle.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -92,11 +91,11 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
             Single<TransactionListInfo> networkCallSingle = isContractAddress ?
                     // Using 'getTokenHistory' API call for the contract address
                     NetworkManager.getContractTokenTransactionListInfoService()
-                            .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY)
+                            .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
                     :
                     // Using 'getAddressHistory' API call for the normal address
                     NetworkManager.getTokenTransactionListInfoService()
-                            .getTokenTransactionListInfo(address, NetworkManager.API_KEY, tokenAddress);
+                            .getTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER, tokenAddress);
 
             networkCallSingle.subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

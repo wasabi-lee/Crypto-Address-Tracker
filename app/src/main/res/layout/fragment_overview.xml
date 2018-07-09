@@ -76,7 +76,9 @@
                         style="@style/TextSecondarySmallAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="563,234.21 USD"
+                        app:eth_balance="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.balance}"
+                        app:base_currency_price="@{viewmodel.mCurrentPrice.price}"
+                        app:base_currency_symbol="@{viewmodel.mCurrentPrice.tsym}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/overview_frag_balance_container" />
 
@@ -85,7 +87,7 @@
                         style="@style/TextSecondarySmallAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="(1 ETH = 550.32 USD)"
+                        android:text="@{`(1 ETH = ` + viewmodel.mCurrentPrice.formattedPriceAndSymbol + `)`}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/overview_frag_basecurrency_value" />
 

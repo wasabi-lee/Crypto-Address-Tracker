@@ -50,7 +50,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
         isLoading.set(true);
 
         Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-                .getTransactionDetail(txHash, NetworkManager.API_KEY);
+                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
 
         txInfoSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

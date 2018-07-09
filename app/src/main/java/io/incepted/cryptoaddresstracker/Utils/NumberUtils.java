@@ -1,7 +1,5 @@
 package io.incepted.cryptoaddresstracker.Utils;
 
-import android.util.Log;
-
 import java.text.DecimalFormat;
 
 public class NumberUtils {
@@ -48,7 +46,7 @@ public class NumberUtils {
     }
 
     public static String formatDouble(Double value) {
-        DecimalFormat df = new DecimalFormat(value < 10 ? "#.####" : "#.##");
+        DecimalFormat df = new DecimalFormat(value < 10 ? "#,###.####" : "#,###.##");
         return df.format(value);
     }
 }

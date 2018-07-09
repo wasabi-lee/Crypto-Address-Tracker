@@ -10,6 +10,19 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/general">
+
+        <ListPreference
+            android:title="@string/base_currency"
+            android:key="@string/pref_key_base_currency"
+            android:summary="%s"
+            android:dialogTitle="@string/select_your_base_currency"
+            android:defaultValue="0"
+            android:entries="@array/base_currency_entries"
+            android:entryValues="@array/base_currency_entry_values" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/help_us">
 
         <Preference

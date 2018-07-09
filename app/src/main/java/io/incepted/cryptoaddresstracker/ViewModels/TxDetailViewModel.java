@@ -8,7 +8,6 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.util.List;
 import java.util.Objects;
@@ -57,7 +56,7 @@ public class TxDetailViewModel extends AndroidViewModel {
         isLoading.set(true);
 
         Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-                .getTransactionDetail(txHash, NetworkManager.API_KEY);
+                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
 
         txInfoSingle.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

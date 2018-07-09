@@ -17,4 +17,12 @@ public class SharedPreferenceHelper {
                 .getBoolean(context.getString(R.string.pref_key_dark_theme), false);
     }
 
+    public static int getBaseCurrencyPrefValue(Context context) {
+
+        String baseCurrencySetting = getSharedPref(context)
+                .getString(context.getString(R.string.pref_key_base_currency), "0");
+
+        return Integer.valueOf(baseCurrencySetting);
+    }
+
 }

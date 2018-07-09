@@ -53,6 +53,8 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        mCallback.onThemeChanged(sharedPreferences.getBoolean(key, false));
+        if (key.equals(getString(R.string.pref_key_dark_theme))) {
+            mCallback.onThemeChanged(sharedPreferences.getBoolean(key, false));
+        }
     }
 }

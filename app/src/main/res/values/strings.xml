@@ -77,4 +77,8 @@
     <string name="rate_this_app">Rate This App</string>
     <string name="theme">Theme</string>
     <string name="seems_like_this_is_a_contract_address">Hmm... seems like this is a contract address...</string>
+    <string name="base_currency">Base Currency</string>
+    <string name="general">General</string>
+    <string name="pref_key_base_currency">pref_key_base_currency</string>
+    <string name="select_your_base_currency">Select your base currency</string>
 </resources>

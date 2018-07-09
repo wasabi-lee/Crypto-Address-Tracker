@@ -92,6 +92,7 @@ public class AddressListBindings {
             textView.setText(NumberUtils.formatDouble(editedValue));
         }
     }
+
     @BindingAdapter({"app:tx_amount", "app:decimal"})
     public static void setDoubleText(TextView textView, String amount, int decimals) {
         String formattedAmount = NumberUtils.moveDecimal(amount, decimals);
@@ -163,7 +164,7 @@ public class AddressListBindings {
 
         boolean noTransfer = transfers == 0;
 
-        textView.setTextColor(Color.parseColor(noTransfer ?"#ababab" : "#3cb271"));
+        textView.setTextColor(Color.parseColor(noTransfer ? "#ababab" : "#3cb271"));
 
         String text = noTransfer ? "No token transfer found" : transfers + " token transfers found (click to see details)";
 
@@ -173,6 +174,14 @@ public class AddressListBindings {
             SpannableString content = new SpannableString(text);
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             textView.setText(content);
+        }
+    }
+
+    @BindingAdapter({"app:eth_balance", "app:base_currency_price", "app:base_currency_symbol"})
+    public static void setBaseCurrencyValue(TextView textView, Double ethBalance, Double baseCurrencyPrice, String baseSymbol) {
+        if (ethBalance != null && baseCurrencyPrice != null) {
+            String formatted = NumberUtils.formatDouble(ethBalance * baseCurrencyPrice) + " " + baseSymbol;
+            textView.setText(formatted);
         }
     }
 }

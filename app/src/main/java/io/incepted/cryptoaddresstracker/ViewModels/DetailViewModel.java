@@ -4,16 +4,12 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.MutableLiveData;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
@@ -23,12 +19,15 @@ import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ContractInfo;
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.CurrentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
+import io.incepted.cryptoaddresstracker.Network.PriceFetcher;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
+import io.incepted.cryptoaddresstracker.Utils.CurrencyUtils;
+import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -41,6 +40,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     private int mAddressId;
 
     public ObservableField<Address> mAddress = new ObservableField<>();
+    public ObservableField<CurrentPrice> mCurrentPrice = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
     public ObservableField<Boolean> isLoading = new ObservableField<>();
@@ -61,11 +61,32 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     public void start(int addressId) {
         this.mAddressId = addressId;
         loadAddress(addressId);
+        loadCurrentPrice();
     }
 
     private void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         this.mAddressRepository.getAddress(addressId, this);
+    }
+
+    private void loadCurrentPrice() {
+
+        int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
+        String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
+
+        PriceFetcher.loadCurrentPrice(tsym, new PriceFetcher.OnPriceLoadedListener() {
+            @Override
+            public void onPriceLoaded(CurrentPrice currentPrice) {
+                mCurrentPrice.set(currentPrice);
+                mCurrentPrice.notifyChange();
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                handleError(throwable);
+            }
+        });
+
     }
 
     public void updateAddressNewName(String newName) {
@@ -117,7 +138,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
         // Network call after
         NetworkManager.getDetailedAddressInfoService()
-                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true)
+                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateViews,

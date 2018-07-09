@@ -8,7 +8,6 @@ import android.databinding.ObservableArrayList;
 import android.databinding.ObservableField;
 import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,7 +146,7 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
                                 // List item data
                                 Observable.just(address),
                                 // Network call observable
-                                networkService.getSimpleAddressInfo(address.getAddrValue(), NetworkManager.API_KEY, true),
+                                networkService.getSimpleAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true),
                                 // Merging function
                                 (BiFunction<Address, RemoteAddressInfo, Object>) (emittedAddress, simpleAddressInfo) -> {
                                     emittedAddress.setRemoteAddressInfo(simpleAddressInfo);
