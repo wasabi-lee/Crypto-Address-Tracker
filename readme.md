@@ -11,4 +11,5 @@ A cryptocurrency address tracking app that allows the users to monitor multiple 
 
 
 ## Screenshots
-![alt text](https://raw.githubusercontent.com/wasabi-lee/Crypto-Address-Tracker/master/screenshots/Screenshot_1531159133.png) ![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/Screenshot_1531167112.png?raw=true) ![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/Screenshot_1531159315.png?raw=true)
+![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/combined_1.png?raw=true)
+![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/combined_2.png?raw=true)
