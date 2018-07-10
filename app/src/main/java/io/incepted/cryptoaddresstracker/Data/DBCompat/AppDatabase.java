@@ -22,7 +22,6 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabase.class, "crypto_address_tracker_db")
-                    .allowMainThreadQueries() // TODO For testing purpose only!! Revise it later
                     .build();
         }
         return INSTANCE;

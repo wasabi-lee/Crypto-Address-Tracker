@@ -31,7 +31,8 @@ import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener, AddressDataSource.OnAddressDeletedListener, AddressDataSource.OnAddressUpdatedListener {
+public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener,
+        AddressDataSource.OnAddressDeletedListener, AddressDataSource.OnAddressUpdatedListener {
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
 

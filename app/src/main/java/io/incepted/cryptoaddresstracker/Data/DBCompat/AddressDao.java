@@ -9,18 +9,20 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
+import io.reactivex.Flowable;
+import io.reactivex.Maybe;
 
 @Dao
 public interface AddressDao {
 
     @Query("SELECT * FROM addresses ORDER BY timestamp")
-    List<Address> getAllAddresses();
+    Flowable<List<Address>> getAllAddresses();
 
     @Query("SELECT * FROM addresses WHERE _id = (:addressId)")
-    Address getAddressById(Integer addressId);
+    Maybe<Address> getAddressById(Integer addressId);
 
     @Query("SELECT count(*) FROM addresses")
-    Integer getAddressCount();
+    Maybe<Integer> getAddressCount();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Address address);
