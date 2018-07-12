@@ -32,15 +32,15 @@ public class AddressRepository implements AddressDataSource {
     private boolean mCacheIsDirty = false;
 
 
-    private AddressRepository(Context context) {
-        mAddressDao = AppDatabase.getAppDatabase(context).addressDao();
+    private AddressRepository(AddressDao addressDao) {
+        mAddressDao = addressDao;
     }
 
-    public static AddressRepository getInstance(Context context) {
+    public static AddressRepository getInstance(AddressDao dao) {
         if (INSTANCE == null) {
             synchronized (AddressRepository.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new AddressRepository(context);
+                    INSTANCE = new AddressRepository(dao);
                 }
             }
         }
@@ -166,5 +166,9 @@ public class AddressRepository implements AddressDataSource {
     @Override
     public void refreshAddresses() {
 
+    }
+
+    public static void destroyInstance() {
+        INSTANCE = null;
     }
 }

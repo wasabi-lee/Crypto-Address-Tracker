@@ -51,7 +51,7 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
         loadAddresses();
     }
 
-    private void loadAddresses() {
+    public void loadAddresses() {
         isDataLoading.set(true);
         mAddressRepository.getAddresses(this);
     }
@@ -175,12 +175,12 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
 
     }
 
-    private void populateAddressListView(List<Address> addresses) {
+    public void populateAddressListView(List<Address> addresses) {
         mAddressList.clear();
         mAddressList.addAll(addresses);
     }
 
-    private List<Address> tagListWithPositions(List<Address> addresses) {
+    public List<Address> tagListWithPositions(List<Address> addresses) {
         for (int i = 0; i < addresses.size(); i++) {
             addresses.get(i).setListPosition(i);
         }

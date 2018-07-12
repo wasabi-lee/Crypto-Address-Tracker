@@ -26,7 +26,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null)
                     INSTANCE = new ViewModelFactory(application,
-                            AddressRepository.getInstance(application.getApplicationContext()));
+                            Injection.provideAddressRepository(application.getApplicationContext()));
             }
         }
         return INSTANCE;
