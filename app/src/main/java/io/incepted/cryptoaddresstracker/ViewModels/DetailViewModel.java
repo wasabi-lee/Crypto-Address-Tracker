@@ -45,7 +45,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
     public ObservableField<Boolean> isLoading = new ObservableField<>();
-    public ObservableField<Boolean> isContractAddress = new ObservableField<>();
+    public ObservableField<Boolean> isContractAddress = new ObservableField<>(false);
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
@@ -65,7 +65,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         loadCurrentPrice();
     }
 
-    private void loadAddress(int addressId) {
+    public void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         this.mAddressRepository.getAddress(addressId, this);
     }
@@ -91,6 +91,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     }
 
     public void updateAddressNewName(String newName) {
+        // If the new input is empty, set the address itself as the default name
+        if (newName.isEmpty()) {
+            newName = mAddress.get().getAddrValue();
+        }
         Address newAddress = mAddress.get();
         newAddress.setName(newName);
         mAddressRepository.updateAddress(newAddress, this);
@@ -129,6 +133,14 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         return mOpenTokenTransactions;
     }
 
+
+    // ----------------------------- Setters ---------------------------
+
+    public void setmAddressId(int mAddressId) {
+        this.mAddressId = mAddressId;
+    }
+
+
     // ----------------------------- Callbacks -------------------------
 
     @SuppressLint("CheckResult")
@@ -152,6 +164,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     @Override
     public void onAddressNotAvailable() {
         Log.d(TAG, "onDataNotAvailable: Failed to load address with id: " + mAddressId);
+        mSnackbarTextResource.setValue(R.string.address_loading_error);
     }
 
     @Override
@@ -182,7 +195,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         Log.d(TAG, "onDeletionNotAvailable: Failed to delete address with id: " + mAddressId);
     }
 
-    private void updateViews(RemoteAddressInfo remoteAddressInfo) {
+    public void updateViews(RemoteAddressInfo remoteAddressInfo) {
         if (remoteAddressInfo.getContractInfo() != null) {
             isContractAddress.set(true);
 

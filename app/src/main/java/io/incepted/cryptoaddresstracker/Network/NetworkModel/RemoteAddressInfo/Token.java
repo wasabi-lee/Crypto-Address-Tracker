@@ -6,6 +6,13 @@ public class Token {
     private Double totalIn;
     private Double totalOut;
 
+    public Token() {
+    }
+
+    public Token(TokenInfo tokenInfo) {
+        this.tokenInfo = tokenInfo;
+    }
+
     public TokenInfo getTokenInfo() {
         return tokenInfo;
     }

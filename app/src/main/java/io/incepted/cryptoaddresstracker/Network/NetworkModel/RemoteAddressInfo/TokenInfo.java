@@ -18,6 +18,14 @@ public class TokenInfo {
     private Long ethTransfersCount;
 //    private Price price;
 
+
+    public TokenInfo() {
+    }
+
+    public TokenInfo(String name) {
+        this.name = name;
+    }
+
     public String getAddress() {
         return address;
     }
