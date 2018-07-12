@@ -66,7 +66,7 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
     // causing the transition to another activity even without the user click.
     // Resetting the navigator's value to null prevents this behavior.
 
-    private void resetActivityNav() {
+    public void resetActivityNav() {
         mActivityNavigator.setValue(null);
     }
 

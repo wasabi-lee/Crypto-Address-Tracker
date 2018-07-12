@@ -9,6 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -33,6 +34,9 @@ dependencies {
     def room_version = "1.1.1"
     def lifecycle_version = "1.1.1"
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
 
     // Support libraries
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -80,5 +84,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
+    // Etc
     api 'com.google.guava:guava:25.1-android'
 }

@@ -14,6 +14,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -89,6 +90,31 @@ public class MainViewModelTest {
     }
 
     @Test
+    public void loadAllAddressesFromRepository_emptyDataLoaded() {
+
+        // Before loading
+        mMainViewModel.loadAddresses();
+
+        // Is getAddresses called
+        verify(mAddressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+
+        // Progress bar shown
+        assertTrue(mMainViewModel.isDataLoading.get());
+
+        // Setting dummy result
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(new ArrayList<>());
+
+        // Hide progress bar
+        assertFalse(mMainViewModel.isDataLoading.get());
+
+        // Address should exists. Hiding placeholder view.
+        assertFalse(mMainViewModel.addressesExist.get());
+
+        assertTrue(mMainViewModel.mAddressList.isEmpty());
+    }
+
+
+    @Test
     public void clickNewAddress_launchNewAddressActivity() {
         Observer<ActivityNavigator> observer = mock(Observer.class);
 
@@ -97,7 +123,7 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.addNewAddress();
 
-        verify(observer, times(2)).onChanged(ActivityNavigator.NEW_ADDRESS);
+        verify(observer, times(2)).onChanged(any());
     }
 
 
@@ -110,12 +136,12 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.toSettings();
 
-        verify(observer, times(2)).onChanged(ActivityNavigator.SETTINGS);
+        verify(observer, times(2)).onChanged(any());
     }
 
 
     @Test
-    public void clickNewAddress_toTxScan() {
+    public void clickNewAddress_toTxScanActivity() {
         Observer<ActivityNavigator> observer = mock(Observer.class);
 
         mMainViewModel.getActivityNavigator().observe(TestUtils.TEST_OBSERVER, observer);
@@ -123,9 +149,30 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.toTxScan();
 
-        verify(observer, times(2)).onChanged(ActivityNavigator.TX_SCAN);
+        verify(observer, times(2)).onChanged(any());
     }
 
+
+    @Test
+    public void clickAddress_toDetailActivity() {
+        Observer<Integer> observer = mock(Observer.class);
+
+        mMainViewModel.getOpenAddressDetail().observe(TestUtils.TEST_OBSERVER, observer);
+
+        // When adding a new address
+        mMainViewModel.openAddressDetail(1);
+
+        verify(observer, times(2)).onChanged(any());
+    }
+
+
+    @Test
+    public void resetActivityNav_Test() {
+        Observer<ActivityNavigator> observer = mock(Observer.class);
+        mMainViewModel.getActivityNavigator().observe(TestUtils.TEST_OBSERVER, observer);
+        mMainViewModel.resetActivityNav();
+        verify(observer).onChanged(any());
+    }
 
 
 }
