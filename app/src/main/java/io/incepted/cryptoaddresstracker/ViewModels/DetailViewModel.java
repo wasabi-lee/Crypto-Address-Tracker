@@ -9,6 +9,7 @@ import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -196,6 +197,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     }
 
     public void updateViews(RemoteAddressInfo remoteAddressInfo) {
+
+        if (remoteAddressInfo.isError()) {
+            getSnackbarText().setValue(remoteAddressInfo.getError().getMessage());
+            isLoading.set(false);
+            return;
+        }
+
         if (remoteAddressInfo.getContractInfo() != null) {
             isContractAddress.set(true);
 
@@ -211,7 +219,12 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     }
 
     private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
-        sortTokenList(remoteAddressInfo.getTokens());
+        if (remoteAddressInfo.getTokens() == null) {
+            // No tokens in this address. Initiate arraylist and put eth alone.
+            remoteAddressInfo.setTokens(new ArrayList<>());
+        } else {
+            sortTokenList(remoteAddressInfo.getTokens());
+        }
         putEthInfoFront(remoteAddressInfo);
     }
 

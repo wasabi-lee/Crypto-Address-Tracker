@@ -39,6 +39,10 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
     public void saveAddress() {
         mAddressState.setValue(AddressStateNavigator.SAVE_IN_PROGRESS);
 
+        if (!address.get().startsWith("0x")) {
+            mSnackbarTextResource.setValue(R.string.error_not_address);
+        }
+
         try {
             String nameInput = name.get().equals("") ? address.get() : name.get();
             String addressInput = address.get().trim();

@@ -35,12 +35,19 @@ public class SimpleAddressInfoDeserializer implements JsonDeserializer {
             String key = entry.getKey();
             if (key.equals("error")) {
                 JsonElement errorInfo = entry.getValue();
-                String errorCode = errorInfo.getAsJsonObject().getAsJsonObject("code").getAsString();
-                String errorMessage = errorInfo.getAsJsonObject().getAsJsonObject("message").getAsString();
+                int errorCode = errorInfo.getAsJsonObject().getAsJsonPrimitive("code").getAsInt();
+                String errorMessage = errorInfo.getAsJsonObject().getAsJsonPrimitive("message").getAsString();
                 Log.d(TAG, "deserialize: Error occurred! " +
                         "\nError code: " + errorCode +
                         "\nError message: " + errorMessage);
-                return null;
+
+                RemoteAddressInfo result = new RemoteAddressInfo();
+                ETH balanceInfo = new ETH();
+                balanceInfo.setBalance(0d);
+                result.setEthBalanceInfo(balanceInfo);
+                result.setCountTxs(0L);
+
+                return new RemoteAddressInfo();
             }
         }
 

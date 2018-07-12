@@ -141,14 +141,16 @@ public class AddressListBindings {
 
     @BindingAdapter({"app:blockies"})
     public static void setBlockies(CircleImageView circleImageView, String address) {
-        try {
-            Bitmap blockies = Blockies.createIcon(address);
+        if (address != null) {
+            try {
+                Bitmap blockies = Blockies.createIcon(address);
 
-            Glide.with(circleImageView.getContext())
-                    .load(blockies)
-                    .into(circleImageView);
-        } catch (Exception e) {
-            e.printStackTrace();
+                Glide.with(circleImageView.getContext())
+                        .load(blockies)
+                        .into(circleImageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

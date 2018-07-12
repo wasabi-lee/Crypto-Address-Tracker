@@ -164,6 +164,7 @@ public class MainViewModel extends AndroidViewModel implements AddressDataSource
                         throwable -> {
                             throwable.printStackTrace();
                             isDataLoading.set(false);
+                            populateAddressListView(addresses);
                             mSnackbarTextResource.setValue(R.string.unexpected_error);
                             mSnackbarTextResource.setValue(null); // resetting the value
                         },

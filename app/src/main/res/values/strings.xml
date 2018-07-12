@@ -81,4 +81,5 @@
     <string name="general">General</string>
     <string name="pref_key_base_currency">pref_key_base_currency</string>
     <string name="select_your_base_currency">Select your base currency</string>
+    <string name="error_not_address">This is not an Ethereum address. Please type a valid address.</string>
 </resources>

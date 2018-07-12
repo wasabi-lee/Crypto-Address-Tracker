@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import io.incepted.cryptoaddresstracker.Network.NetworkModel.ErrorResponse;
+
 public class RemoteAddressInfo {
 
     private String address;
@@ -19,6 +21,15 @@ public class RemoteAddressInfo {
 
     private List<Token> tokens = null;
 
+    private ErrorResponse error;
+
+    public ErrorResponse getError() {
+        return error;
+    }
+
+    public void setError(ErrorResponse error) {
+        this.error = error;
+    }
 
     public String getAddress() {
         return address;
@@ -66,5 +77,9 @@ public class RemoteAddressInfo {
 
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    public boolean isError() {
+        return error != null;
     }
 }
