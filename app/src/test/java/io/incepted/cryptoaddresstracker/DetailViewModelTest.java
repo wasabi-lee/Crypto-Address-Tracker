@@ -25,12 +25,15 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
 import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
+import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ContractInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ETH;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
+import io.incepted.cryptoaddresstracker.Network.NetworkService;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
+import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -57,7 +60,7 @@ public class DetailViewModelTest {
     private AddressRepository mAddressRepository;
 
     @Mock
-    Application mContext;
+    private Application mContext;
 
     @Mock
     private AddressDataSource.OnAddressLoadedListener mRepositoryCallback;
@@ -256,5 +259,9 @@ public class DetailViewModelTest {
         // Trigger callback
         mAddressUpdateCallbackCaptor.getValue().onAddressUpdated(mAddress);
     }
+
+
+
+
 
 }
