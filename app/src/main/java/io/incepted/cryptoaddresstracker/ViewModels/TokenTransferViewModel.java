@@ -51,7 +51,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
-    public void loadTransactionInfo(String txHash) {
+        public void loadTransactionInfo(String txHash) {
         mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
                 new AddressRemoteDataSource.TransactionInfoListener() {
             @Override
@@ -71,19 +71,6 @@ public class TokenTransferViewModel extends AndroidViewModel {
                 handleError(throwable);
             }
         });
-
-//        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-//                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
-//
-//        txInfoSingle.subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(result -> {
-//                            isLoading.set(false);
-//                            mTxInfo.set(result);
-//                            mTxInfo.notifyChange();
-//                        }
-//                        , this::handleError);
-
     }
 
 
@@ -109,5 +96,6 @@ public class TokenTransferViewModel extends AndroidViewModel {
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         mSnackbarTextResource.setValue(R.string.unexpected_error);
+        mSnackbarTextResource.setValue(null);
     }
 }

@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -10,17 +10,25 @@ import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
+import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +43,10 @@ public class TxDetailViewModelTest {
 
 
     @Mock
-    private AddressLocalRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+
+    @Mock
+    private AddressRemoteRepository mRemoteRepository;
 
     @Mock
     private Application mContext;
@@ -46,7 +57,13 @@ public class TxDetailViewModelTest {
     @Mock
     private TransactionInfo mTransactionInfo;
 
+    @Captor
+    private ArgumentCaptor<AddressRemoteDataSource.TransactionInfoListener> mTransactionInfoCaptor;
+
     private TxDetailViewModel mTxDetailViewModel;
+
+    private TransactionInfo TX_INFO_TEST;
+
 
     @Before
     public void setupTxDetailViewModel() {
@@ -54,18 +71,15 @@ public class TxDetailViewModelTest {
 
         setupContext();
 
-        mTxDetailViewModel = new TxDetailViewModel(mContext, mAddressRepository);
+        mTxDetailViewModel = new TxDetailViewModel(mContext, mLocalRepository, mRemoteRepository);
+        TX_INFO_TEST  = new TransactionInfo();
+        TX_INFO_TEST.setHash(TX_HASH_TEST);
     }
 
     private void setupContext() {
         when(mContext.getApplicationContext()).thenReturn(mContext);
     }
 
-    @Test
-    public void fetchTxDetail_validTx() {
-        mTxDetailViewModel.fetchTxDetail(TX_HASH_TEST);
-        assertTrue(mTxDetailViewModel.isLoading.get());
-    }
 
     @Test
     public void tokenTransferClicked_toTokenTransferActivity() {
@@ -103,6 +117,46 @@ public class TxDetailViewModelTest {
 
         // No invocation expected
         verify(observer, times(0)).onChanged(TX_HASH_TEST);
+    }
+
+
+    @Test
+    public void fetchTxDetail_validTx() {
+        mTxDetailViewModel.fetchTxDetail(TX_HASH_TEST);
+
+        verify(mRemoteRepository).fetchTransactionDetail(any(), any(), any(), mTransactionInfoCaptor.capture());
+
+        mTransactionInfoCaptor.getValue().onTransactionDetailReady(TX_INFO_TEST);
+
+        assertFalse(mTxDetailViewModel.isLoading.get());
+
+        assertEquals(mTxDetailViewModel.mTxInfo.get().getHash(), TX_INFO_TEST.getHash());
+
+    }
+
+    @Test
+    public void fetchTxDetail_onReady() {
+        mTxDetailViewModel.fetchTxDetail(TX_HASH_TEST);
+
+        verify(mRemoteRepository).fetchTransactionDetail(any(), any(), any(), mTransactionInfoCaptor.capture());
+
+        mTransactionInfoCaptor.getValue().onCallReady();
+
+        assertTrue(mTxDetailViewModel.isLoading.get());
+    }
+
+    @Test
+    public void lfetchTxDetail_onError() {
+        Observer<Integer> observer = mock(Observer.class);
+        mTxDetailViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
+
+        mTxDetailViewModel.fetchTxDetail(TX_HASH_TEST);
+
+        verify(mRemoteRepository).fetchTransactionDetail(any(), any(), any(), mTransactionInfoCaptor.capture());
+
+        mTransactionInfoCaptor.getValue().onDataNotAvailable(new Throwable());
+
+        verify(observer, times(2)).onChanged(any());
     }
 
 

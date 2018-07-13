@@ -167,42 +167,6 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
                     }
                 });
 
-//        NetworkService networkService = NetworkManager.getSimpleAddressInfoService();
-//        Observable.fromIterable(positionTaggedAddresses)
-//                // Using flatMap() over concatMap() for the concurrency.
-//                .flatMap(address ->
-//                        Observable.zip(
-//                                // List item data
-//                                Observable.just(address),
-//                                // Network call observable
-//                                networkService.getSimpleAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true),
-//                                // Merging function
-//                                (BiFunction<Address, RemoteAddressInfo, Object>) (emittedAddress, simpleAddressInfo) -> {
-//                                    emittedAddress.setRemoteAddressInfo(simpleAddressInfo);
-//                                    return emittedAddress;
-//                                }))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        // OnNext. Set the result to the appropriate position
-//                        result -> {
-//                            Address address = (Address) result;
-//                            addresses.set(address.getListPosition(), address);
-//                        },
-//                        // OnError
-//                        throwable -> {
-//                            throwable.printStackTrace();
-//                            isDataLoading.set(false);
-//                            populateAddressListView(addresses);
-//                            mSnackbarTextResource.setValue(R.string.unexpected_error);
-//                            mSnackbarTextResource.setValue(null); // resetting the value
-//                        },
-//                        // OnComplete. Updating the RecyclerView.
-//                        () -> {
-//                            isDataLoading.set(false);
-//                            populateAddressListView(addresses);
-//                        });
-
     }
 
     public void populateAddressListView(List<Address> addresses) {

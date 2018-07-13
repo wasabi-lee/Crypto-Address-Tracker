@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -23,6 +23,8 @@ import java.util.List;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ContractInfo;
@@ -30,6 +32,7 @@ import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.E
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
+import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
 
 import static junit.framework.Assert.assertFalse;
@@ -37,6 +40,7 @@ import static junit.framework.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,7 +58,10 @@ public class DetailViewModelTest {
     private static final String TOKEN_ADDR_VALUE_TEST = "token_value";
 
     @Mock
-    private AddressLocalRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+
+    @Mock
+    private AddressRemoteRepository mRemoteRepository;
 
     @Mock
     private Application mContext;
@@ -68,10 +75,15 @@ public class DetailViewModelTest {
 
     @Captor
     private ArgumentCaptor<AddressLocalDataSource.OnAddressLoadedListener> mAddressLoadCallbackCaptor;
+
     @Captor
     private ArgumentCaptor<AddressLocalDataSource.OnAddressUpdatedListener> mAddressUpdateCallbackCaptor;
+
     @Captor
     private ArgumentCaptor<AddressLocalDataSource.OnAddressDeletedListener> mAddressDeletedCallbackCaptor;
+
+    @Captor
+    private ArgumentCaptor<AddressRemoteDataSource.DetailAddressInfoListener> mDetailAddressInfoCaptor;
 
     private DetailViewModel mDetailViewModel;
 
@@ -101,7 +113,7 @@ public class DetailViewModelTest {
         remoteAddressInfo = new RemoteAddressInfo();
 
         // Init test object
-        mDetailViewModel = new DetailViewModel(mContext, mAddressRepository);
+        mDetailViewModel = new DetailViewModel(mContext, mLocalRepository, mRemoteRepository);
         mDetailViewModel.setmAddressId(ID_TEST);
     }
 
@@ -152,7 +164,7 @@ public class DetailViewModelTest {
         verify(observer).onChanged(DeletionStateNavigator.DELETION_IN_PROGRESS);
 
         // Is the repository method called
-        verify(mAddressRepository).deleteAddress(eq(mAddress.get_id()), mAddressDeletedCallbackCaptor.capture());
+        verify(mLocalRepository).deleteAddress(eq(mAddress.get_id()), mAddressDeletedCallbackCaptor.capture());
 
         // Set callback
         mAddressDeletedCallbackCaptor.getValue().onAddressDeleted();
@@ -231,6 +243,35 @@ public class DetailViewModelTest {
         assertEquals(mAddress.getRemoteAddressInfo(), mDetailViewModel.mAddress.get().getRemoteAddressInfo());
     }
 
+    @Test
+    public void remoteApiCallTest_onSuccess() {
+        setupViewModelRepositoryCallback();
+
+        verify(mRemoteRepository).fetchDetailedAddressInfo(any(), any(), any(), mDetailAddressInfoCaptor.capture());
+
+        // rest is same as 'updateViewsTest'.
+    }
+
+    @Test
+    public void remoteApiCallTest_onError() {
+        // setup observer
+        Observer<Integer> observer = mock(Observer.class);
+        mDetailViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
+
+        setupViewModelRepositoryCallback();
+
+        verify(mRemoteRepository).fetchDetailedAddressInfo(any(), any(), any(), mDetailAddressInfoCaptor.capture());
+
+        mDetailAddressInfoCaptor.getValue().onDataNotAvailable(new Throwable());
+
+        // hide progress bar
+        assertFalse(mDetailViewModel.isLoading.get());
+
+        // Is the snackbar shown
+        verify(observer, times(2)).onChanged(any());
+
+    }
+
 
     private void setupViewModelRepositoryCallback() {
         mViewModelCallback = mock(AddressLocalDataSource.OnAddressLoadedListener.class);
@@ -239,7 +280,7 @@ public class DetailViewModelTest {
         mDetailViewModel.loadAddress(mAddress.get_id());
 
         // Is the repository call triggered
-        verify(mAddressRepository).getAddress(eq(mAddress.get_id()), mAddressLoadCallbackCaptor.capture());
+        verify(mLocalRepository).getAddress(eq(mAddress.get_id()), mAddressLoadCallbackCaptor.capture());
 
         // Trigger callback
         mAddressLoadCallbackCaptor.getValue().onAddressLoaded(mAddress);
@@ -253,7 +294,7 @@ public class DetailViewModelTest {
         mAddress.setName(mAddress.getAddrValue());
 
         // Is the repository call triggered
-        verify(mAddressRepository).updateAddress(eq(mAddress), mAddressUpdateCallbackCaptor.capture());
+        verify(mLocalRepository).updateAddress(eq(mAddress), mAddressUpdateCallbackCaptor.capture());
 
         // Trigger callback
         mAddressUpdateCallbackCaptor.getValue().onAddressUpdated(mAddress);

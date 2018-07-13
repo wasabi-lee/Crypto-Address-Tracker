@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -17,7 +17,10 @@ import java.util.Date;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Navigators.AddressStateNavigator;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
 
 import static junit.framework.Assert.assertEquals;
@@ -40,7 +43,10 @@ public class NewAddressViewModelTest {
     private static final String QR_STRING_TEST = "qr_string";
 
     @Mock
-    private AddressLocalRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+
+    @Mock
+    private AddressRemoteRepository mRemoteRepository;
 
     @Mock
     private Application mContext;
@@ -62,7 +68,7 @@ public class NewAddressViewModelTest {
         mAddress = new Address(NAME_TEST, ADDR_VALUE_TEST, new Date());
 
 
-        mNewAddressViewModel = new NewAddressViewModel(mContext, mAddressRepository);
+        mNewAddressViewModel = new NewAddressViewModel(mContext, mLocalRepository, mRemoteRepository);
         mNewAddressViewModel.name.set(NAME_TEST);
         mNewAddressViewModel.address.set(ADDR_VALUE_TEST);
     }
@@ -78,7 +84,7 @@ public class NewAddressViewModelTest {
 
         mNewAddressViewModel.saveAddress();
 
-        verify(mAddressRepository).saveAddress(any(), mAddressSavedCaptor.capture());
+        verify(mLocalRepository).saveAddress(any(), mAddressSavedCaptor.capture());
 
         mAddressSavedCaptor.getValue().onAddressSaved();
 
@@ -95,7 +101,7 @@ public class NewAddressViewModelTest {
 
         mNewAddressViewModel.saveAddress();
 
-        verify(mAddressRepository).saveAddress(any(), mAddressSavedCaptor.capture());
+        verify(mLocalRepository).saveAddress(any(), mAddressSavedCaptor.capture());
 
         mAddressSavedCaptor.getValue().onSaveNotAvailable();
 
@@ -115,6 +121,7 @@ public class NewAddressViewModelTest {
     }
 
     //TODO Move handleActivityResult() test to Android test since IntentResult cannot be mocked.
+
 
 
 

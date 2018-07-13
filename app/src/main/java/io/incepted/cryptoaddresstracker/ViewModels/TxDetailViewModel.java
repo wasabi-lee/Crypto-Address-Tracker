@@ -80,19 +80,6 @@ public class TxDetailViewModel extends AndroidViewModel {
                     }
                 });
 
-//        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-//                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
-//
-//        txInfoSingle.subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(result -> {
-//                            // hide progress bar
-//                            isLoading.set(false);
-//                            mTxInfo.set(result);
-//                            mTxInfo.notifyChange();
-//                        }
-//                        , this::handleError);
-
     }
 
 
@@ -126,6 +113,7 @@ public class TxDetailViewModel extends AndroidViewModel {
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         mSnackbarTextResource.setValue(R.string.unexpected_error);
+        mSnackbarTextResource.setValue(null);
     }
 
 }

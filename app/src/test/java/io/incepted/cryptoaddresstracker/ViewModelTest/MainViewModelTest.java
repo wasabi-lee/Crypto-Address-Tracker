@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker;
+package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -17,11 +17,15 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Observable;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Navigators.ActivityNavigator;
+import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 
 import static org.junit.Assert.assertFalse;
@@ -40,13 +44,19 @@ public class MainViewModelTest {
     private static List<Address> ADDRESSES;
 
     @Mock
-    private AddressLocalRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+
+    @Mock
+    private AddressRemoteRepository mRemoteRepository;
 
     @Mock
     private Application mContext;
 
     @Captor
     private ArgumentCaptor<AddressLocalDataSource.OnAddressesLoadedListener> mAddressesLoadedCaptor;
+
+    @Captor
+    private ArgumentCaptor<AddressRemoteDataSource.SimpleAddressInfoListener> mSimpleAddressInfoCaptor;
 
     private MainViewModel mMainViewModel;
 
@@ -56,7 +66,7 @@ public class MainViewModelTest {
 
         setupContext();
 
-        mMainViewModel = new MainViewModel(mContext, mAddressRepository);
+        mMainViewModel = new MainViewModel(mContext, mLocalRepository, mRemoteRepository);
 
         ADDRESSES = Lists.newArrayList(new Address("Title1", "Addr1", new Date()),
                 new Address("Title2", "Addr2", new Date()),
@@ -74,7 +84,7 @@ public class MainViewModelTest {
         mMainViewModel.loadAddresses();
 
         // Is getAddresses called
-        verify(mAddressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
 
         // Progress bar shown
         assertTrue(mMainViewModel.isDataLoading.get());
@@ -85,8 +95,13 @@ public class MainViewModelTest {
         // Address should exists. Hiding placeholder view.
         assertTrue(mMainViewModel.addressesExist.get());
 
+        // Do addresses exists?
         assertFalse(mMainViewModel.mAddressList.isEmpty());
         assertTrue(mMainViewModel.mAddressList.size() == 3);
+
+        // Is the remote api call triggered?
+        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+
     }
 
     @Test
@@ -96,7 +111,7 @@ public class MainViewModelTest {
         mMainViewModel.loadAddresses();
 
         // Is getAddresses called
-        verify(mAddressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
 
         // Progress bar shown
         assertTrue(mMainViewModel.isDataLoading.get());
@@ -111,6 +126,55 @@ public class MainViewModelTest {
         assertFalse(mMainViewModel.addressesExist.get());
 
         assertTrue(mMainViewModel.mAddressList.isEmpty());
+    }
+
+
+    @Test
+    public void loadApiResponse_onCompleted() {
+
+        assertFalse(mMainViewModel.isDataLoading.get());
+
+        mMainViewModel.loadAddresses();
+        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+
+        assertTrue(mMainViewModel.isDataLoading.get());
+
+        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+
+        mSimpleAddressInfoCaptor.getValue().onSimpleAddressInfoLoadingCompleted();
+
+        assertFalse(mMainViewModel.isDataLoading.get());
+
+    }
+
+    @Test
+    public void loadApiResponse_onError() {
+        // setup observer
+        Observer<Integer> observer = mock(Observer.class);
+        mMainViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
+
+        // make sure progress bar is hidden
+        assertFalse(mMainViewModel.isDataLoading.get());
+
+        mMainViewModel.loadAddresses();
+        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+
+        // show progress bar
+        assertTrue(mMainViewModel.isDataLoading.get());
+
+        // Is the remote call triggered?
+        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+
+        // Throw exception
+        mSimpleAddressInfoCaptor.getValue().onDataNotAvailable(new Throwable());
+
+        // hide progress bar
+        assertFalse(mMainViewModel.isDataLoading.get());
+
+        // Is the snackbar message set
+        verify(observer, times(2)).onChanged(any());
     }
 
 

@@ -157,6 +157,14 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
         return mSnackbarTextResource;
     }
 
+    public void setFetchEthTx(boolean fetchEthTx) {
+        this.fetchEthTx = fetchEthTx;
+    }
+
+    public void setContractAddress(boolean contractAddress) {
+        isContractAddress = contractAddress;
+    }
+
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddress.setValue(address);
@@ -177,5 +185,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         mSnackbarTextResource.setValue(R.string.unexpected_error);
+        mSnackbarTextResource.setValue(null);
     }
 }

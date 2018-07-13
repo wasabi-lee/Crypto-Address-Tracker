@@ -178,16 +178,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
                         handleError(throwable);
                     }
                 });
-
-//        NetworkManager.getDetailedAddressInfoService()
-//                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::updateViews,
-//                        throwable -> {
-//                            isLoading.set(false);
-//                            handleError(throwable);
-//                        });
     }
 
     @Override
@@ -293,5 +283,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         getSnackbarTextResource().setValue(R.string.unexpected_error);
+        getSnackbarTextResource().setValue(null);
     }
 }
