@@ -45,7 +45,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
-    private void loadTransactionInfo(String txHash) {
+    public void loadTransactionInfo(String txHash) {
 
         isLoading.set(true);
 

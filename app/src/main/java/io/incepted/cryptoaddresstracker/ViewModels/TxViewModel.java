@@ -60,7 +60,7 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
         loadAddress(addressId);
     }
 
-    private void loadAddress(int addressId) {
+    public void loadAddress(int addressId) {
         isLoading.set(true);
         mAddressRepository.getAddress(addressId, this);
     }

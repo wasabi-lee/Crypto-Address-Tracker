@@ -50,7 +50,7 @@ public class TxDetailViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
-    private void fetchTxDetail(String txHash) {
+    public void fetchTxDetail(String txHash) {
 
         // show progress bar
         isLoading.set(true);

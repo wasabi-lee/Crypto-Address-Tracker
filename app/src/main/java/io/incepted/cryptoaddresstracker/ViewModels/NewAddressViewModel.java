@@ -28,6 +28,9 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
 
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+
+    private MutableLiveData<Integer> mEditTextErrorText = new MutableLiveData<>();
+
     private MutableLiveData<Void> openQRScanActivity = new MutableLiveData<>();
     private MutableLiveData<AddressStateNavigator> mAddressState = new MutableLiveData<>();
 
@@ -40,7 +43,9 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
         mAddressState.setValue(AddressStateNavigator.SAVE_IN_PROGRESS);
 
         if (!address.get().startsWith("0x")) {
-            mSnackbarTextResource.setValue(R.string.error_not_address);
+            mEditTextErrorText.setValue(R.string.error_not_address);
+            mAddressState.setValue(AddressStateNavigator.SAVE_ERROR);
+            return;
         }
 
         try {
@@ -81,6 +86,10 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressData
 
     public MutableLiveData<Integer> getSnackbarTextResource() {
         return mSnackbarTextResource;
+    }
+
+    public MutableLiveData<Integer> getEditTextErrorText() {
+        return mEditTextErrorText;
     }
 
     public MutableLiveData<AddressStateNavigator> getAddressState() {
