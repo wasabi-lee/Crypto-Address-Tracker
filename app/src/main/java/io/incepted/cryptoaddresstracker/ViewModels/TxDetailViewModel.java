@@ -12,14 +12,14 @@ import android.util.Log;
 import java.util.List;
 import java.util.Objects;
 
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
-import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,7 +27,9 @@ public class TxDetailViewModel extends AndroidViewModel {
 
     private static final String TAG = TxDetailViewModel.class.getSimpleName();
 
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+    private AddressRemoteRepository mRemoteRepository;
+
     private String txHash;
 
     public ObservableField<TransactionInfo> mTxInfo = new ObservableField<>();
@@ -38,9 +40,12 @@ public class TxDetailViewModel extends AndroidViewModel {
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
-    public TxDetailViewModel(@NonNull Application application, AddressRepository repository) {
+    public TxDetailViewModel(@NonNull Application application,
+                             @NonNull AddressLocalRepository localRepository,
+                             @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        mAddressRepository = repository;
+        mLocalRepository = localRepository;
+        mRemoteRepository = remoteRepository;
     }
 
     public void start(String txHash) {
@@ -53,20 +58,40 @@ public class TxDetailViewModel extends AndroidViewModel {
     public void fetchTxDetail(String txHash) {
 
         // show progress bar
-        isLoading.set(true);
 
-        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
+        mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
+                new AddressRemoteDataSource.TransactionInfoListener() {
+                    @Override
+                    public void onCallReady() {
+                        isLoading.set(true);
+                    }
 
-        txInfoSingle.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            // hide progress bar
-                            isLoading.set(false);
-                            mTxInfo.set(result);
-                            mTxInfo.notifyChange();
-                        }
-                        , this::handleError);
+                    @Override
+                    public void onTransactionDetailReady(TransactionInfo transactionDetail) {
+                        isLoading.set(false);
+                        mTxInfo.set(transactionDetail);
+                        mTxInfo.notifyChange();
+                    }
+
+                    @Override
+                    public void onDataNotAvailable(Throwable throwable) {
+                        isLoading.set(false);
+                        handleError(throwable);
+                    }
+                });
+
+//        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
+//                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
+//
+//        txInfoSingle.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(result -> {
+//                            // hide progress bar
+//                            isLoading.set(false);
+//                            mTxInfo.set(result);
+//                            mTxInfo.notifyChange();
+//                        }
+//                        , this::handleError);
 
     }
 

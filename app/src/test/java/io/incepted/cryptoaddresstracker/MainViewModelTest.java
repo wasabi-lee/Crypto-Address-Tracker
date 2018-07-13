@@ -19,8 +19,8 @@ import java.util.Date;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 
@@ -40,13 +40,13 @@ public class MainViewModelTest {
     private static List<Address> ADDRESSES;
 
     @Mock
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mAddressRepository;
 
     @Mock
     private Application mContext;
 
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressesLoadedListener> mAddressesLoadedCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressesLoadedListener> mAddressesLoadedCaptor;
 
     private MainViewModel mMainViewModel;
 

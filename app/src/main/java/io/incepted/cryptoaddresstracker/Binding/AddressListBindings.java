@@ -30,6 +30,7 @@ import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.Blockies;
 import io.incepted.cryptoaddresstracker.Utils.NumberUtils;
+import io.reactivex.Single;
 
 public class AddressListBindings {
 

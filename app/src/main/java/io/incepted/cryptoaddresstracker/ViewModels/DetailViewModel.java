@@ -14,12 +14,13 @@ import java.util.Collections;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
-import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.CurrentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
@@ -32,12 +33,13 @@ import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener,
-        AddressDataSource.OnAddressDeletedListener, AddressDataSource.OnAddressUpdatedListener {
+public class DetailViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressLoadedListener,
+        AddressLocalDataSource.OnAddressDeletedListener, AddressLocalDataSource.OnAddressUpdatedListener {
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
 
-    private final AddressRepository mAddressRepository;
+    private final AddressLocalRepository mLocalRepository;
+    private AddressRemoteRepository mRemoteRepository;
 
     private int mAddressId;
 
@@ -55,9 +57,14 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
     private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
-    public DetailViewModel(@NonNull Application application, @NonNull AddressRepository repository) {
+
+    public DetailViewModel(@NonNull Application application,
+                           @NonNull AddressLocalRepository localRepository,
+                           @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        this.mAddressRepository = repository;
+        this.mLocalRepository = localRepository;
+        mRemoteRepository = remoteRepository;
+
     }
 
     public void start(int addressId) {
@@ -68,7 +75,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
 
     public void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
-        this.mAddressRepository.getAddress(addressId, this);
+        this.mLocalRepository.getAddress(addressId, this);
     }
 
     private void loadCurrentPrice() {
@@ -76,18 +83,20 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
 
-        PriceFetcher.loadCurrentPrice(tsym, new PriceFetcher.OnPriceLoadedListener() {
-            @Override
-            public void onPriceLoaded(CurrentPrice currentPrice) {
-                mCurrentPrice.set(currentPrice);
-                mCurrentPrice.notifyChange();
-            }
+        PriceFetcher.loadCurrentPrice(tsym, Schedulers.io(),
+                AndroidSchedulers.mainThread(),
+                new PriceFetcher.OnPriceLoadedListener() {
+                    @Override
+                    public void onPriceLoaded(CurrentPrice currentPrice) {
+                        mCurrentPrice.set(currentPrice);
+                        mCurrentPrice.notifyChange();
+                    }
 
-            @Override
-            public void onError(Throwable throwable) {
-                handleError(throwable);
-            }
-        });
+                    @Override
+                    public void onError(Throwable throwable) {
+                        handleError(throwable);
+                    }
+                });
 
     }
 
@@ -98,13 +107,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         }
         Address newAddress = mAddress.get();
         newAddress.setName(newName);
-        mAddressRepository.updateAddress(newAddress, this);
+        mLocalRepository.updateAddress(newAddress, this);
 
     }
 
     public void deleteAddress() {
         mDeletionState.setValue(DeletionStateNavigator.DELETION_IN_PROGRESS);
-        mAddressRepository.deleteAddress(mAddressId, this);
+        mLocalRepository.deleteAddress(mAddressId, this);
     }
 
     public void toTxActivity(String tokenName, String tokenAddress) {
@@ -151,15 +160,34 @@ public class DetailViewModel extends AndroidViewModel implements AddressDataSour
         this.mAddress.set(address);
 
         // Network call after
-        NetworkManager.getDetailedAddressInfoService()
-                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateViews,
-                        throwable -> {
-                            isLoading.set(false);
-                            handleError(throwable);
-                        });
+        mRemoteRepository.fetchDetailedAddressInfo(address.getAddrValue(), Schedulers.io(), AndroidSchedulers.mainThread(),
+                new AddressRemoteDataSource.DetailAddressInfoListener() {
+                    @Override
+                    public void onCallReady() {
+                        /* empty */
+                    }
+
+                    @Override
+                    public void onSimpleAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo) {
+                        updateViews(remoteAddressInfo);
+                    }
+
+                    @Override
+                    public void onDataNotAvailable(Throwable throwable) {
+                        isLoading.set(false);
+                        handleError(throwable);
+                    }
+                });
+
+//        NetworkManager.getDetailedAddressInfoService()
+//                .getDetailedAddressInfo(address.getAddrValue(), NetworkManager.API_KEY_ETHPLORER, true)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::updateViews,
+//                        throwable -> {
+//                            isLoading.set(false);
+//                            handleError(throwable);
+//                        });
     }
 
     @Override

@@ -5,7 +5,8 @@ import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProvider;
 import android.support.annotation.NonNull;
 
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
@@ -19,22 +20,26 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private static volatile ViewModelFactory INSTANCE;
 
     private final Application mApplication;
-    private final AddressRepository mRepository;
+    private final AddressLocalRepository mLocalRepository;
+    private final AddressRemoteRepository mRemoteRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null)
                     INSTANCE = new ViewModelFactory(application,
-                            Injection.provideAddressRepository(application.getApplicationContext()));
+                            LocalAddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
+                            RemoteAddressRepositoryInjection.provideAddressRepository());
+
             }
         }
         return INSTANCE;
     }
 
-    private ViewModelFactory(Application application, AddressRepository repository) {
+    private ViewModelFactory(Application application, AddressLocalRepository localRepository, AddressRemoteRepository remoteRepository) {
         mApplication = application;
-        mRepository = repository;
+        mLocalRepository = localRepository;
+        mRemoteRepository = remoteRepository;
     }
 
     public static void destroyInstance() {
@@ -46,25 +51,25 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
-            return (T) new MainViewModel(mApplication, mRepository);
+            return (T) new MainViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(NewAddressViewModel.class)) {
             //noinspection unchecked
-            return (T) new NewAddressViewModel(mApplication, mRepository);
+            return (T) new NewAddressViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new DetailViewModel(mApplication, mRepository);
+            return (T) new DetailViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxViewModel(mApplication, mRepository);
+            return (T) new TxViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(TxDetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxDetailViewModel(mApplication, mRepository);
+            return (T) new TxDetailViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(TokenTransferViewModel.class)) {
             //noinspection unchecked
-            return (T) new TokenTransferViewModel(mApplication, mRepository);
+            return (T) new TokenTransferViewModel(mApplication, mLocalRepository, mRemoteRepository);
         } else if (modelClass.isAssignableFrom(TxScanViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxScanViewModel(mApplication, mRepository);
+            return (T) new TxScanViewModel(mApplication, mLocalRepository, mRemoteRepository);
         }
         return super.create(modelClass);
     }

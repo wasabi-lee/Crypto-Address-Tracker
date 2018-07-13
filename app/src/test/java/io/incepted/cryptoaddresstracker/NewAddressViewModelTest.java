@@ -4,8 +4,6 @@ import android.app.Application;
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
 import android.arch.lifecycle.Observer;
 
-import com.google.zxing.integration.android.IntentResult;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,8 +15,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.Date;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel;
 
@@ -26,7 +24,6 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -43,13 +40,13 @@ public class NewAddressViewModelTest {
     private static final String QR_STRING_TEST = "qr_string";
 
     @Mock
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mAddressRepository;
 
     @Mock
     private Application mContext;
 
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressSavedListener> mAddressSavedCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressSavedListener> mAddressSavedCaptor;
 
     private NewAddressViewModel mNewAddressViewModel;
 

@@ -15,8 +15,8 @@ import org.mockito.MockitoAnnotations;
 import java.util.Date;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.ViewModels.TxViewModel;
 
 import static junit.framework.Assert.assertEquals;
@@ -36,13 +36,13 @@ public class TxViewModelTest {
     private static final String ADDR_VALUE_TEST = "addr_value";
 
     @Mock
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mAddressRepository;
 
     @Mock
     private Application mContext;
 
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressLoadedListener> mAddressLoadCallbackCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressLoadedListener> mAddressLoadCallbackCaptor;
 
     private TxViewModel mTxViewModel;
 

@@ -26,7 +26,7 @@ public interface NetworkService {
                                                        @Query("showETHTotals") boolean showEthTotals);
 
     @GET("getAddressInfo/{address}")
-    Observable<RemoteAddressInfo> getDetailedAddressInfo(@Path("address") String address,
+    Single<RemoteAddressInfo> getDetailedAddressInfo(@Path("address") String address,
                                                          @Query("apiKey") String apiKey,
                                                          @Query("showETHTotals") boolean showEthTotals);
 

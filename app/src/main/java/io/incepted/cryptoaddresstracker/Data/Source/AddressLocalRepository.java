@@ -1,46 +1,32 @@
 package io.incepted.cryptoaddresstracker.Data.Source;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Executor;
-
 import io.incepted.cryptoaddresstracker.Data.DBCompat.AddressDao;
-import io.incepted.cryptoaddresstracker.Data.DBCompat.AppDatabase;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddressRepository implements AddressDataSource {
+public class AddressLocalRepository implements AddressLocalDataSource {
 
 
-    private static final String TAG = AddressRepository.class.getSimpleName();
+    private static final String TAG = AddressLocalRepository.class.getSimpleName();
 
-    private volatile static AddressRepository INSTANCE = null;
+    private volatile static AddressLocalRepository INSTANCE = null;
     private AddressDao mAddressDao;
-    private Executor executor;
-
-    Map<Integer, Address> mCachedAddresses;
-    private boolean mCacheIsDirty = false;
 
 
-    private AddressRepository(AddressDao addressDao) {
+    private AddressLocalRepository(AddressDao addressDao) {
         mAddressDao = addressDao;
     }
 
-    public static AddressRepository getInstance(AddressDao dao) {
+    public static AddressLocalRepository getInstance(AddressDao dao) {
         if (INSTANCE == null) {
-            synchronized (AddressRepository.class) {
+            synchronized (AddressLocalRepository.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new AddressRepository(dao);
+                    INSTANCE = new AddressLocalRepository(dao);
                 }
             }
         }

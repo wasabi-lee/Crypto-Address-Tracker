@@ -15,7 +15,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel;
@@ -35,7 +35,7 @@ public class TxDetailViewModelTest {
 
 
     @Mock
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mAddressRepository;
 
     @Mock
     private Application mContext;

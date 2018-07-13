@@ -21,19 +21,16 @@ import java.util.Date;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
-import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ContractInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.ETH;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.TokenInfo;
-import io.incepted.cryptoaddresstracker.Network.NetworkService;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
-import io.reactivex.Observable;
 
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertTrue;
@@ -57,23 +54,24 @@ public class DetailViewModelTest {
     private static final String TOKEN_ADDR_VALUE_TEST = "token_value";
 
     @Mock
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mAddressRepository;
 
     @Mock
     private Application mContext;
 
     @Mock
-    private AddressDataSource.OnAddressLoadedListener mRepositoryCallback;
+    private AddressLocalDataSource.OnAddressLoadedListener mRepositoryCallback;
 
     @Mock
-    private AddressDataSource.OnAddressLoadedListener mViewModelCallback;
+    private AddressLocalDataSource.OnAddressLoadedListener mViewModelCallback;
+
 
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressLoadedListener> mAddressLoadCallbackCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressLoadedListener> mAddressLoadCallbackCaptor;
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressUpdatedListener> mAddressUpdateCallbackCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressUpdatedListener> mAddressUpdateCallbackCaptor;
     @Captor
-    private ArgumentCaptor<AddressDataSource.OnAddressDeletedListener> mAddressDeletedCallbackCaptor;
+    private ArgumentCaptor<AddressLocalDataSource.OnAddressDeletedListener> mAddressDeletedCallbackCaptor;
 
     private DetailViewModel mDetailViewModel;
 
@@ -176,6 +174,7 @@ public class DetailViewModelTest {
         verify(observer).onChanged(any());
     }
 
+
     @Test
     public void updateViewsTest_NormalAddress() {
         setupViewModelRepositoryCallback();
@@ -234,7 +233,7 @@ public class DetailViewModelTest {
 
 
     private void setupViewModelRepositoryCallback() {
-        mViewModelCallback = mock(AddressDataSource.OnAddressLoadedListener.class);
+        mViewModelCallback = mock(AddressLocalDataSource.OnAddressLoadedListener.class);
 
         // Load address
         mDetailViewModel.loadAddress(mAddress.get_id());

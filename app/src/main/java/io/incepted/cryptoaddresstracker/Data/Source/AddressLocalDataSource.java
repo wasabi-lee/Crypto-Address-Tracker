@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
 
-public interface AddressDataSource {
+public interface AddressLocalDataSource {
 
     interface OnAddressesLoadedListener {
         void onAddressesLoaded(List<Address> addresses);

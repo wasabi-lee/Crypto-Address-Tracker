@@ -8,13 +8,13 @@ import android.databinding.ObservableBoolean;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
-import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -22,7 +22,9 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
     private static final String TAG = TokenTransferViewModel.class.getSimpleName();
 
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+    private AddressRemoteRepository mRemoteRepository;
+
     private String mTxHash;
 
     public ObservableField<TransactionInfo> mTxInfo = new ObservableField<>();
@@ -32,9 +34,13 @@ public class TokenTransferViewModel extends AndroidViewModel {
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
-    public TokenTransferViewModel(@NonNull Application application, AddressRepository mAddressRepository) {
+    public TokenTransferViewModel(@NonNull Application application,
+                                  @NonNull AddressLocalRepository localRepository,
+                                  @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        this.mAddressRepository = mAddressRepository;
+        this.mLocalRepository = localRepository;
+        mRemoteRepository = remoteRepository;
+
     }
 
     public void start(String txHash) {
@@ -46,20 +52,37 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
     @SuppressLint("CheckResult")
     public void loadTransactionInfo(String txHash) {
+        mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
+                new AddressRemoteDataSource.TransactionInfoListener() {
+            @Override
+            public void onCallReady() {
+                isLoading.set(true);
+            }
 
-        isLoading.set(true);
+            @Override
+            public void onTransactionDetailReady(TransactionInfo transactionDetail) {
+                isLoading.set(false);
+                mTxInfo.set(transactionDetail);
+                mTxInfo.notifyChange();
+            }
 
-        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
-                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
+            @Override
+            public void onDataNotAvailable(Throwable throwable) {
+                handleError(throwable);
+            }
+        });
 
-        txInfoSingle.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                            isLoading.set(false);
-                            mTxInfo.set(result);
-                            mTxInfo.notifyChange();
-                        }
-                        , this::handleError);
+//        Single<TransactionInfo> txInfoSingle = NetworkManager.getTransactionDetailService()
+//                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER);
+//
+//        txInfoSingle.subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(result -> {
+//                            isLoading.set(false);
+//                            mTxInfo.set(result);
+//                            mTxInfo.notifyChange();
+//                        }
+//                        , this::handleError);
 
     }
 

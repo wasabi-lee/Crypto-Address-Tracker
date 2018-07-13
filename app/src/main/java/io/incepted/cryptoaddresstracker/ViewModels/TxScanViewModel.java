@@ -9,14 +9,15 @@ import android.util.Log;
 
 import com.google.zxing.integration.android.IntentResult;
 
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
-import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 
 public class TxScanViewModel extends AndroidViewModel {
 
     private static final String TAG = TxScanViewModel.class.getSimpleName();
 
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+    private AddressRemoteRepository mRemoteRepository;
 
     public ObservableField<String> mTxHashInput = new ObservableField<>("");
 
@@ -26,9 +27,12 @@ public class TxScanViewModel extends AndroidViewModel {
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
-    public TxScanViewModel(@NonNull Application application, @NonNull AddressRepository repository) {
+    public TxScanViewModel(@NonNull Application application,
+                           @NonNull AddressLocalRepository localRepository,
+                           @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        this.mAddressRepository = repository;
+        this.mLocalRepository = localRepository;
+        this.mRemoteRepository = remoteRepository;
     }
 
 

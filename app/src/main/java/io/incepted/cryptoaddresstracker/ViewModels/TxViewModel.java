@@ -11,22 +11,25 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRepository;
-import io.incepted.cryptoaddresstracker.Network.NetworkManager;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TransactionListInfo;
 import io.incepted.cryptoaddresstracker.R;
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class TxViewModel extends AndroidViewModel implements AddressDataSource.OnAddressLoadedListener {
+public class TxViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressLoadedListener {
 
     private static final String TAG = TxViewModel.class.getSimpleName();
 
-    private AddressRepository mAddressRepository;
+    private AddressLocalRepository mLocalRepository;
+    private AddressRemoteRepository mRemoteRepository;
+
+
     public MutableLiveData<Address> mAddress = new MutableLiveData<>();
     public String tokenName;
     public String tokenAddress;
@@ -47,9 +50,12 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
     private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
     private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
 
-    public TxViewModel(@NonNull Application application, AddressRepository repository) {
+    public TxViewModel(@NonNull Application application,
+                       @NonNull AddressLocalRepository localRepository,
+                       @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        this.mAddressRepository = repository;
+        this.mLocalRepository = localRepository;
+        mRemoteRepository = remoteRepository;
     }
 
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
@@ -62,7 +68,7 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
 
     public void loadAddress(int addressId) {
         isLoading.set(true);
-        mAddressRepository.getAddress(addressId, this);
+        mLocalRepository.getAddress(addressId, this);
     }
 
     @SuppressLint("CheckResult")
@@ -71,43 +77,57 @@ public class TxViewModel extends AndroidViewModel implements AddressDataSource.O
 
             // When fetching Ethereum transactions
 
-            Single<List<EthOperation>> networkCallSingle =
-                    NetworkManager.getEthTransactionListInfoService()
-                            .getEthTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER);
+            mRemoteRepository.fetchEthTransactionListInfo(address, Schedulers.io(), AndroidSchedulers.mainThread(),
+                    new AddressRemoteDataSource.EthTransactionListInfoListener() {
+                        @Override
+                        public void onCallReady() {
+                            /* empty */
+                        }
 
-            networkCallSingle.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(operations -> {
-                        isLoading.set(false);
-                        refreshList(operations);
-                    }, throwable -> {
-                        isLoading.set(false);
-                        handleError(throwable);
+                        @Override
+                        public void onEthTransactionListInfoReady(List<EthOperation> ethOperationList) {
+                            isLoading.set(false);
+                            refreshList(ethOperationList);
+                        }
+
+                        @Override
+                        public void onDataNotAvailable(Throwable throwable) {
+                            isLoading.set(false);
+                            handleError(throwable);
+                        }
                     });
 
         } else {
 
-            // When fetching token transactions
-            Single<TransactionListInfo> networkCallSingle = isContractAddress ?
-                    // Using 'getTokenHistory' API call for the contract address
-                    NetworkManager.getContractTokenTransactionListInfoService()
-                            .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
-                    :
-                    // Using 'getAddressHistory' API call for the normal address
-                    NetworkManager.getTokenTransactionListInfoService()
-                            .getTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER, tokenAddress);
+            AddressRemoteDataSource.TransactionListInfoListener callback = new AddressRemoteDataSource.TransactionListInfoListener() {
+                @Override
+                public void onCallReady() {
+                    /* empty */
+                }
 
-            networkCallSingle.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(transactionListInfo -> {
-                        // onSuccess
-                        isLoading.set(false);
-                        refreshList(transactionListInfo.getOperations());
-                    }, throwable -> {
-                        // onError
-                        isLoading.set(false);
-                        handleError(throwable);
-                    });
+                @Override
+                public void onTransactionListInfoLoaded(TransactionListInfo transactionListInfo) {
+                    isLoading.set(false);
+                    refreshList(transactionListInfo.getOperations());
+                }
+
+                @Override
+                public void onDataNotAvailable(Throwable throwable) {
+                    isLoading.set(false);
+                    handleError(throwable);
+                }
+            };
+
+            // Using 'getTokenHistory' API call for the contract address
+            if (isContractAddress) {
+                mRemoteRepository.fetchContractTokenTransactionListInfo(address, Schedulers.io(),
+                        AndroidSchedulers.mainThread(), callback);
+            } else {
+                // Using 'getAddressHistory' API call for the normal address
+                mRemoteRepository.fetchTokenTransactionListInfo(address, tokenAddress, Schedulers.io(),
+                        AndroidSchedulers.mainThread(), callback);
+            }
+
         }
     }
 
