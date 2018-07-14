@@ -11,7 +11,9 @@ import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkService;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.Scheduler;
+import io.reactivex.disposables.Disposable;
 
 /**
  * A utility class dedicated for executing API calls to Ethplorer.io
@@ -23,11 +25,11 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
 
     private volatile static AddressRemoteRepository INSTANCE = null;
 
-    private static NetworkService mSimpleAddressInfoService =
+    private NetworkService mSimpleAddressInfoService =
             NetworkManager.getCustomNetworkService(NetworkManager.BASE_URL_ETHPLORER,
                     RemoteAddressInfo.class, new SimpleAddressInfoDeserializer());
 
-    private static NetworkService mDefaultAddressInfoService =
+    private NetworkService mDefaultAddressInfoService =
             NetworkManager.getDefaultNetworkService(NetworkManager.BASE_URL_ETHPLORER);
 
     private AddressRemoteRepository() {
@@ -46,8 +48,10 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
 
     @SuppressLint("CheckResult")
     @Override
-    public void fetchMultipleSimpleAddressInfo(@NonNull List<Address> addresses, @NonNull Scheduler bkgdScheduler,
-                                               @NonNull Scheduler mainScheduler, @NonNull SimpleAddressInfoListener callback) {
+    public void fetchMultipleSimpleAddressInfo(@NonNull List<Address> addresses,
+                                               @NonNull Scheduler bkgdScheduler,
+                                               @NonNull Scheduler mainScheduler,
+                                               @NonNull SimpleAddressInfoListener callback) {
         callback.onCallReady();
         Observable.fromIterable(addresses)
                 .flatMap(address ->
@@ -69,11 +73,13 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
     @SuppressLint("CheckResult")
     @Override
     public void fetchDetailedAddressInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
-                                         @NonNull Scheduler mainScheduler, @NonNull DetailAddressInfoListener callback) {
+                                         @NonNull Scheduler mainScheduler,
+                                         @NonNull DetailAddressInfoListener callback) {
 
         callback.onCallReady();
 
-        mDefaultAddressInfoService.getDetailedAddressInfo(address, NetworkManager.API_KEY_ETHPLORER, true)
+        mDefaultAddressInfoService
+                .getDetailedAddressInfo(address, NetworkManager.API_KEY_ETHPLORER, true)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onSimpleAddressInfoLoaded,
@@ -83,9 +89,11 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
     @SuppressLint("CheckResult")
     @Override
     public void fetchEthTransactionListInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
-                                            @NonNull Scheduler mainScheduler, @NonNull EthTransactionListInfoListener callback) {
+                                            @NonNull Scheduler mainScheduler,
+                                            @NonNull EthTransactionListInfoListener callback) {
         callback.onCallReady();
-        mDefaultAddressInfoService.getEthTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
+        mDefaultAddressInfoService
+                .getEthTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onEthTransactionListInfoReady,
@@ -94,11 +102,14 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
 
     @SuppressLint("CheckResult")
     @Override
-    public void fetchContractTokenTransactionListInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
-                                                      @NonNull Scheduler mainScheduler, @NonNull TransactionListInfoListener callback) {
+    public void fetchContractTokenTransactionListInfo(@NonNull String address,
+                                                      @NonNull Scheduler bkgdScheduler,
+                                                      @NonNull Scheduler mainScheduler,
+                                                      @NonNull TransactionListInfoListener callback) {
         callback.onCallReady();
 
-        mDefaultAddressInfoService.getContractTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
+        mDefaultAddressInfoService
+                .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionListInfoLoaded,
@@ -108,11 +119,13 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
     @SuppressLint("CheckResult")
     @Override
     public void fetchTokenTransactionListInfo(@NonNull String address, @NonNull String tokenAddress,
-                                              @NonNull Scheduler bkgdScheduler, @NonNull Scheduler mainScheduler,
+                                              @NonNull Scheduler bkgdScheduler,
+                                              @NonNull Scheduler mainScheduler,
                                               @NonNull TransactionListInfoListener callback) {
         callback.onCallReady();
 
-        mDefaultAddressInfoService.getTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER, tokenAddress)
+        mDefaultAddressInfoService
+                .getTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER, tokenAddress)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionListInfoLoaded,
@@ -122,20 +135,22 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
     @SuppressLint("CheckResult")
     @Override
     public void fetchTransactionDetail(@NonNull String txHash, @NonNull Scheduler bkgdScheduler,
-                                       @NonNull Scheduler mainScheduler, @NonNull TransactionInfoListener callback) {
+                                       @NonNull Scheduler mainScheduler,
+                                       @NonNull TransactionInfoListener callback) {
         callback.onCallReady();
-        mDefaultAddressInfoService.getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER)
+        mDefaultAddressInfoService
+                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionDetailReady,
                         callback::onDataNotAvailable);
     }
 
-    public static void setSimpleAddressInfoService(NetworkService mSimpleAddressInfoService) {
-        AddressRemoteRepository.mSimpleAddressInfoService = mSimpleAddressInfoService;
+    public void setSimpleAddressInfoService(NetworkService mSimpleAddressInfoService) {
+        this.mSimpleAddressInfoService = mSimpleAddressInfoService;
     }
 
-    public static void setDefaultAddressInfoService(NetworkService mDefaultAddressInfoService) {
-        AddressRemoteRepository.mDefaultAddressInfoService = mDefaultAddressInfoService;
+    public void setDefaultAddressInfoService(NetworkService mDefaultAddressInfoService) {
+        this.mDefaultAddressInfoService = mDefaultAddressInfoService;
     }
 }

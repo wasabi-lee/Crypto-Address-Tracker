@@ -15,7 +15,8 @@ public class PriceFetcher {
 
     private static final String FSYM = "ETH";
 
-    private static NetworkService mApiCallObservable = NetworkManager.getCurrentPrice(NetworkManager.BASE_URL_CRYPTOCOMPARE);
+    private static NetworkService mApiCallObservable =
+            NetworkManager.getCurrentPrice(NetworkManager.BASE_URL_CRYPTOCOMPARE);
 
     public interface OnPriceLoadedListener {
         void onPriceLoaded(CurrentPrice currentPrice);
