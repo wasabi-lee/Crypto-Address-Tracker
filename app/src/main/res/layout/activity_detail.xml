@@ -56,6 +56,7 @@
 
 
                     <TextView
+                        android:id="@+id/detail_appbar_content_name"
                         style="@style/TextLargeSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
