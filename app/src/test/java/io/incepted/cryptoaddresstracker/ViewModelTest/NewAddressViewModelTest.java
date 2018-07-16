@@ -38,8 +38,8 @@ public class NewAddressViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    private static final String NAME_TEST = "name";
-    private static final String ADDR_VALUE_TEST = "addr_value";
+    private static final String NAME_TEST = "name_test";
+    private static final String ADDR_VALUE_TEST = "0x123";
     private static final String QR_STRING_TEST = "qr_string";
 
     @Mock
@@ -81,6 +81,9 @@ public class NewAddressViewModelTest {
     public void clickSave_validName() {
         Observer<AddressStateNavigator> observer = mock(Observer.class);
         mNewAddressViewModel.getAddressState().observe(TestUtils.TEST_OBSERVER, observer);
+
+        mNewAddressViewModel.name.set(NAME_TEST);
+        mNewAddressViewModel.name.set(ADDR_VALUE_TEST);
 
         mNewAddressViewModel.saveAddress();
 

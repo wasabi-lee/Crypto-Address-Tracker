@@ -32,6 +32,12 @@ public interface AddressLocalDataSource {
         void onDeletionNotAvailable();
     }
 
+    interface OnAllAddressDeletedListener {
+        void onAddressesDeleted();
+
+        void onDeletionNotAvailable();
+    }
+
     interface OnAddressCountListener {
         void onAddressCount(Integer addressCount);
 
@@ -39,7 +45,7 @@ public interface AddressLocalDataSource {
     }
 
     interface OnAddressUpdatedListener {
-        void onAddressUpdated(Address updatedAddress);
+        void onAddressUpdated();
 
         void onUpdateNotAvailable();
     }
@@ -56,6 +62,8 @@ public interface AddressLocalDataSource {
     void updateAddress(@NonNull Address address, @NonNull OnAddressUpdatedListener callback);
 
     void deleteAddress(@NonNull int addressId, @NonNull OnAddressDeletedListener callback);
+
+    void deleteAllAddresses(@NonNull OnAllAddressDeletedListener callback);
 
     void refreshAddresses();
 

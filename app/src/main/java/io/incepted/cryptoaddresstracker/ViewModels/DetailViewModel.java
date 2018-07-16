@@ -43,6 +43,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     private int mAddressId;
 
+    private boolean shouldUpdateAddrName = false;
+
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<CurrentPrice> mCurrentPrice = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
@@ -101,12 +103,16 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     }
 
     public void updateAddressNewName(String newName) {
+        // Setting the flag upfront
+        shouldUpdateAddrName = true;
+
         // If the new input is empty, set the address itself as the default name
         if (newName.isEmpty()) {
             newName = mAddress.get().getAddrValue();
         }
         Address newAddress = mAddress.get();
         newAddress.setName(newName);
+
         mLocalRepository.updateAddress(newAddress, this);
 
     }
@@ -123,6 +129,16 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
         } catch (NullPointerException e) {
             handleError(e);
         }
+    }
+
+    private void updateNameChangeToView(Address address) {
+        // Updating the view with the new name
+        this.mAddress.get().setName(address.getName());
+        this.mAddress.notifyChange();
+        mSnackbarTextResource.setValue(R.string.address_edit_successful);
+
+        // Setting the flag to default so that it can perform normal api call next time.
+        shouldUpdateAddrName = false;
     }
 
     // ----------------------------- Getters ---------------------------
@@ -156,28 +172,37 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     @SuppressLint("CheckResult")
     @Override
     public void onAddressLoaded(Address address) {
-        // Notifying databinding layout the data change first
-        this.mAddress.set(address);
 
-        // Network call after
-        mRemoteRepository.fetchDetailedAddressInfo(address.getAddrValue(), Schedulers.io(), AndroidSchedulers.mainThread(),
-                new AddressRemoteDataSource.DetailAddressInfoListener() {
-                    @Override
-                    public void onCallReady() {
-                        /* empty */
-                    }
+        if (shouldUpdateAddrName) {
+            // Retrieving the updated address name only.
+            // Do not trigger API call because we want to just update the name alone.
+            updateNameChangeToView(address);
 
-                    @Override
-                    public void onSimpleAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo) {
-                        updateViews(remoteAddressInfo);
-                    }
+        } else {
 
-                    @Override
-                    public void onDataNotAvailable(Throwable throwable) {
-                        isLoading.set(false);
-                        handleError(throwable);
-                    }
-                });
+            // Notifying databinding layout the data change first
+            this.mAddress.set(address);
+
+            // Network call after
+            mRemoteRepository.fetchDetailedAddressInfo(address.getAddrValue(), Schedulers.io(), AndroidSchedulers.mainThread(),
+                    new AddressRemoteDataSource.DetailAddressInfoListener() {
+                        @Override
+                        public void onCallReady() {
+                            /* empty */
+                        }
+
+                        @Override
+                        public void onSimpleAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo) {
+                            updateViews(remoteAddressInfo);
+                        }
+
+                        @Override
+                        public void onDataNotAvailable(Throwable throwable) {
+                            isLoading.set(false);
+                            handleError(throwable);
+                        }
+                    });
+        }
     }
 
     @Override
@@ -187,12 +212,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     }
 
     @Override
-    public void onAddressUpdated(Address updatedAddress) {
-        mSnackbarTextResource.setValue(R.string.address_edit_successful);
-        Address update = mAddress.get();
-        update.setName(updatedAddress.getName());
-        mAddress.set(update);
-        mAddress.notifyChange();
+    public void onAddressUpdated() {
+        mLocalRepository.getAddress(mAddressId, this);
     }
 
     @Override

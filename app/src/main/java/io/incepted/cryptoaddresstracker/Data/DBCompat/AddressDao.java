@@ -33,4 +33,7 @@ public interface AddressDao {
     @Query("DELETE FROM addresses WHERE _id = (:addressId)")
     void delete(Integer addressId);
 
+    @Query("DELETE FROM addresses")
+    void deleteAllAddresses();
+
 }
