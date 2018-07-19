@@ -6,14 +6,13 @@ import android.support.annotation.NonNull;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.Data.Model.Address;
+import io.incepted.cryptoaddresstracker.Network.ApiManager;
 import io.incepted.cryptoaddresstracker.Network.Deserializer.SimpleAddressInfoDeserializer;
 import io.incepted.cryptoaddresstracker.Network.NetworkManager;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkService;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.Scheduler;
-import io.reactivex.disposables.Disposable;
 
 /**
  * A utility class dedicated for executing API calls to Ethplorer.io
@@ -57,7 +56,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
                 .flatMap(address ->
                         Observable.zip(Observable.just(address),
                                 mSimpleAddressInfoService.getSimpleAddressInfo(address.getAddrValue(),
-                                        NetworkManager.API_KEY_ETHPLORER, true),
+                                        ApiManager.API_KEY_ETHPLORER, true),
                                 (emittedAddress, simpleAddressInfo) -> {
                                     emittedAddress.setRemoteAddressInfo(simpleAddressInfo);
                                     return emittedAddress;
@@ -79,7 +78,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
         callback.onCallReady();
 
         mDefaultAddressInfoService
-                .getDetailedAddressInfo(address, NetworkManager.API_KEY_ETHPLORER, true)
+                .getDetailedAddressInfo(address, ApiManager.API_KEY_ETHPLORER, true)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onSimpleAddressInfoLoaded,
@@ -93,7 +92,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
                                             @NonNull EthTransactionListInfoListener callback) {
         callback.onCallReady();
         mDefaultAddressInfoService
-                .getEthTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
+                .getEthTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onEthTransactionListInfoReady,
@@ -109,7 +108,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
         callback.onCallReady();
 
         mDefaultAddressInfoService
-                .getContractTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER)
+                .getContractTokenTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionListInfoLoaded,
@@ -125,7 +124,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
         callback.onCallReady();
 
         mDefaultAddressInfoService
-                .getTokenTransactionListInfo(address, NetworkManager.API_KEY_ETHPLORER, tokenAddress)
+                .getTokenTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER, tokenAddress)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionListInfoLoaded,
@@ -139,7 +138,7 @@ public class AddressRemoteRepository implements AddressRemoteDataSource {
                                        @NonNull TransactionInfoListener callback) {
         callback.onCallReady();
         mDefaultAddressInfoService
-                .getTransactionDetail(txHash, NetworkManager.API_KEY_ETHPLORER)
+                .getTransactionDetail(txHash, ApiManager.API_KEY_ETHPLORER)
                 .subscribeOn(bkgdScheduler)
                 .observeOn(mainScheduler)
                 .subscribe(callback::onTransactionDetailReady,
