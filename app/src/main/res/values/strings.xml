@@ -18,6 +18,7 @@
 
     <string name="qr_scan_error">Error occurred while scanning QR code. Please try again
         later!</string>
+    <string name="error_offline">The device is offline</string>
 
     <string name="address_loading_error">"Error occurred while loading the address info. Please try again later!"</string>
     <string name="delete">Delete</string>

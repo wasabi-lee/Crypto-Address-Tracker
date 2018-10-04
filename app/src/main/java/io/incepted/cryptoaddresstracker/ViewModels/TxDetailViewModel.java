@@ -16,6 +16,7 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
@@ -51,7 +52,11 @@ public class TxDetailViewModel extends AndroidViewModel {
     public void start(String txHash) {
         // load txhash detail
         this.txHash = txHash;
-        fetchTxDetail(txHash);
+        if (ConnectivityChecker.isConnected(getApplication())) {
+            fetchTxDetail(txHash);
+        } else {
+            mSnackbarTextResource.setValue(R.string.error_offline);
+        }
     }
 
     @SuppressLint("CheckResult")

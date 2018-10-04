@@ -15,6 +15,7 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TransactionListInfo;
@@ -168,7 +169,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddress.setValue(address);
-        loadTransactions(address.getAddrValue(), tokenAddress);
+        if (ConnectivityChecker.isConnected(getApplication())) {
+            loadTransactions(address.getAddrValue(), tokenAddress);
+        } else {
+            mSnackbarTextResource.setValue(R.string.error_offline);
+        }
     }
 
     @Override

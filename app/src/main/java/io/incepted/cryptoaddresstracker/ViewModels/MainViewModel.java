@@ -18,6 +18,7 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.R;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -54,7 +55,11 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
 
     public void loadAddresses() {
         isDataLoading.set(true);
-        mLocalRepository.getAddresses(this);
+        if (ConnectivityChecker.isConnected(getApplication())) {
+            mLocalRepository.getAddresses(this);
+        } else {
+            mSnackbarTextResource.setValue(R.string.error_offline);
+        }
     }
 
 
