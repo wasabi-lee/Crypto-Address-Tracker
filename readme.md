@@ -13,3 +13,8 @@ A cryptocurrency address tracking app that allows the users to monitor multiple 
 ## Screenshots
 ![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/combined_1.png?raw=true)
 ![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/combined_2.png?raw=true)
+
+
+## Future implementations
+1. Change the crypto price into desired currency (BTC, USD, CAD, etc..) 
+2. Widgets 
