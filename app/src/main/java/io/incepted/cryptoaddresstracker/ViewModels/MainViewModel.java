@@ -2,12 +2,12 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
-import android.databinding.ObservableList;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableList;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.R;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -55,11 +54,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
 
     public void loadAddresses() {
         isDataLoading.set(true);
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            mLocalRepository.getAddresses(this);
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        mLocalRepository.getAddresses(this);
     }
 
 

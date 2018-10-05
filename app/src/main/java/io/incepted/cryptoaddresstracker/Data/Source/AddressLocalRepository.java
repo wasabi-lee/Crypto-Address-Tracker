@@ -1,7 +1,7 @@
 package io.incepted.cryptoaddresstracker.Data.Source;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.Data.DBCompat.AddressDao;
 import io.incepted.cryptoaddresstracker.Data.Model.Address;

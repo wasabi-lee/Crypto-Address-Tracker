@@ -4,10 +4,8 @@ package io.incepted.cryptoaddresstracker.Fragments;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.Preference;
 
-import android.support.v7.preference.PreferenceFragmentCompat;
-import android.util.Log;
+import androidx.preference.PreferenceFragmentCompat;
 
 import io.incepted.cryptoaddresstracker.Activities.SettingsActivity;
 import io.incepted.cryptoaddresstracker.Listeners.OnThemeChangedListener;

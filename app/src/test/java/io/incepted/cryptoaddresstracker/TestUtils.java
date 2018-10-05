@@ -1,9 +1,9 @@
 package io.incepted.cryptoaddresstracker;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.LifecycleRegistry;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LifecycleRegistry;
+import androidx.annotation.NonNull;
 
 public class TestUtils {
     public static final LifecycleOwner TEST_OBSERVER = new LifecycleOwner() {

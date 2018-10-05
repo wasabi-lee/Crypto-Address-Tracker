@@ -16,7 +16,7 @@
 
     </data>
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:isScrollContainer="true"
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_large">
@@ -346,12 +346,12 @@
                     app:layout_constraintTop_toBottomOf="@+id/tx_detail_content_horizontal_divider_8" />
 
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <!-- ************************ Miscellaneous ********************** -->
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/spacing_large">
@@ -513,16 +513,16 @@
                     android:background="?attr/overview_card_background"
                     android:padding="@dimen/spacing_xsmall"
                     android:text="@{txInfo.input}"
-                    android:onClick="@{{() -> viewmodel.mListener.onCopyRequested(txInfo.input)}}"
+                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(txInfo.input)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tx_detail_content_to_input_dummy"/>
 
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 </layout>

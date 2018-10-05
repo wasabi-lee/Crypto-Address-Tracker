@@ -1,6 +1,6 @@
 package io.incepted.cryptoaddresstracker.Utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
 

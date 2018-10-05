@@ -1,8 +1,8 @@
 package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.Observer;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 
 import com.google.common.collect.Lists;
 
@@ -297,7 +297,7 @@ public class DetailViewModelTest {
         verify(mLocalRepository).updateAddress(eq(mAddress), mAddressUpdateCallbackCaptor.capture());
 
         // Trigger callback
-        mAddressUpdateCallbackCaptor.getValue().onAddressUpdated(mAddress);
+        mAddressUpdateCallbackCaptor.getValue().onAddressUpdated();
     }
 
 

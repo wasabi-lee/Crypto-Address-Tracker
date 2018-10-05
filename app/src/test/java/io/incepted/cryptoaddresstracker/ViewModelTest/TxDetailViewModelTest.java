@@ -1,9 +1,9 @@
 package io.incepted.cryptoaddresstracker.ViewModelTest;
 
 import android.app.Application;
-import android.arch.core.executor.testing.InstantTaskExecutorRule;
-import android.arch.lifecycle.Observer;
-import android.databinding.ObservableField;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
+import androidx.databinding.ObservableField;
 
 import com.google.common.collect.Lists;
 

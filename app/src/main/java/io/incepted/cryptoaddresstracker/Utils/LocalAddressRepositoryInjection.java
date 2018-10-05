@@ -1,7 +1,7 @@
 package io.incepted.cryptoaddresstracker.Utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.Data.DBCompat.AppDatabase;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;

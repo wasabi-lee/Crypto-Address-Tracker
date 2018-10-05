@@ -29,7 +29,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:src="@drawable/thinking_emoji"/>
+                app:srcCompat="@drawable/thinking_emoji"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -49,7 +49,7 @@
                 android:textColor="@color/colorAccent" />
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/token_frag_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

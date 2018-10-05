@@ -1,17 +1,12 @@
 package io.incepted.cryptoaddresstracker;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
 
 import static org.junit.Assert.*;
 

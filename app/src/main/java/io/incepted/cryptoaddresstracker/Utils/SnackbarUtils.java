@@ -1,8 +1,8 @@
 package io.incepted.cryptoaddresstracker.Utils;
 
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
+import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,7 +15,7 @@ public class SnackbarUtils {
         }
 
         Snackbar snackbar = Snackbar.make(v, snackbarText, Snackbar.LENGTH_LONG);
-        int snackBarTextId = android.support.design.R.id.snackbar_text;
+        int snackBarTextId = com.google.android.material.R.id.snackbar_text;
         TextView textView = snackbar.getView().findViewById(snackBarTextId);
         textView.setTextColor(Color.WHITE);
         snackbar.show();

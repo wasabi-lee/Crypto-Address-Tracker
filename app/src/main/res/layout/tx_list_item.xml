@@ -35,7 +35,6 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
-        android:onClick="@{() -> listener.onTxItemClicked(fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
         app:cardElevation="@dimen/card_medium_elevation">
 

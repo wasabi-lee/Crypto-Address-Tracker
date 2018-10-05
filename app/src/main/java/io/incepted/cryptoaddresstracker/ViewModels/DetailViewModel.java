@@ -2,11 +2,11 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -21,7 +21,6 @@ import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.CurrentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token;
@@ -72,12 +71,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     public void start(int addressId) {
         this.mAddressId = addressId;
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            loadAddress(addressId);
-            loadCurrentPrice();
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        loadAddress(addressId);
+        loadCurrentPrice();
     }
 
     public void loadAddress(int addressId) {
@@ -86,6 +81,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     }
 
     private void loadCurrentPrice() {
+
         int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
 
@@ -211,6 +207,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     @Override
     public void onAddressNotAvailable() {
+        Log.d(TAG, "onDataNotAvailable: Failed to load address with id: " + mAddressId);
         mSnackbarTextResource.setValue(R.string.address_loading_error);
     }
 
@@ -222,6 +219,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     @Override
     public void onUpdateNotAvailable() {
         isLoading.set(false);
+        Log.d(TAG, "onUpdateNotAvailable: Failed to update data with id: " + mAddressId);
     }
 
     @Override
@@ -234,6 +232,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
         isLoading.set(false);
         mDeletionState.setValue(DeletionStateNavigator.DELETION_FAILED);
         mSnackbarTextResource.setValue(R.string.unexpected_error);
+        Log.d(TAG, "onDeletionNotAvailable: Failed to delete address with id: " + mAddressId);
     }
 
     public void updateViews(RemoteAddressInfo remoteAddressInfo) {

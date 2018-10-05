@@ -1,11 +1,11 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
-import android.arch.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.v4.app.FragmentActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;

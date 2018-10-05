@@ -16,7 +16,7 @@
     </data>
 
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/overview_card_background"
@@ -106,6 +106,6 @@
             app:layout_constraintStart_toEndOf="@+id/token_transfer_header_divider"
             app:layout_constraintTop_toTopOf="@+id/token_transfer_header_tx_hash_dummy" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

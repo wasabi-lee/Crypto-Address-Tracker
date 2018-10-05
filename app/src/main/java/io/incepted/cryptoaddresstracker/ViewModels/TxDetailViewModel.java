@@ -2,11 +2,11 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import java.util.List;
@@ -16,7 +16,6 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
@@ -52,11 +51,7 @@ public class TxDetailViewModel extends AndroidViewModel {
     public void start(String txHash) {
         // load txhash detail
         this.txHash = txHash;
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            fetchTxDetail(txHash);
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        fetchTxDetail(txHash);
     }
 
     @SuppressLint("CheckResult")

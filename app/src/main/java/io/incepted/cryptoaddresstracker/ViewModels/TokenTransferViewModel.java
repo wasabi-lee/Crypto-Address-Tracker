@@ -2,17 +2,16 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableBoolean;
-import android.databinding.ObservableField;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.CopyUtils;
@@ -52,32 +51,26 @@ public class TokenTransferViewModel extends AndroidViewModel {
     }
 
     @SuppressLint("CheckResult")
-    public void loadTransactionInfo(String txHash) {
+        public void loadTransactionInfo(String txHash) {
+        mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
+                new AddressRemoteDataSource.TransactionInfoListener() {
+            @Override
+            public void onCallReady() {
+                isLoading.set(true);
+            }
 
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteDataSource.TransactionInfoListener() {
-                        @Override
-                        public void onCallReady() {
-                            isLoading.set(true);
-                        }
+            @Override
+            public void onTransactionDetailReady(TransactionInfo transactionDetail) {
+                isLoading.set(false);
+                mTxInfo.set(transactionDetail);
+                mTxInfo.notifyChange();
+            }
 
-                        @Override
-                        public void onTransactionDetailReady(TransactionInfo transactionDetail) {
-                            isLoading.set(false);
-                            mTxInfo.set(transactionDetail);
-                            mTxInfo.notifyChange();
-                        }
-
-                        @Override
-                        public void onDataNotAvailable(Throwable throwable) {
-                            isLoading.set(false);
-                            handleError(throwable);
-                        }
-                    });
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+            @Override
+            public void onDataNotAvailable(Throwable throwable) {
+                handleError(throwable);
+            }
+        });
     }
 
 

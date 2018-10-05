@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,12 +12,12 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Activities.TxScanActivity">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/tx_scan_appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,14 +26,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tx_scan_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:title="Scan A Transaction" />
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
 
         <FrameLayout
@@ -42,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tx_scan_appbar_layout">
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/spacing_normal">
@@ -87,7 +88,7 @@
                     android:contentDescription="@string/scan_qr_code"
                     android:padding="@dimen/spacing_xsmall"
                     android:onClick="@{() -> viewmodel.initiateScan()}"
-                    android:src="?attr/qr_scan_icon"
+                    app:srcCompat="?attr/qr_scan_icon"
                     app:layout_constraintBottom_toBottomOf="@+id/tx_scan_tx_hash_edit_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tx_scan_tx_hash_edit_text" />
@@ -112,9 +113,9 @@
                     app:layout_constraintTop_toBottomOf="@+id/tx_scan_tx_hash_edit_text" />
 
 
-            </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </FrameLayout>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

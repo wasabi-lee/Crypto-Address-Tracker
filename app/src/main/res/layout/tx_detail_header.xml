@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -13,8 +15,7 @@
             type="io.incepted.cryptoaddresstracker.Listeners.CopyListener" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:id="@+id/tx_detail_appbar_content_inner_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -125,7 +126,7 @@
                 android:layout_marginLeft="@dimen/spacing_xsmall"
                 android:layout_marginStart="@dimen/spacing_xsmall"
                 android:onClick="@{() -> copylistener.onCopyRequested(txInfo.hash)}"
-                android:src="@drawable/ic_content_copy" />
+                app:srcCompat="@drawable/ic_content_copy" />
 
         </LinearLayout>
 

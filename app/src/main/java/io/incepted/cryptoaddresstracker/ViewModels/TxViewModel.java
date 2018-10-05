@@ -2,11 +2,11 @@ package io.incepted.cryptoaddresstracker.ViewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
-import android.arch.lifecycle.MutableLiveData;
-import android.databinding.ObservableArrayList;
-import android.databinding.ObservableBoolean;
-import android.support.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
+import androidx.annotation.NonNull;
 
 import java.util.List;
 
@@ -15,7 +15,6 @@ import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TransactionListInfo;
@@ -169,11 +168,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddress.setValue(address);
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            loadTransactions(address.getAddrValue(), tokenAddress);
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        loadTransactions(address.getAddrValue(), tokenAddress);
     }
 
     @Override

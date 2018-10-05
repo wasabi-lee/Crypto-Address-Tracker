@@ -1,21 +1,8 @@
 package io.incepted.cryptoaddresstracker.Activities;
 
-import android.app.AlertDialog;
-import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.databinding.DataBindingUtil;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,14 +12,22 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.Adapters.ViewPagerAdapter;
 import io.incepted.cryptoaddresstracker.Data.TxExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.Fragments.OverviewFragment;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Fragments.TokenFragment;
-import io.incepted.cryptoaddresstracker.Adapters.ViewPagerAdapter;
-import io.incepted.cryptoaddresstracker.Utils.SharedPreferenceHelper;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.Utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel;
