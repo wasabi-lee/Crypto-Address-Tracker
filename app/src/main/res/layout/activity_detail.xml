@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout>
 
     <data>
 
@@ -10,13 +8,15 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.DetailViewModel" />
     </data>
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.DetailActivity">
+        tools:context=".activities.DetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/detail_app_bar"
@@ -91,8 +91,8 @@
                         style="@style/TextMediumLargeSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
                         android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
                         android:gravity="center_vertical"
                         android:text="@{viewmodel.mAddress.name}" />
 
@@ -102,11 +102,11 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/detail_tab_layout"
-                style="?attr/tab_layout_style"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                style="?attr/tab_layout_style"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

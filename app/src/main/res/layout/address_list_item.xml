@@ -7,11 +7,11 @@
 
         <variable
             name="address"
-            type="io.incepted.cryptoaddresstracker.Data.Model.Address" />
+            type="io.incepted.cryptoaddresstracker.data.model.Address" />
 
         <variable
             name="listener"
-            type="io.incepted.cryptoaddresstracker.Listeners.AddressItemActionListener" />
+            type="io.incepted.cryptoaddresstracker.listeners.AddressItemActionListener" />
 
     </data>
 

@@ -1,30 +1,29 @@
 package io.incepted.cryptoaddresstracker;
 
+import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-
-import java.util.Collection;
-
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
 import androidx.test.runner.lifecycle.Stage;
+import androidx.appcompat.widget.Toolbar;
+
+import java.util.Collection;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 
 public class TestUtils {
 
-    private static void rotateToLandscape(AppCompatActivity activity) {
+    private static void rotateToLandscape(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     }
 
-    private static void rotateToPortrait(AppCompatActivity activity) {
+    private static void rotateToPortrait(Activity activity) {
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
-    public static void rotateOrientation(AppCompatActivity activity) {
+    public static void rotateOrientation(Activity activity) {
         int currentOrientation = activity.getResources().getConfiguration().orientation;
         switch (currentOrientation) {
             case Configuration.ORIENTATION_LANDSCAPE:
@@ -38,7 +37,7 @@ public class TestUtils {
         }
     }
 
-    public static String getToolbarNavigationContentDescription(@NonNull AppCompatActivity activity, @IdRes int toolbar1) {
+    public static String getToolbarNavigationContentDescription(@NonNull Activity activity, @IdRes int toolbar1) {
         Toolbar toolbar = activity.findViewById(toolbar1);
         if (toolbar != null) {
             return (String) toolbar.getNavigationContentDescription();
@@ -48,14 +47,14 @@ public class TestUtils {
     }
 
 
-    public static AppCompatActivity getCurrentActivity() throws IllegalStateException {
-        final AppCompatActivity[] resumedActivity = new AppCompatActivity[1];
+    public static Activity getCurrentActivity() throws IllegalStateException {
+        final Activity[] resumedActivity = new Activity[1];
 
         getInstrumentation().runOnMainSync(() -> {
             Collection resumedActivities = ActivityLifecycleMonitorRegistry.getInstance()
                     .getActivitiesInStage(Stage.RESUMED);
             if (resumedActivities.iterator().hasNext()) {
-                resumedActivity[0] = (AppCompatActivity) resumedActivities.iterator().next();
+                resumedActivity[0] = (Activity) resumedActivities.iterator().next();
              } else {
                 throw new IllegalStateException("No Activity in stage RESUMED");
             }

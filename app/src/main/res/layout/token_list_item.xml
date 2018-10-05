@@ -8,11 +8,11 @@
 
         <variable
             name="token"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.Token" />
+            type="io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token" />
 
         <variable
             name="listener"
-            type="io.incepted.cryptoaddresstracker.Listeners.TokenItemActionListener" />
+            type="io.incepted.cryptoaddresstracker.listeners.TokenItemActionListener" />
 
     </data>
 

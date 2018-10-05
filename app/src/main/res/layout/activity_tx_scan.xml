@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,14 +7,14 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.TxScanViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.TxScanViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.TxScanActivity">
+        tools:context=".activities.TxScanActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/tx_scan_appbar_layout"
@@ -88,7 +87,7 @@
                     android:contentDescription="@string/scan_qr_code"
                     android:padding="@dimen/spacing_xsmall"
                     android:onClick="@{() -> viewmodel.initiateScan()}"
-                    app:srcCompat="?attr/qr_scan_icon"
+                    android:src="?attr/qr_scan_icon"
                     app:layout_constraintBottom_toBottomOf="@+id/tx_scan_tx_hash_edit_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/tx_scan_tx_hash_edit_text" />

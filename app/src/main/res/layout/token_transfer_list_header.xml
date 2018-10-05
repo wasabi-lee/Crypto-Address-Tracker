@@ -8,11 +8,11 @@
 
         <variable
             name="txInfo"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo" />
+            type="io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo" />
 
         <variable
             name="listener"
-            type="io.incepted.cryptoaddresstracker.Listeners.CopyListener" />
+            type="io.incepted.cryptoaddresstracker.listeners.CopyListener" />
     </data>
 
 

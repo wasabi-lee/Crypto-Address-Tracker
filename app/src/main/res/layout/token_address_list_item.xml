@@ -12,6 +12,7 @@
     app:cardCornerRadius="@dimen/card_small_radius"
     app:cardElevation="@dimen/card_medium_elevation">
 
+    <!-- TODO Dot icon! -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

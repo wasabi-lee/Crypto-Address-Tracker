@@ -3,7 +3,6 @@ package io.incepted.cryptoaddresstracker.data;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.room.Room;
 import androidx.test.InstrumentationRegistry;
-import androidx.test.filters.LargeTest;
 import androidx.test.runner.AndroidJUnit4;
 
 import org.junit.After;
@@ -14,11 +13,11 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.incepted.cryptoaddresstracker.Data.DBCompat.AddressDao;
-import io.incepted.cryptoaddresstracker.Data.DBCompat.AppDatabase;
-import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.data.dbCompat.AddressDao;
+import io.incepted.cryptoaddresstracker.data.dbCompat.AppDatabase;
+import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.reactivex.schedulers.Schedulers;
 
 import static junit.framework.Assert.assertNotNull;

@@ -10,13 +10,13 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.TxDetailViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.TxDetailActivity">
+        tools:context=".activities.TxDetailActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/tx_detail_app_bar"

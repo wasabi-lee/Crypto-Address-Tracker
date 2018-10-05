@@ -9,13 +9,13 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.DetailViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.DetailViewModel" />
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Fragments.TokenFragment">
+        tools:context=".fragments.TokenFragment">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/thinking_emoji"/>
+                android:src="@drawable/thinking_emoji"/>
 
             <TextView
                 android:layout_width="wrap_content"

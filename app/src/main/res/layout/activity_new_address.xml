@@ -7,13 +7,13 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.NewAddressViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.NewAddressViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.NewAddressActivity">
+        tools:context=".activities.NewAddressActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/new_addr_appbar_layout"
@@ -121,7 +121,7 @@
                     android:padding="@dimen/spacing_xsmall"
                     android:contentDescription="@string/scan_qr_code"
                     android:onClick="@{() -> viewmodel.toQRScanActivity()}"
-                    app:srcCompat="?attr/qr_scan_icon"
+                    android:src="?attr/qr_scan_icon"
                     app:layout_constraintBottom_toBottomOf="@+id/new_addr_addr_edit_text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/new_addr_addr_edit_text" />

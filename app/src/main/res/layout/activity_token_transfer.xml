@@ -11,7 +11,7 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.TokenTransferViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.TokenTransferViewModel" />
 
     </data>
 
@@ -19,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.TokenTransferActivity">
+        tools:context=".activities.TokenTransferActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/token_transfer_appbar_layout"

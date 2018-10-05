@@ -16,18 +16,18 @@
 
         <variable
             name="ethOperation"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.EthOperation" />
+            type="io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation" />
 
         <variable
             name="tokenOperation"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TokenOperation"/>
+            type="io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation"/>
 
         <variable
             name="listener"
-            type="io.incepted.cryptoaddresstracker.Listeners.TxItemActionListener" />
+            type="io.incepted.cryptoaddresstracker.listeners.TxItemActionListener" />
     </data>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/token_frag_item_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,10 +35,11 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
+        android:onClick="@{() -> listener.onTxItemClicked(fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
         app:cardElevation="@dimen/card_medium_elevation">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/default_card_background"
@@ -134,9 +135,9 @@
                     app:tx_amount="@{fetchEthTx ? ethOperation.value.toString() : tokenOperation.value}" />
 
             </LinearLayout>
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

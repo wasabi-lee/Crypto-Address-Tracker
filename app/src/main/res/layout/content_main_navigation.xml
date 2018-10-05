@@ -8,7 +8,7 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.MainViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.MainViewModel" />
 
     </data>
 
@@ -36,7 +36,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                app:srcCompat="@drawable/ethicon"
+                android:src="@drawable/ethicon"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +85,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/nav_version_info"/>
+                app:layout_constraintTop_toBottomOf="@+id/nav_version_info" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

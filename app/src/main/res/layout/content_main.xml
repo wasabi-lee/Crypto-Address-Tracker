@@ -10,14 +10,14 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.MainViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.MainViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.MainActivity">
+        tools:context=".activities.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/main_appbar_layout"
@@ -52,7 +52,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@drawable/no_content_cat" />
+                android:src="@drawable/no_content_cat" />
 
             <TextView
                 style="@style/TextMediumLargeBoldAppearance"

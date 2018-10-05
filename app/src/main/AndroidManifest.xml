@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="io.incepted.cryptoaddresstracker">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -15,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme_light">
-        <activity android:name=".Activities.MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,20 +28,20 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".Activities.DetailActivity" />
-        <activity android:name=".Activities.TxActivity" />
-        <activity android:name=".Activities.TokenAddressActivity" />
-        <activity android:name=".Activities.TxDetailActivity" />
-        <activity android:name=".Activities.NewAddressActivity" />
-        <activity android:name=".Activities.TokenTransferActivity" />
+        <activity android:name=".activities.DetailActivity" />
+        <activity android:name=".activities.TxActivity" />
+        <activity android:name=".activities.TokenAddressActivity" />
+        <activity android:name=".activities.TxDetailActivity" />
+        <activity android:name=".activities.NewAddressActivity" />
+        <activity android:name=".activities.TokenTransferActivity" />
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
-        <activity android:name=".Activities.TxScanActivity" />
-        <activity android:name=".Activities.SettingsActivity" />
-        <activity android:name=".Activities.FeedbackActivity" />
-        <activity android:name=".Activities.BaseActivity"></activity>
+        <activity android:name=".activities.TxScanActivity" />
+        <activity android:name=".activities.SettingsActivity" />
+        <activity android:name=".activities.FeedbackActivity" />
+        <activity android:name=".activities.BaseActivity"></activity>
     </application>
 
 </manifest>

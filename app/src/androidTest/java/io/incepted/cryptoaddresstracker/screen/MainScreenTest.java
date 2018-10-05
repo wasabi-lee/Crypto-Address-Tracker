@@ -1,7 +1,6 @@
 package io.incepted.cryptoaddresstracker.screen;
 
 import androidx.test.InstrumentationRegistry;
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
@@ -17,11 +16,11 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.incepted.cryptoaddresstracker.Activities.MainActivity;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.activities.MainActivity;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.Utils.LocalAddressRepositoryInjection;
-import io.incepted.cryptoaddresstracker.Utils.ViewModelFactory;
+import io.incepted.cryptoaddresstracker.utils.LocalAddressRepositoryInjection;
+import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;

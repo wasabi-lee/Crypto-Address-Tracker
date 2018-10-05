@@ -8,11 +8,11 @@
 
         <variable
             name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.ViewModels.TxDetailViewModel" />
+            type="io.incepted.cryptoaddresstracker.viewModels.TxDetailViewModel" />
 
         <variable
             name="txInfo"
-            type="io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo" />
+            type="io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo" />
 
     </data>
 
@@ -513,7 +513,7 @@
                     android:background="?attr/overview_card_background"
                     android:padding="@dimen/spacing_xsmall"
                     android:text="@{txInfo.input}"
-                    android:onClick="@{() -> viewmodel.mListener.onCopyRequested(txInfo.input)}"
+                    android:onClick="@{{() -> viewmodel.mListener.onCopyRequested(txInfo.input)}}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

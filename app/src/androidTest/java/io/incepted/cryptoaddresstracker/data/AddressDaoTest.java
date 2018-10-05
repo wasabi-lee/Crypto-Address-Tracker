@@ -11,8 +11,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import io.incepted.cryptoaddresstracker.Data.DBCompat.AppDatabase;
-import io.incepted.cryptoaddresstracker.Data.Model.Address;
+import io.incepted.cryptoaddresstracker.data.dbCompat.AppDatabase;
+import io.incepted.cryptoaddresstracker.data.model.Address;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

@@ -9,13 +9,13 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import io.incepted.cryptoaddresstracker.Data.Model.Address;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteDataSource;
-import io.incepted.cryptoaddresstracker.Data.Source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.RemoteAddressInfo.RemoteAddressInfo;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionInfo.TransactionInfo;
-import io.incepted.cryptoaddresstracker.Network.NetworkModel.TransactionListInfo.TransactionListInfo;
-import io.incepted.cryptoaddresstracker.Network.NetworkService;
+import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
+import io.incepted.cryptoaddresstracker.network.NetworkService;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
