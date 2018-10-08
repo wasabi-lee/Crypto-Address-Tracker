@@ -2,12 +2,18 @@ package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+
+import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableBoolean;
 import androidx.annotation.NonNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
@@ -31,10 +37,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     private AddressRemoteRepository mRemoteRepository;
 
 
-    public MutableLiveData<Address> mAddress = new MutableLiveData<>();
-    public String tokenName;
-    public String tokenAddress;
-    public boolean isContractAddress;
+    public ObservableField<Address> mAddress = new ObservableField<>();
+    public ObservableField<String> tokenName = new ObservableField<>("-");
+    public ObservableField<String> tokenAddress = new ObservableField<>("-");
+    public ObservableBoolean isContractAddress = new ObservableBoolean(false);
+    public ObservableField<String> lastUpdated = new ObservableField<>();
 
     /**
      * @value boolean fetchEthTx:
@@ -43,6 +50,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
      * For token transactions, call 'getAddressHistory'.
      */
     public boolean fetchEthTx;
+    public Calendar calendar;
 
     public ObservableArrayList<OperationWrapper> mTxOperations = new ObservableArrayList<>();
     public ObservableBoolean isLoading = new ObservableBoolean(false);
@@ -60,11 +68,19 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     }
 
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
-        this.tokenName = tokenName;
-        this.tokenAddress = tokenAddress;
-        this.isContractAddress = isContractAddress;
+        this.tokenName.set(tokenName);
+        this.tokenAddress.set(tokenAddress);
+        this.isContractAddress.set(isContractAddress);
         this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
+        this.lastUpdated.set(getCurrentTimeInString());
         loadAddress(addressId);
+    }
+
+    public String getCurrentTimeInString() {
+        calendar = Calendar.getInstance();
+        Date time = calendar.getTime();
+        DateFormat sdf = SimpleDateFormat.getInstance();
+        return sdf.format(time);
     }
 
     public void loadAddress(int addressId) {
@@ -120,7 +136,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
             };
 
             // Using 'getTokenHistory' API call for the contract address
-            if (isContractAddress) {
+            if (isContractAddress.get()) {
                 mRemoteRepository.fetchContractTokenTransactionListInfo(address, Schedulers.io(),
                         AndroidSchedulers.mainThread(), callback);
             } else {
@@ -142,7 +158,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     }
 
 
-    public MutableLiveData<Address> getmAddress() {
+    public ObservableField<Address> getmAddress() {
         return mAddress;
     }
 
@@ -163,14 +179,14 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     }
 
     public void setContractAddress(boolean contractAddress) {
-        isContractAddress = contractAddress;
+        isContractAddress.set(contractAddress);
     }
 
     @Override
     public void onAddressLoaded(Address address) {
-        this.mAddress.setValue(address);
+        this.mAddress.set(address);
         if (ConnectivityChecker.isConnected(getApplication())) {
-            loadTransactions(address.getAddrValue(), tokenAddress);
+            loadTransactions(address.getAddrValue(), tokenAddress.get());
         } else {
             mSnackbarTextResource.setValue(R.string.error_offline);
         }

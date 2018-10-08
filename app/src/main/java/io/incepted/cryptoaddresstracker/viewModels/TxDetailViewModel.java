@@ -97,7 +97,6 @@ public class TxDetailViewModel extends AndroidViewModel {
         if (mTxInfo.get() != null) {
             List<Operation> operations = Objects.requireNonNull(mTxInfo.get()).getOperations();
             if (operations != null && operations.size() != 0) {
-                Log.d(TAG, "toTokenTransferActivity: clicked");
                 openTokenOperations.setValue(txHash);
             }
         }

@@ -69,8 +69,7 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
             itemBinding.setTokenOperation((TokenOperation) currentItem);
         }
 
-        itemBinding.setListener(mListener);
-        itemBinding.setTxHolderAddress(mTxHoldingAddress);
+        itemBinding.setViewmodel(mViewModel);
         itemBinding.executePendingBindings();
     }
 

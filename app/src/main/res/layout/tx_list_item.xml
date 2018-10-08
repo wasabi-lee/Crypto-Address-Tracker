@@ -11,8 +11,8 @@
             type="boolean" />
 
         <variable
-            name="txHolderAddress"
-            type="String" />
+            name="viewmodel"
+            type="io.incepted.cryptoaddresstracker.viewModels.TxViewModel" />
 
         <variable
             name="ethOperation"
@@ -22,9 +22,6 @@
             name="tokenOperation"
             type="io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation"/>
 
-        <variable
-            name="listener"
-            type="io.incepted.cryptoaddresstracker.listeners.TxItemActionListener" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -35,7 +32,7 @@
         android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
-        android:onClick="@{() -> listener.onTxItemClicked(fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash)}"
+        android:onClick="@{() -> viewmodel.toTxDetailActivity(fetchEthTx ? ethOperation.hash : tokenOperation.transactionHash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
         app:cardElevation="@dimen/card_medium_elevation">
 
@@ -129,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    app:address="@{txHolderAddress}"
+                    app:address="@{viewmodel.mAddress.addrValue}"
                     app:decimal="@{fetchEthTx ? 0 : tokenOperation.tokenInfo.decimals}"
                     app:from="@{fetchEthTx? ethOperation.from : tokenOperation.from}"
                     app:tx_amount="@{fetchEthTx ? ethOperation.value.toString() : tokenOperation.value}" />

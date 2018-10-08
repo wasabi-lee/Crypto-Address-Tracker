@@ -121,8 +121,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     }
 
     private void setupObservers() {
-        mViewModel.getmAddress().observe(this, address ->
-                mAdapter.setTxHoldingAddress(address != null ? address.getAddrValue() : null));
+//        mViewModel.getmAddress().observe(this, address ->
+//                mAdapter.setTxHoldingAddress(address != null ? address.getAddrValue() : null));
 
         mViewModel.getOpenTxDetail().observe(this, txHash -> {
             if (txHash != null)

@@ -59,7 +59,6 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         itemBinding.setAddress(currentItem);
         itemBinding.setListener(mListener);
         itemBinding.executePendingBindings();
-        Log.d(TAG, "onBindViewHolder: " + mAddresses.get(position).getName());
     }
 
     @Override

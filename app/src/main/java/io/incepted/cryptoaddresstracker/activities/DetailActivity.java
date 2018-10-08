@@ -134,7 +134,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     }
 
     private void setupObservers() {
-        mViewModel.getOpenTokenTransactions().observe(this, txExtraWrapper -> toTxActivity(txExtraWrapper));
+        mViewModel.getOpenTokenTransactions().observe(this, this::toTxActivity);
 
         mViewModel.getDeletionState().observe(this, deletionStateNavigator -> {
             if (deletionStateNavigator != null)
