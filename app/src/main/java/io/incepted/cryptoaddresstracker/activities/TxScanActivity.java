@@ -1,5 +1,6 @@
 package io.incepted.cryptoaddresstracker.activities;
 
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import androidx.databinding.DataBindingUtil;
@@ -58,10 +59,8 @@ public class TxScanActivity extends BaseActivity {
 
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, this::showSnackbar);
-        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
-            if (stringResource != null)
-                showSnackbar(getString(stringResource));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, message ->
+                showSnackbar(getString(message)));
     }
 
     private void setupObservers() {
@@ -109,4 +108,5 @@ public class TxScanActivity extends BaseActivity {
     private void showSnackbar(String s) {
         SnackbarUtils.showSnackbar(findViewById(android.R.id.content), s);
     }
+
 }

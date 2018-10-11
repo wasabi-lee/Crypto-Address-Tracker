@@ -92,26 +92,19 @@ public class NewAddressActivity extends BaseActivity {
 
     private void setupObservers() {
         mViewModel.getOpenQRScanActivity().observe(this, aVoid -> toQRScanActivity());
-        mViewModel.getEditTextErrorText().observe(this, message -> {
-            if (message != null)
-                mAddrEdit.setError(getString(message));
-        });
+        mViewModel.getEditTextErrorText().observe(this, message ->
+                mAddrEdit.setError(getString(message)));
     }
 
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, this::showSnackbar);
-
-        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
-            if (stringResource != null)
-                showSnackbar(getString(stringResource));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, stringResource ->
+                showSnackbar(getString(stringResource)));
 
     }
 
 
     private void toQRScanActivity() {
-//        Intent intent = new Intent(this, QRScanActivity.class);
-//        startActivityForResult(intent, QR_SCAN_ACTIVITY_REQUEST_CODE);
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
         intentIntegrator.setPrompt("Scan a QR code");
         intentIntegrator.setBeepEnabled(true);

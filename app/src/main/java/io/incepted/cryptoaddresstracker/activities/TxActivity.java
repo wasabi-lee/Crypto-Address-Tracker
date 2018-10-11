@@ -1,16 +1,22 @@
 package io.incepted.cryptoaddresstracker.activities;
 
 import androidx.lifecycle.ViewModelProviders;
+
 import android.content.Intent;
+
 import androidx.databinding.DataBindingUtil;
+
 import com.google.android.material.appbar.AppBarLayout;
+
 import androidx.fragment.app.FragmentActivity;
+
 import android.os.Bundle;
+
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
+
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
@@ -28,7 +34,6 @@ import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
 
 public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
-    private static final String TAG = TxActivity.class.getSimpleName();
 
     public static final String TX_ADDRESS_ID_EXTRA_KEY = "tx_address_id_extra_key";
     public static final String TX_TOKEN_NAME_EXTRA_KEY = "tx_token_name_extra_key";
@@ -54,7 +59,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private boolean mIsTheTitleContainerVisible = true;
 
     private TxViewModel mViewModel;
-    private TxAdapter mAdapter;
 
     private int mAddressId;
     private String mTokenName;
@@ -78,7 +82,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         setupObservers();
         setupRecyclerView();
 
-        Log.d(TAG, "onCreate: Token address: " + mTokenAddress);
 
     }
 
@@ -108,28 +111,15 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     }
 
     private void setupSnackbar() {
-        mViewModel.getSnackbarText().observe(this, message -> {
-            if (message != null)
-                showSnackbar(message);
-        });
+        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
-        mViewModel.getSnackbarTextResource().observe(this, message -> {
-            if (message != null)
-                showSnackbar(getString(message));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, message ->
+                showSnackbar(getString(message)));
 
     }
 
     private void setupObservers() {
-//        mViewModel.getmAddress().observe(this, address ->
-//                mAdapter.setTxHoldingAddress(address != null ? address.getAddrValue() : null));
-
-        mViewModel.getOpenTxDetail().observe(this, txHash -> {
-            if (txHash != null)
-                toTxDetailActivity(txHash);
-            else
-                showSnackbar(getString(R.string.unexpected_error));
-        });
+        mViewModel.getOpenTxDetail().observe(this, this::toTxDetailActivity);
     }
 
     private void setupRecyclerView() {
@@ -138,7 +128,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mTxList.setItemAnimator(new DefaultItemAnimator());
         mTxList.setLayoutManager(new LinearLayoutManager(this));
 
-        mAdapter = new TxAdapter(mViewModel);
+        TxAdapter mAdapter = new TxAdapter(mViewModel);
         mTxList.setAdapter(mAdapter);
     }
 
@@ -161,13 +151,10 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     }
 
     private void handleToolbarTitleVisibility(float percentage) {
-        Log.d(TAG, "Percentage: " + percentage + ", isTheTitleVisible: " + mIsTheTitleVisible);
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-
             if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;
-                Log.d(TAG, "Showing toolbar");
             }
 
         } else {
@@ -175,7 +162,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
             if (mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
                 mIsTheTitleVisible = false;
-                Log.d(TAG, "Hiding toolbar");
             }
         }
     }

@@ -30,7 +30,6 @@ import io.incepted.cryptoaddresstracker.utils.NumberUtils;
 
 public class AddressListBindings {
 
-    private static final String TAG = AddressListBindings.class.getSimpleName();
 
     @BindingAdapter({"app:address_items"})
     public static void setAddressItems(RecyclerView recyclerView, List<Address> items) {

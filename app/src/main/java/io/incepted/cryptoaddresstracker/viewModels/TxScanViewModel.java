@@ -11,6 +11,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
 public class TxScanViewModel extends AndroidViewModel {
 
@@ -21,11 +22,11 @@ public class TxScanViewModel extends AndroidViewModel {
 
     public ObservableField<String> mTxHashInput = new ObservableField<>("");
 
-    private MutableLiveData<Void> mInitiateScan = new MutableLiveData<>();
-    private MutableLiveData<String> mOpenTxDetail = new MutableLiveData<>();
+    private SingleLiveEvent<Void> mInitiateScan = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> mOpenTxDetail = new SingleLiveEvent<>();
 
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxScanViewModel(@NonNull Application application,
                            @NonNull AddressLocalRepository localRepository,

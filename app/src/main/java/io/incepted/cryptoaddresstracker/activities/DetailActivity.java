@@ -74,9 +74,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
 
         ButterKnife.bind(this);
 
-
         mAddressId = unpackExtra();
-        Log.d(TAG, "onCreate: Address id: " + mAddressId);
 
         initToolbar();
         initAppbar();
@@ -157,10 +155,8 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
-        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
-            if (stringResource != null)
-                showSnackbar(getString(stringResource));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, stringResource ->
+                showSnackbar(getString(stringResource)));
     }
 
 
@@ -282,10 +278,6 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     }
 
     private void launchDeletionDialog() {
-
-//        boolean isDarkMode = SharedPreferenceHelper.getThemeFlag(this);
-//        int style = isDarkMode ? R.style.dialog_theme_dark : R.style.dialog_theme_light;
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false)
                 .setTitle("Are you sure?")

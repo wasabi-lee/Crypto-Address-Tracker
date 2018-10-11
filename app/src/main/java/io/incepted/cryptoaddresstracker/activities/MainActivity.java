@@ -83,15 +83,10 @@ public class MainActivity extends BaseActivity {
     }
 
     private void setupSnackbar() {
-        mViewModel.getSnackbarText().observe(this, message -> {
-            if (message != null)
-                showSnackbar(message);
-        });
+        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
-        mViewModel.getSnackbarTextResource().observe(this, stringResource -> {
-            if (stringResource != null)
-                showSnackbar(getString(stringResource));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, stringResource ->
+                showSnackbar(getString(stringResource)));
     }
 
     private void setupTransitionObservers() {
@@ -113,10 +108,7 @@ public class MainActivity extends BaseActivity {
                 }
         });
 
-        mViewModel.getOpenAddressDetail().observe(this, addressId -> {
-            if (addressId != null)
-                toDetailActivity(addressId);
-        });
+        mViewModel.getOpenAddressDetail().observe(this, this::toDetailActivity);
     }
 
 

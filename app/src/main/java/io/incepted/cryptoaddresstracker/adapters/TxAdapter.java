@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation;
@@ -20,17 +19,12 @@ import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
 
 public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
 
-    private static final String TAG = TxAdapter.class.getSimpleName();
-
     private TxViewModel mViewModel;
     private List<OperationWrapper> mOperations;
-    private TxItemActionListener mListener;
 
-    private String mTxHoldingAddress;
 
     public TxAdapter(TxViewModel viewModel) {
         this.mViewModel = viewModel;
-        this.mListener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
         this.mOperations = new ArrayList<>();
     }
 
@@ -43,7 +37,7 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
             txListItemBinding = binding;
         }
 
-        public TxListItemBinding getItemBinding() {
+        TxListItemBinding getItemBinding() {
             return txListItemBinding;
         }
     }
@@ -81,10 +75,6 @@ public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
     private void setList(List<OperationWrapper> txInfoList) {
         this.mOperations = txInfoList;
         notifyDataSetChanged();
-    }
-
-    public void setTxHoldingAddress(String txHoldingAddress) {
-        this.mTxHoldingAddress = txHoldingAddress;
     }
 
     public void replaceData(List<OperationWrapper> txInfoList) {

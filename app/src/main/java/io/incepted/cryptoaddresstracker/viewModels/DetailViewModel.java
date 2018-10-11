@@ -30,6 +30,7 @@ import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -52,11 +53,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     public ObservableField<Boolean> isLoading = new ObservableField<>();
     public ObservableField<Boolean> isContractAddress = new ObservableField<>(false);
 
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
-    private MutableLiveData<TxExtraWrapper> mOpenTokenTransactions = new MutableLiveData<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
+    private SingleLiveEvent<TxExtraWrapper> mOpenTokenTransactions = new SingleLiveEvent<>();
 
-    private MutableLiveData<DeletionStateNavigator> mDeletionState = new MutableLiveData<>();
+    private SingleLiveEvent<DeletionStateNavigator> mDeletionState = new SingleLiveEvent<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
 
@@ -304,6 +305,5 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         getSnackbarTextResource().setValue(R.string.unexpected_error);
-        getSnackbarTextResource().setValue(null);
     }
 }

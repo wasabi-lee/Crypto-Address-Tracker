@@ -20,6 +20,7 @@ import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -34,11 +35,11 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
     public ObservableField<Boolean> isDataLoading = new ObservableField<>(false);
     public ObservableList<Address> mAddressList = new ObservableArrayList<>();
 
-    private MutableLiveData<ActivityNavigator> mActivityNavigator = new MutableLiveData<>();
-    private MutableLiveData<Integer> mOpenAddressDetail = new MutableLiveData<>();
+    private SingleLiveEvent<ActivityNavigator> mActivityNavigator = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mOpenAddressDetail = new SingleLiveEvent<>();
 
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
 
     public MainViewModel(@NonNull Application application,
@@ -65,40 +66,24 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
 
     // ----------------------- Activity transition ------------------
 
-    // Resetting the value of the navigator back to null after the assignment
-    // to prevent unnecessary activity transition call after recreating MainActivity.
-    // This behavior occurs because when MutableLiveData.observe() method is called in MainActivity's OnCreate(),
-    // and when the data already exists in that LiveData, that data gets delivered immediately to the activity
-    // causing the transition to another activity even without the user click.
-    // Resetting the navigator's value to null prevents this behavior.
-
-    public void resetActivityNav() {
-        mActivityNavigator.setValue(null);
-    }
-
     public void addNewAddress() {
         mActivityNavigator.setValue(ActivityNavigator.NEW_ADDRESS);
-        resetActivityNav();
     }
 
     public void openAddressDetail(int addressId) {
         mOpenAddressDetail.setValue(addressId);
-        mOpenAddressDetail.setValue(null);
     }
 
     public void toSettings() {
         mActivityNavigator.setValue(ActivityNavigator.SETTINGS);
-        resetActivityNav();
     }
 
     public void toTokenAddresses() {
         mActivityNavigator.setValue(ActivityNavigator.TOKEN_ADDRESS);
-        resetActivityNav();
     }
 
     public void toTxScan() {
         mActivityNavigator.setValue(ActivityNavigator.TX_SCAN);
-        resetActivityNav();
     }
 
     // ----------------------- Getters -------------------
@@ -168,7 +153,6 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
                         isDataLoading.set(false);
                         populateAddressListView(addresses);
                         mSnackbarTextResource.setValue(R.string.unexpected_error);
-                        mSnackbarTextResource.setValue(null);
                     }
                 });
 

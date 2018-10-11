@@ -18,6 +18,7 @@ import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
 public class NewAddressViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressSavedListener {
 
@@ -29,13 +30,13 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressLoca
     public ObservableField<String> name = new ObservableField<>("");
     public ObservableField<String> address = new ObservableField<>("");
 
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
-    private MutableLiveData<Integer> mEditTextErrorText = new MutableLiveData<>();
+    private SingleLiveEvent<Integer> mEditTextErrorText = new SingleLiveEvent<>();
 
-    private MutableLiveData<Void> openQRScanActivity = new MutableLiveData<>();
-    private MutableLiveData<AddressStateNavigator> mAddressState = new MutableLiveData<>();
+    private SingleLiveEvent<Void> openQRScanActivity = new SingleLiveEvent<>();
+    private SingleLiveEvent<AddressStateNavigator> mAddressState = new SingleLiveEvent<>();
 
     public NewAddressViewModel(@NonNull Application application,
                                @NonNull AddressLocalRepository localRepository,

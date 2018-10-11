@@ -21,6 +21,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.Ope
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -37,9 +38,9 @@ public class TxDetailViewModel extends AndroidViewModel {
     public ObservableBoolean isLoading = new ObservableBoolean();
     public CopyListener mListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
 
-    private MutableLiveData<String> openTokenOperations = new MutableLiveData<>();
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<String> openTokenOperations = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxDetailViewModel(@NonNull Application application,
                              @NonNull AddressLocalRepository localRepository,
@@ -117,7 +118,6 @@ public class TxDetailViewModel extends AndroidViewModel {
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         mSnackbarTextResource.setValue(R.string.unexpected_error);
-        mSnackbarTextResource.setValue(null);
     }
 
 }

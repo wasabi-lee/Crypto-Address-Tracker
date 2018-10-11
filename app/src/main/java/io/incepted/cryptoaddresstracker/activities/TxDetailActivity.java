@@ -63,15 +63,10 @@ public class TxDetailActivity extends BaseActivity {
     }
 
     private void setupSnackbar() {
-        mViewModel.getSnackbarText().observe(this, message -> {
-            if (message != null)
-                showSnackbar(message);
-        });
+        mViewModel.getSnackbarText().observe(this, this::showSnackbar);
 
-        mViewModel.getSnackbarTextResource().observe(this, message -> {
-            if (message != null)
-                showSnackbar(getString(message));
-        });
+        mViewModel.getSnackbarTextResource().observe(this, message ->
+                showSnackbar(getString(message)));
 
     }
 

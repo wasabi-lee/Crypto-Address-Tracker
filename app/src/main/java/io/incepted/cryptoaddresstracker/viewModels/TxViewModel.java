@@ -26,6 +26,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -40,7 +41,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<String> tokenName = new ObservableField<>("-");
     public ObservableField<String> tokenAddress = new ObservableField<>("-");
-    public ObservableBoolean isContractAddress = new ObservableBoolean(false);
+    private boolean isContractAddress =false;
     public ObservableField<String> lastUpdated = new ObservableField<>();
 
     /**
@@ -55,9 +56,9 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     public ObservableArrayList<OperationWrapper> mTxOperations = new ObservableArrayList<>();
     public ObservableBoolean isLoading = new ObservableBoolean(false);
 
-    private MutableLiveData<String> mOpenTxDetail = new MutableLiveData<>();
-    private MutableLiveData<String> mSnackbarText = new MutableLiveData<>();
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<String> mOpenTxDetail = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxViewModel(@NonNull Application application,
                        @NonNull AddressLocalRepository localRepository,
@@ -70,13 +71,13 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
         this.tokenName.set(tokenName);
         this.tokenAddress.set(tokenAddress);
-        this.isContractAddress.set(isContractAddress);
+        this.isContractAddress = isContractAddress;
         this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
         this.lastUpdated.set(getCurrentTimeInString());
         loadAddress(addressId);
     }
 
-    public String getCurrentTimeInString() {
+    private String getCurrentTimeInString() {
         calendar = Calendar.getInstance();
         Date time = calendar.getTime();
         DateFormat sdf = SimpleDateFormat.getInstance();
@@ -136,7 +137,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
             };
 
             // Using 'getTokenHistory' API call for the contract address
-            if (isContractAddress.get()) {
+            if (isContractAddress) {
                 mRemoteRepository.fetchContractTokenTransactionListInfo(address, Schedulers.io(),
                         AndroidSchedulers.mainThread(), callback);
             } else {
@@ -179,7 +180,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     }
 
     public void setContractAddress(boolean contractAddress) {
-        isContractAddress.set(contractAddress);
+        isContractAddress = contractAddress;
     }
 
     @Override
@@ -194,18 +195,17 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
 
     @Override
     public void onAddressNotAvailable() {
-        handleError(R.string.address_loading_error);
+        handleError();
         isLoading.set(false);
     }
 
 
-    private void handleError(int errorMessage) {
-        mSnackbarTextResource.setValue(errorMessage);
+    private void handleError() {
+        mSnackbarTextResource.setValue(R.string.address_loading_error);
     }
 
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
         mSnackbarTextResource.setValue(R.string.unexpected_error);
-        mSnackbarTextResource.setValue(null);
     }
 }

@@ -13,9 +13,6 @@ import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.R
 public class Address {
 
 
-    @Ignore
-    private static final String TAG = Address.class.getSimpleName();
-
     @PrimaryKey(autoGenerate = true)
     private int _id;
 
