@@ -3,49 +3,66 @@
     <style name="AppTheme_light" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textColorPrimary">@color/text_color_light</item>
+        <item name="android:textColorSecondary">@color/text_color_light</item>
+        <item name="android:fontFamily">@font/roboto</item>
+
         <item name="android:windowBackground">@color/window_background_light</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="overview_card_background">@color/overview_card_background_light</item>
         <item name="default_card_background">@color/window_background_light</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_light</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_light</item>
+
         <item name="button_style">@style/button_style_light</item>
         <item name="tab_layout_style">@style/tab_layout_style_light</item>
         <item name="qr_scan_icon">@drawable/ic_camera_alt_black</item>
         <item name="edit_icon">@drawable/ic_mode_edit_black</item>
         <item name="delete_icon">@drawable/ic_delete_black</item>
         <item name="transparent_toolbar_style">@style/transparent_toolbar_style_light</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:alertDialogTheme">@style/dialog_theme_light</item>
         <item name="edit_text_style">@style/edittext_style_light</item>
+
+        <item name="preferenceTheme">@style/AppTheme_light.PreferenceTheme</item>
+        <item name="alertDialogTheme">@style/dialog_theme_light</item>
+        <item name="android:alertDialogTheme">@style/dialog_theme_light</item>
+
     </style>
 
     <style name="AppTheme_dark" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
         <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textColorPrimary">@color/text_color_dark</item>
+        <item name="android:textColorSecondary">@color/text_color_dark</item>
+        <item name="android:fontFamily">@font/roboto</item>
+
         <item name="android:windowBackground">@color/window_background_dark</item>
-        <item name="android:fontFamily">@font/roboto_medium</item>
         <item name="overview_card_background">@color/overview_card_background_dark</item>
         <item name="default_card_background">@color/window_background_dark</item>
         <item name="bottom_sheet_background">@color/bottom_sheet_background_dark</item>
         <item name="top_rounded_background">@drawable/top_rounded_background_dark</item>
+
         <item name="button_style">@style/button_style_dark</item>
         <item name="tab_layout_style">@style/tab_layout_style_dark</item>
         <item name="qr_scan_icon">@drawable/ic_camera_alt_white</item>
         <item name="edit_icon">@drawable/ic_mode_edit_white</item>
         <item name="delete_icon">@drawable/ic_delete_white</item>
         <item name="transparent_toolbar_style">@style/transparent_toolbar_style_dark</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
-        <item name="android:alertDialogTheme">@style/dialog_theme_dark</item>
         <item name="edit_text_style">@style/edittext_style_dark</item>
+
+        <item name="preferenceTheme">@style/AppTheme_dark.PreferenceTheme</item>
+        <item name="alertDialogTheme">@style/dialog_theme_dark</item>
+        <item name="android:alertDialogTheme">@style/dialog_theme_dark</item>
     </style>
 
     <attr name="overview_card_background" format="reference" />
@@ -62,6 +79,21 @@
     <attr name="edit_text_style" format="reference" />
 
 
+    <!-- ****************** Custom Themes ******************** -->
+
+    <style name="AppTheme_light.PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:textColor">@color/text_color_light</item>
+        <item name="android:textColorPrimary">@color/text_color_light</item>
+        <item name="android:textColorSecondary">@color/text_color_light</item>
+    </style>
+
+    <style name="AppTheme_dark.PreferenceTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
+        <item name="android:textColor">@color/text_color_dark</item>
+        <item name="android:textColorPrimary">@color/text_color_dark</item>
+        <item name="android:textColorSecondary">@color/text_color_dark</item>
+    </style>
+
+
     <!-- ****************** Text appearance ******************* -->
 
     <!-- Large fonts -->
@@ -73,6 +105,7 @@
 
     <style name="TextLargeSemiBoldAppearance">
         <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
     </style>
 
     <style name="TextLargeBoldAppearance">
@@ -90,6 +123,8 @@
 
     <style name="TextMediumLargeSemiBoldAppearance">
         <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+
     </style>
 
     <style name="TextMediumLargeBoldAppearance">
@@ -108,6 +143,7 @@
     <style name="TextMediumSemiBoldAppearance">
         <item name="android:textSize">14sp</item>
         <item name="android:fontFamily">@font/roboto_medium</item>
+
     </style>
 
     <style name="TextMediumBoldAppearance">
@@ -125,6 +161,8 @@
 
     <style name="TextSmallSemiBoldAppearance">
         <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+
     </style>
 
     <style name="TextSmallBoldAppearance">
@@ -142,6 +180,8 @@
 
     <style name="TextXSmallSemiBoldAppearance">
         <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+
     </style>
 
     <style name="TextXSmallBoldAppearance">

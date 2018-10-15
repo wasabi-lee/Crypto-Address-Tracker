@@ -129,7 +129,7 @@
 
                 <TextView
                     android:id="@+id/new_addr_required_field_dummy"
-                    style="@style/TextXSmallRegularAppearance"
+                    style="@style/TextSmallRegularAppearance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"

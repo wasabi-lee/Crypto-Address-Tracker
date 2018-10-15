@@ -88,13 +88,13 @@
 
                     <TextView
                         android:id="@+id/detail_textview_title"
-                        style="@style/TextMediumLargeSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
                         android:gravity="center_vertical"
-                        android:text="@{viewmodel.mAddress.name}" />
+                        android:text="@{viewmodel.mAddress.name}"
+                        android:textSize="18sp" />
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -102,11 +102,11 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/detail_tab_layout"
+                style="?attr/tab_layout_style"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="bottom"
-                app:layout_collapseMode="pin"
-                style="?attr/tab_layout_style"/>
+                app:layout_collapseMode="pin" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

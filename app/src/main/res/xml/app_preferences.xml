@@ -29,7 +29,7 @@
             android:key="@string/pref_key_feedback"
             android:title="@string/feedback">
             <intent
-                android:targetClass="io.incepted.cryptoaddresstracker.Activities.FeedbackActivity"
+                android:targetClass="io.incepted.cryptoaddresstracker.activities.FeedbackActivity"
                 android:targetPackage="io.incepted.cryptoaddresstracker" />
         </Preference>
 

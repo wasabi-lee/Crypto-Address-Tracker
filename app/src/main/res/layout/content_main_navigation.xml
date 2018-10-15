@@ -50,6 +50,7 @@
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:textStyle="bold"
                 android:text="@string/app_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -136,12 +137,9 @@
 
             <TextView
                 android:id="@+id/nav_content_item_scan_tx"
-                style="@style/TextMediumBoldAppearance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:padding="8dp"
                 android:onClick="@{()->viewmodel.toTxScan()}"
                 android:text="@string/scan_a_transaction"
                 app:layout_constraintStart_toStartOf="parent"
@@ -172,12 +170,9 @@
 
             <TextView
                 android:id="@+id/nav_content_item_settings"
-                style="@style/TextMediumBoldAppearance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:padding="8dp"
                 android:onClick="@{()->viewmodel.toSettings()}"
                 android:text="@string/settings"
                 app:layout_constraintStart_toStartOf="parent"
