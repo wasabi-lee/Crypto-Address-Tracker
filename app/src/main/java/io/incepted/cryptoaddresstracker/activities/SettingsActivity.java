@@ -39,6 +39,7 @@ public class SettingsActivity extends BaseActivity implements OnThemeChangedList
     }
 
 
+
     private void initToolbar() {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {

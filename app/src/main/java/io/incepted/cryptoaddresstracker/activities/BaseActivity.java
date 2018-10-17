@@ -12,10 +12,10 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         boolean isDarkTheme = SharedPreferenceHelper.getThemeFlag(this);
         setTheme(isDarkTheme ? R.style.AppTheme_dark : R.style.AppTheme_light);
+        super.onCreate(savedInstanceState);
+
 
     }
 }
