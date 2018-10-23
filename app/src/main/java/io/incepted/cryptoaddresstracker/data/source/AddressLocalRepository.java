@@ -12,7 +12,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AddressLocalRepository implements AddressLocalDataSource {
 
-
     private static final String TAG = AddressLocalRepository.class.getSimpleName();
 
     private volatile static AddressLocalRepository INSTANCE = null;

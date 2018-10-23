@@ -126,7 +126,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
                 @Override
                 public void onTransactionListInfoLoaded(TransactionListInfo transactionListInfo) {
                     isLoading.set(false);
-                    refreshList(transactionListInfo.getOperations());
+                    refreshList(transactionListInfo.getTokenTxList());
                 }
 
                 @Override
@@ -136,15 +136,9 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
                 }
             };
 
-            // Using 'getTokenHistory' API call for the contract address
-            if (isContractAddress) {
-                mRemoteRepository.fetchContractTokenTransactionListInfo(address, Schedulers.io(),
-                        AndroidSchedulers.mainThread(), callback);
-            } else {
                 // Using 'getAddressHistory' API call for the normal address
                 mRemoteRepository.fetchTokenTransactionListInfo(address, tokenAddress, Schedulers.io(),
                         AndroidSchedulers.mainThread(), callback);
-            }
 
         }
     }

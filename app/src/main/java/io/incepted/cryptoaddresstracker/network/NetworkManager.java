@@ -11,7 +11,7 @@ public class NetworkManager {
 
     private static final String TAG = NetworkManager.class.getSimpleName();
 
-    public static final String BASE_URL_ETHPLORER = "http://api.ethplorer.io/";
+    public static final String BASE_URL_ETHPLORER = "https://api.ethplorer.io/";
 
     public static final String BASE_URL_CRYPTOCOMPARE = "https://min-api.cryptocompare.com/";
 

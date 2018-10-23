@@ -86,7 +86,7 @@ public class TxViewModelTest {
         // Setting up expected test results
         ETH_TX_LIST_INFO_TEST = Lists.newArrayList(new EthOperation(), new EthOperation(), new EthOperation());
         TX_LIST_INFO_TEST = new TransactionListInfo();
-        TX_LIST_INFO_TEST.setOperations(Lists.newArrayList(new TokenOperation(), new TokenOperation(), new TokenOperation()));
+        TX_LIST_INFO_TEST.setTokenTxList(Lists.newArrayList(new TokenOperation(), new TokenOperation(), new TokenOperation()));
     }
 
     private void setupContext() {
@@ -164,7 +164,7 @@ public class TxViewModelTest {
         mTxListInfoCaptor.getValue().onTransactionListInfoLoaded(TX_LIST_INFO_TEST);
 
         assertFalse(mTxViewModel.isLoading.get());
-        assertEquals(mTxViewModel.mTxOperations.size(), TX_LIST_INFO_TEST.getOperations().size());
+        assertEquals(mTxViewModel.mTxOperations.size(), TX_LIST_INFO_TEST.getTokenTxList().size());
     }
 
     @Test
@@ -201,7 +201,7 @@ public class TxViewModelTest {
         mTxListInfoCaptor.getValue().onTransactionListInfoLoaded(TX_LIST_INFO_TEST);
 
         assertFalse(mTxViewModel.isLoading.get());
-        assertEquals(mTxViewModel.mTxOperations.size(), TX_LIST_INFO_TEST.getOperations().size());
+        assertEquals(mTxViewModel.mTxOperations.size(), TX_LIST_INFO_TEST.getTokenTxList().size());
     }
 
     @Test

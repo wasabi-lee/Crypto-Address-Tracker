@@ -2,6 +2,7 @@ package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.databinding.ObservableArrayList;
@@ -128,7 +129,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     public void toTxActivity(String tokenName, String tokenAddress) {
         try {
-            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId, tokenName, tokenAddress, isContractAddress.get());
+            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId,
+                    tokenName, tokenAddress, isContractAddress.get());
             mOpenTokenTransactions.setValue(wrapper);
         } catch (NullPointerException e) {
             handleError(e);
@@ -244,14 +246,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
             return;
         }
 
-        if (remoteAddressInfo.getContractInfo() != null) {
-            isContractAddress.set(true);
+        isContractAddress.set(remoteAddressInfo.getContractInfo() != null);
+        realignTokenList(remoteAddressInfo);
+        updateTokenList(remoteAddressInfo.getTokens());
 
-        } else {
-            isContractAddress.set(false);
-            realignTokenList(remoteAddressInfo);
-            updateTokenList(remoteAddressInfo.getTokens());
-        }
         updateAddressInfo(remoteAddressInfo);
 
         // hide progress bar
