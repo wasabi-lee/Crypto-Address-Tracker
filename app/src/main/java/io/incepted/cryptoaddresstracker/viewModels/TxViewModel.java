@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
@@ -26,16 +27,17 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class TxViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressLoadedListener {
+public class TxViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener {
 
     private static final String TAG = TxViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
     private AddressRemoteRepository mRemoteRepository;
+    private AddressRepository mAddressRepository;
 
 
     public ObservableField<Address> mAddress = new ObservableField<>();
@@ -61,11 +63,12 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxViewModel(@NonNull Application application,
-                       @NonNull AddressLocalRepository localRepository,
-                       @NonNull AddressRemoteRepository remoteRepository) {
+                       @NonNull AddressRemoteRepository remoteRepository,
+                       @NonNull AddressRepository addressRepository) {
         super(application);
-        this.mLocalRepository = localRepository;
         mRemoteRepository = remoteRepository;
+        mAddressRepository = addressRepository;
+
     }
 
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
@@ -86,7 +89,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalDataSou
 
     public void loadAddress(int addressId) {
         isLoading.set(true);
-        mLocalRepository.getAddress(addressId, this);
+        mAddressRepository.getAddress(addressId, this);
     }
 
     @SuppressLint("CheckResult")

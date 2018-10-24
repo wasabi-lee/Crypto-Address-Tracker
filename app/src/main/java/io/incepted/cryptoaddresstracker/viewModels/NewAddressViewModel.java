@@ -13,19 +13,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
-public class NewAddressViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressSavedListener {
+public class NewAddressViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressSavedListener {
 
     private static final String TAG = NewAddressViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
-    private AddressRemoteRepository mRemoteRepository;
+    private AddressRepository mAddressRepository;
 
     public ObservableField<String> name = new ObservableField<>("");
     public ObservableField<String> address = new ObservableField<>("");
@@ -39,11 +37,9 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressLoca
     private SingleLiveEvent<AddressStateNavigator> mAddressState = new SingleLiveEvent<>();
 
     public NewAddressViewModel(@NonNull Application application,
-                               @NonNull AddressLocalRepository localRepository,
-                               @NonNull AddressRemoteRepository remoteRepository) {
+                               @NonNull AddressRepository addressRepository) {
         super(application);
-        this.mLocalRepository = localRepository;
-        mRemoteRepository = remoteRepository;
+        mAddressRepository = addressRepository;
 
     }
 
@@ -59,14 +55,14 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressLoca
         try {
             String nameInput = name.get().equals("") ? address.get() : name.get();
             String addressInput = address.get().trim();
-            mLocalRepository.saveAddress(new Address(nameInput, addressInput, getCurrentTimestamp()), this);
+            mAddressRepository.saveAddress(new Address(nameInput, addressInput, getCurrentTimestamp()), this);
         } catch (NullPointerException e) {
             e.printStackTrace();
             mSnackbarTextResource.setValue(R.string.unexpected_error);
         }
     }
 
-    public Date getCurrentTimestamp() {
+    private Date getCurrentTimestamp() {
         return Calendar.getInstance().getTime();
     }
 

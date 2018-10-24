@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
@@ -20,16 +21,17 @@ import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressesLoadedListener {
+public class MainViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressesLoadedListener {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
     private AddressRemoteRepository mRemoteRepository;
+    private AddressRepository mAddressRepository;
 
     public ObservableField<Boolean> addressesExist = new ObservableField<>();
     public ObservableField<Boolean> isDataLoading = new ObservableField<>(false);
@@ -43,11 +45,11 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
 
 
     public MainViewModel(@NonNull Application application,
-                         @NonNull AddressLocalRepository addressLocalRepository,
-                         @NonNull AddressRemoteRepository remoteRepository) {
+                         @NonNull AddressRemoteRepository remoteRepository,
+                         @NonNull AddressRepository addressRepository) {
         super(application);
-        mLocalRepository = addressLocalRepository;
         mRemoteRepository = remoteRepository;
+        mAddressRepository = addressRepository;
     }
 
     public void start() {
@@ -57,7 +59,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalDataS
     public void loadAddresses() {
         isDataLoading.set(true);
         if (ConnectivityChecker.isConnected(getApplication())) {
-            mLocalRepository.getAddresses(this);
+            mAddressRepository.getAddresses(this);
         } else {
             mSnackbarTextResource.setValue(R.string.error_offline);
         }

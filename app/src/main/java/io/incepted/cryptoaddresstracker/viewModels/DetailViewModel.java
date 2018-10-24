@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
@@ -28,6 +29,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.T
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
 import io.incepted.cryptoaddresstracker.network.PriceFetcher;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
@@ -35,13 +37,13 @@ import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class DetailViewModel extends AndroidViewModel implements AddressLocalDataSource.OnAddressLoadedListener,
-        AddressLocalDataSource.OnAddressDeletedListener, AddressLocalDataSource.OnAddressUpdatedListener {
+public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
+        AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener {
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
 
-    private final AddressLocalRepository mLocalRepository;
     private AddressRemoteRepository mRemoteRepository;
+    private AddressRepository mAddressRepository;
 
     private int mAddressId;
 
@@ -63,11 +65,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
 
     public DetailViewModel(@NonNull Application application,
-                           @NonNull AddressLocalRepository localRepository,
-                           @NonNull AddressRemoteRepository remoteRepository) {
+                           @NonNull AddressRemoteRepository remoteRepository,
+                           @NonNull AddressRepository addressRepository) {
         super(application);
-        this.mLocalRepository = localRepository;
         mRemoteRepository = remoteRepository;
+        mAddressRepository = addressRepository;
 
     }
 
@@ -83,7 +85,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     public void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
-        this.mLocalRepository.getAddress(addressId, this);
+        mAddressRepository.getAddress(addressId, this);
     }
 
     private void loadCurrentPrice() {
@@ -118,13 +120,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
         Address newAddress = mAddress.get();
         newAddress.setName(newName);
 
-        mLocalRepository.updateAddress(newAddress, this);
+        mAddressRepository.updateAddress(newAddress, this);
 
     }
 
     public void deleteAddress() {
         mDeletionState.setValue(DeletionStateNavigator.DELETION_IN_PROGRESS);
-        mLocalRepository.deleteAddress(mAddressId, this);
+        mAddressRepository.deleteAddress(mAddressId, this);
     }
 
     public void toTxActivity(String tokenName, String tokenAddress) {
@@ -218,7 +220,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalDat
 
     @Override
     public void onAddressUpdated() {
-        mLocalRepository.getAddress(mAddressId, this);
+        mAddressRepository.getAddress(mAddressId, this);
     }
 
     @Override

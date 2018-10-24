@@ -56,7 +56,7 @@ public class MainScreenTest {
     @Before
     public void resetState() {
         ViewModelFactory.destroyInstance();
-        LocalAddressRepositoryInjection.provideAddressRepository(InstrumentationRegistry.getTargetContext())
+        LocalAddressRepositoryInjection.provideAddressLocalRepository(InstrumentationRegistry.getTargetContext())
                 .deleteAllAddresses(new AddressLocalDataSource.OnAllAddressDeletedListener() {
                     @Override
                     public void onAddressesDeleted() {

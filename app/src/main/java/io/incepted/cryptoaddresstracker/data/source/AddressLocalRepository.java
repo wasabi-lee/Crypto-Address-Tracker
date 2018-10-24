@@ -5,12 +5,19 @@ import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.data.dbCompat.AddressDao;
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressCountListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressesLoadedListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressLoadedListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressSavedListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressDeletedListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAllAddressDeletedListener;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks.OnAddressUpdatedListener;
 import io.reactivex.Completable;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public class AddressLocalRepository implements AddressLocalDataSource {
+public class AddressLocalRepository {
 
     private static final String TAG = AddressLocalRepository.class.getSimpleName();
 
@@ -37,7 +44,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getAddressCount(@NonNull OnAddressCountListener callback) {
         try {
             mAddressDao.getAddressCount()
@@ -54,7 +60,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getAddresses(@NonNull OnAddressesLoadedListener callback) {
         try {
             mAddressDao.getAllAddresses()
@@ -71,7 +76,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void getAddress(@NonNull int addressId, @NonNull OnAddressLoadedListener callback) {
         try {
             mAddressDao.getAddressById(addressId)
@@ -88,25 +92,11 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void saveAddress(@NonNull Address address, @NonNull OnAddressSavedListener callback) {
-        try {
 
-            Completable.fromAction(() -> mAddressDao.insert(address))
-                    .subscribeOn(backgroundScheduler)
-                    .observeOn(mainScheduler)
-                    .subscribe(callback::onAddressSaved,
-                            throwable -> {
-                                throwable.printStackTrace();
-                                callback.onSaveNotAvailable();
-                            });
-        } catch (Exception e) {
-            callback.onSaveNotAvailable();
-        }
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void updateAddress(@NonNull Address address, @NonNull OnAddressUpdatedListener callback) {
         try {
             Completable.fromAction(() -> mAddressDao.update(address))
@@ -123,7 +113,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void deleteAddress(@NonNull int addressId, @NonNull OnAddressDeletedListener callback) {
         try {
             Completable.fromAction(() -> mAddressDao.delete(addressId))
@@ -140,7 +129,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
     }
 
     @SuppressLint("CheckResult")
-    @Override
     public void deleteAllAddresses(@NonNull OnAllAddressDeletedListener callback) {
         try {
             Completable.fromAction(() -> mAddressDao.deleteAllAddresses())
@@ -156,7 +144,6 @@ public class AddressLocalRepository implements AddressLocalDataSource {
         }
     }
 
-    @Override
     public void refreshAddresses() {
 
     }

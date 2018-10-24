@@ -7,6 +7,10 @@ import androidx.annotation.NonNull;
 
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
+import io.incepted.cryptoaddresstracker.repository.PriceRepository;
+import io.incepted.cryptoaddresstracker.repository.TxInfoRepository;
+import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.NewAddressViewModel;
@@ -22,24 +26,36 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Application mApplication;
     private final AddressLocalRepository mLocalRepository;
     private final AddressRemoteRepository mRemoteRepository;
+    private final AddressRepository mAddressRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null)
                     INSTANCE = new ViewModelFactory(application,
+                            LocalAddressRepositoryInjection.provideAddressLocalRepository(application.getApplicationContext()),
+                            RemoteAddressRepositoryInjection.provideAddressRepository(),
                             LocalAddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
-                            RemoteAddressRepositoryInjection.provideAddressRepository());
+                            null,
+                            null,
+                            null);
 
             }
         }
         return INSTANCE;
     }
 
-    private ViewModelFactory(Application application, AddressLocalRepository localRepository, AddressRemoteRepository remoteRepository) {
+    private ViewModelFactory(Application application,
+                             AddressLocalRepository localRepository,
+                             AddressRemoteRepository remoteRepository,
+                             AddressRepository addressRepository,
+                             TxInfoRepository txInfoRepository,
+                             TxListRepository txListRepository,
+                             PriceRepository priceRepository) {
         mApplication = application;
         mLocalRepository = localRepository;
         mRemoteRepository = remoteRepository;
+        mAddressRepository = addressRepository;
     }
 
     public static void destroyInstance() {
@@ -51,16 +67,16 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //noinspection unchecked
-            return (T) new MainViewModel(mApplication, mLocalRepository, mRemoteRepository);
+            return (T) new MainViewModel(mApplication, mRemoteRepository, mAddressRepository);
         } else if (modelClass.isAssignableFrom(NewAddressViewModel.class)) {
             //noinspection unchecked
-            return (T) new NewAddressViewModel(mApplication, mLocalRepository, mRemoteRepository);
+            return (T) new NewAddressViewModel(mApplication, mAddressRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new DetailViewModel(mApplication, mLocalRepository, mRemoteRepository);
+            return (T) new DetailViewModel(mApplication, mRemoteRepository, mAddressRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxViewModel(mApplication, mLocalRepository, mRemoteRepository);
+            return (T) new TxViewModel(mApplication, mRemoteRepository, mAddressRepository);
         } else if (modelClass.isAssignableFrom(TxDetailViewModel.class)) {
             //noinspection unchecked
             return (T) new TxDetailViewModel(mApplication, mLocalRepository, mRemoteRepository);
