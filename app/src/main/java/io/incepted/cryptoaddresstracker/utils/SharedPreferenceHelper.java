@@ -2,8 +2,8 @@ package io.incepted.cryptoaddresstracker.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import androidx.preference.PreferenceManager;
 
+import androidx.preference.PreferenceManager;
 import io.incepted.cryptoaddresstracker.R;
 
 public class SharedPreferenceHelper {

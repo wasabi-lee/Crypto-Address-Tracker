@@ -1,11 +1,11 @@
 package io.incepted.cryptoaddresstracker.data.dbCompat;
 
+import android.content.Context;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
-import android.content.Context;
-
 import io.incepted.cryptoaddresstracker.data.model.Address;
 
 

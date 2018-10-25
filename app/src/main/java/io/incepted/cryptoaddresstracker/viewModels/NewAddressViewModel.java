@@ -1,10 +1,6 @@
 package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.zxing.integration.android.IntentResult;
@@ -12,10 +8,14 @@ import com.google.zxing.integration.android.IntentResult;
 import java.util.Calendar;
 import java.util.Date;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 

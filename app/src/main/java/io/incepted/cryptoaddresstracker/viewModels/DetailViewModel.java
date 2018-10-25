@@ -3,32 +3,28 @@ package io.incepted.cryptoaddresstracker.viewModels;
 import android.annotation.SuppressLint;
 import android.app.Application;
 
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.navigators.DeletionStateNavigator;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
+import io.incepted.cryptoaddresstracker.network.PriceFetcher;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
-import io.incepted.cryptoaddresstracker.network.PriceFetcher;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
@@ -42,7 +38,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     private static final String TAG = DetailViewModel.class.getSimpleName();
 
-    private AddressRemoteRepository mRemoteRepository;
     private AddressRepository mAddressRepository;
 
     private int mAddressId;
@@ -65,10 +60,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 
     public DetailViewModel(@NonNull Application application,
-                           @NonNull AddressRemoteRepository remoteRepository,
                            @NonNull AddressRepository addressRepository) {
         super(application);
-        mRemoteRepository = remoteRepository;
         mAddressRepository = addressRepository;
 
     }
@@ -192,8 +185,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
             this.mAddress.set(address);
 
             // Network call after
-            mRemoteRepository.fetchDetailedAddressInfo(address.getAddrValue(), Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteDataSource.DetailAddressInfoListener() {
+            mAddressRepository.fetchDetailedAddressInfo(address.getAddrValue(),
+                    new AddressRemoteCallbacks.DetailAddressInfoListener() {
                         @Override
                         public void onCallReady() {
                             /* empty */

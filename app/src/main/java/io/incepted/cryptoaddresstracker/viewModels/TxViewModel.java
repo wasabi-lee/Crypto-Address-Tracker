@@ -3,30 +3,27 @@ package io.incepted.cryptoaddresstracker.viewModels;
 import android.annotation.SuppressLint;
 import android.app.Application;
 
-import androidx.databinding.ObservableField;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableBoolean;
-import androidx.annotation.NonNull;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -99,7 +96,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
             // When fetching Ethereum transactions
 
             mRemoteRepository.fetchEthTransactionListInfo(address, Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteDataSource.EthTransactionListInfoListener() {
+                    new AddressRemoteCallbacks.EthTransactionListInfoListener() {
                         @Override
                         public void onCallReady() {
                             /* empty */
@@ -120,7 +117,8 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
         } else {
 
-            AddressRemoteDataSource.TransactionListInfoListener callback = new AddressRemoteDataSource.TransactionListInfoListener() {
+            AddressRemoteCallbacks.TransactionListInfoListener callback =
+                    new AddressRemoteCallbacks.TransactionListInfoListener() {
                 @Override
                 public void onCallReady() {
                     /* empty */

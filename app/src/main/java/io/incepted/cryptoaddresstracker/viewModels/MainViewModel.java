@@ -2,35 +2,29 @@ package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableField;
-import androidx.databinding.ObservableList;
-import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableField;
+import androidx.databinding.ObservableList;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class MainViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressesLoadedListener {
 
     private static final String TAG = MainViewModel.class.getSimpleName();
 
-    private AddressRemoteRepository mRemoteRepository;
     private AddressRepository mAddressRepository;
 
     public ObservableField<Boolean> addressesExist = new ObservableField<>();
@@ -45,10 +39,8 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
 
     public MainViewModel(@NonNull Application application,
-                         @NonNull AddressRemoteRepository remoteRepository,
                          @NonNull AddressRepository addressRepository) {
         super(application);
-        mRemoteRepository = remoteRepository;
         mAddressRepository = addressRepository;
     }
 
@@ -131,8 +123,8 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         // Tagging each item with their position to keep the list in order even after the flatMap() call.
         List<Address> positionTaggedAddresses = tagListWithPositions(addresses);
 
-        mRemoteRepository.fetchMultipleSimpleAddressInfo(positionTaggedAddresses, Schedulers.io(), AndroidSchedulers.mainThread(),
-                new AddressRemoteDataSource.SimpleAddressInfoListener() {
+        mAddressRepository.fetchMultipleSimpleAddressInfo(positionTaggedAddresses,
+                new AddressRemoteCallbacks.SimpleAddressInfoListener() {
                     @Override
                     public void onCallReady() {
                         /* empty */

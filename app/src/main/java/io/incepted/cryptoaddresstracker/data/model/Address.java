@@ -1,12 +1,11 @@
 package io.incepted.cryptoaddresstracker.data.model;
 
+import java.util.Date;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.Date;
-
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 
 @Entity(tableName = "addresses")

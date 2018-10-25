@@ -1,21 +1,21 @@
 package io.incepted.cryptoaddresstracker.adapters;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
-import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
 
 public class TxAdapter extends RecyclerView.Adapter<TxAdapter.ViewHolder> {
 

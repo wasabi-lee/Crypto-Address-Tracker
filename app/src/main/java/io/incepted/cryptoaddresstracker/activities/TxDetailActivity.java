@@ -1,21 +1,21 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.databinding.ActivityTxDetailBinding;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxDetailViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityTxDetailBinding;
 
 public class TxDetailActivity extends BaseActivity {
 

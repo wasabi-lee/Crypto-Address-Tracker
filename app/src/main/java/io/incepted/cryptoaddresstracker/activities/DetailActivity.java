@@ -1,16 +1,8 @@
 package io.incepted.cryptoaddresstracker.activities;
 
 import android.app.AlertDialog;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,17 +12,25 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.tabs.TabLayout;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
-import io.incepted.cryptoaddresstracker.fragments.OverviewFragment;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.fragments.TokenFragment;
 import io.incepted.cryptoaddresstracker.adapters.ViewPagerAdapter;
+import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
+import io.incepted.cryptoaddresstracker.databinding.ActivityDetailBinding;
+import io.incepted.cryptoaddresstracker.fragments.OverviewFragment;
+import io.incepted.cryptoaddresstracker.fragments.TokenFragment;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityDetailBinding;
 
 public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 

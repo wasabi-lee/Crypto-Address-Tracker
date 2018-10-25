@@ -5,10 +5,10 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.Toolbar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;

@@ -2,19 +2,18 @@ package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
+
+import androidx.annotation.NonNull;
 import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
-
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.listeners.CopyListener;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -24,7 +23,6 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
     private static final String TAG = TokenTransferViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
     private AddressRemoteRepository mRemoteRepository;
 
     private String mTxHash;
@@ -37,10 +35,8 @@ public class TokenTransferViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TokenTransferViewModel(@NonNull Application application,
-                                  @NonNull AddressLocalRepository localRepository,
                                   @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        this.mLocalRepository = localRepository;
         mRemoteRepository = remoteRepository;
 
     }
@@ -57,7 +53,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
         if (ConnectivityChecker.isConnected(getApplication())) {
             mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteDataSource.TransactionInfoListener() {
+                    new AddressRemoteCallbacks.TransactionInfoListener() {
                         @Override
                         public void onCallReady() {
                             isLoading.set(true);

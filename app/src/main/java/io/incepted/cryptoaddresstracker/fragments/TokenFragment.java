@@ -2,23 +2,23 @@ package io.incepted.cryptoaddresstracker.fragments;
 
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;
-import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.databinding.FragmentTokenBinding;
+import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 
 
 /**

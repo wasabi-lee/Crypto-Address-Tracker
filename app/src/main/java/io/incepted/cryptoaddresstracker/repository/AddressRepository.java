@@ -1,12 +1,12 @@
 package io.incepted.cryptoaddresstracker.repository;
 
-import javax.annotation.Nonnull;
+import java.util.List;
 
 import androidx.annotation.NonNull;
-import io.incepted.cryptoaddresstracker.data.dbCompat.AddressDao;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
 
 public class AddressRepository {
@@ -65,5 +65,16 @@ public class AddressRepository {
 
     public static void destroyInstance() {
         INSTANCE = null;
+    }
+
+    public void fetchMultipleSimpleAddressInfo(@NonNull List<Address> addresses,
+                                               @NonNull AddressRemoteCallbacks.SimpleAddressInfoListener callback) {
+        mRemoteDataSource.fetchMultipleSimpleAddressInfo(addresses, callback);
+    }
+
+
+    public void fetchDetailedAddressInfo(@NonNull String address,
+                                         @NonNull AddressRemoteCallbacks.DetailAddressInfoListener callback) {
+        mRemoteDataSource.fetchDetailedAddressInfo(address, callback);
     }
 }

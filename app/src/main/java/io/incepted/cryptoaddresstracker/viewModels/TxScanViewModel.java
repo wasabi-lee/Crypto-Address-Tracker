@@ -1,24 +1,20 @@
 package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.google.zxing.integration.android.IntentResult;
 
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
 public class TxScanViewModel extends AndroidViewModel {
 
     private static final String TAG = TxScanViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
-    private AddressRemoteRepository mRemoteRepository;
 
     public ObservableField<String> mTxHashInput = new ObservableField<>("");
 
@@ -28,12 +24,8 @@ public class TxScanViewModel extends AndroidViewModel {
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
-    public TxScanViewModel(@NonNull Application application,
-                           @NonNull AddressLocalRepository localRepository,
-                           @NonNull AddressRemoteRepository remoteRepository) {
+    public TxScanViewModel(@NonNull Application application) {
         super(application);
-        this.mLocalRepository = localRepository;
-        this.mRemoteRepository = remoteRepository;
     }
 
 

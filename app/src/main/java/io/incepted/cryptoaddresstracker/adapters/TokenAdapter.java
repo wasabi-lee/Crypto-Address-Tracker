@@ -1,9 +1,5 @@
 package io.incepted.cryptoaddresstracker.adapters;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -11,11 +7,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.databinding.TokenListItemBinding;
 import io.incepted.cryptoaddresstracker.listeners.TokenItemActionListener;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
-import io.incepted.cryptoaddresstracker.databinding.TokenListItemBinding;
 
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
 

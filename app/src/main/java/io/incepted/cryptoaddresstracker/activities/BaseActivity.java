@@ -1,8 +1,8 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 

@@ -3,7 +3,6 @@ package io.incepted.cryptoaddresstracker.data.source;
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
-
 import io.incepted.cryptoaddresstracker.data.dbCompat.AddressDao;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.reactivex.Completable;
@@ -23,16 +22,15 @@ public class AddressLocalDataSource {
 
     private Scheduler mainScheduler = AndroidSchedulers.mainThread();
 
-    private AddressLocalDataSource(
-                                 @NonNull AddressDao dao) {
+    private AddressLocalDataSource(@NonNull AddressDao dao) {
         mAddressDao = dao;
     }
 
-    public static AddressLocalDataSource getInstance(@NonNull AddressDao tasksDao) {
+    public static AddressLocalDataSource getInstance(@NonNull AddressDao addressDao) {
         if (INSTANCE == null) {
             synchronized (AddressLocalDataSource.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new AddressLocalDataSource(tasksDao);
+                    INSTANCE = new AddressLocalDataSource(addressDao);
                 }
             }
         }

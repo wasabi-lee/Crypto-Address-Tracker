@@ -6,10 +6,9 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
-
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.SettingsActivity;
 import io.incepted.cryptoaddresstracker.listeners.OnThemeChangedListener;
-import io.incepted.cryptoaddresstracker.R;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 

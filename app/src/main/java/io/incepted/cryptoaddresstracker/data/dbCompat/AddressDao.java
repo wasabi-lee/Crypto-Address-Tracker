@@ -1,13 +1,12 @@
 package io.incepted.cryptoaddresstracker.data.dbCompat;
 
+import java.util.List;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import java.util.List;
-
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;

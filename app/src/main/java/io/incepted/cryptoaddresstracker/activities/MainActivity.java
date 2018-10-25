@@ -1,31 +1,30 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import android.os.Bundle;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.ArrayList;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.incepted.cryptoaddresstracker.adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.adapters.AddressAdapter;
+import io.incepted.cryptoaddresstracker.databinding.ActivityMainBinding;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityMainBinding;
 
 public class MainActivity extends BaseActivity {
 

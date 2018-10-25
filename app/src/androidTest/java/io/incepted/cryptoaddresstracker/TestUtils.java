@@ -3,13 +3,14 @@ package io.incepted.cryptoaddresstracker;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import androidx.annotation.IdRes;
-import androidx.annotation.NonNull;
-import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
-import androidx.test.runner.lifecycle.Stage;
-import androidx.appcompat.widget.Toolbar;
 
 import java.util.Collection;
+
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
+import androidx.test.runner.lifecycle.Stage;
 
 import static androidx.test.InstrumentationRegistry.getInstrumentation;
 

@@ -2,24 +2,22 @@ package io.incepted.cryptoaddresstracker.viewModels;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.MutableLiveData;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableField;
-import androidx.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
 import java.util.Objects;
 
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.listeners.CopyListener;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import androidx.annotation.NonNull;
+import androidx.databinding.ObservableBoolean;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,7 +27,6 @@ public class TxDetailViewModel extends AndroidViewModel {
 
     private static final String TAG = TxDetailViewModel.class.getSimpleName();
 
-    private AddressLocalRepository mLocalRepository;
     private AddressRemoteRepository mRemoteRepository;
 
     private String txHash;
@@ -43,10 +40,8 @@ public class TxDetailViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxDetailViewModel(@NonNull Application application,
-                             @NonNull AddressLocalRepository localRepository,
                              @NonNull AddressRemoteRepository remoteRepository) {
         super(application);
-        mLocalRepository = localRepository;
         mRemoteRepository = remoteRepository;
     }
 
@@ -66,7 +61,7 @@ public class TxDetailViewModel extends AndroidViewModel {
         // show progress bar
 
         mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
-                new AddressRemoteDataSource.TransactionInfoListener() {
+                new AddressRemoteCallbacks.TransactionInfoListener() {
                     @Override
                     public void onCallReady() {
                         isLoading.set(true);

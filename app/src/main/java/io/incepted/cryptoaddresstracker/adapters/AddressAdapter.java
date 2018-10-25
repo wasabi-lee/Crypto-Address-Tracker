@@ -1,20 +1,19 @@
 package io.incepted.cryptoaddresstracker.adapters;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
 
-import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.listeners.AddressItemActionListener;
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
+import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.databinding.AddressListItemBinding;
+import io.incepted.cryptoaddresstracker.listeners.AddressItemActionListener;
+import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
 

@@ -1,24 +1,23 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.FragmentActivity;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.databinding.ActivityTxScanBinding;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxScanViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityTxScanBinding;
 
 public class TxScanActivity extends BaseActivity {
 

@@ -3,9 +3,9 @@ package io.incepted.cryptoaddresstracker.network;
 import java.util.List;
 
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
+import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
-import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
 import io.reactivex.Observable;
 import io.reactivex.Single;

@@ -2,16 +2,16 @@ package io.incepted.cryptoaddresstracker.fragments;
 
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import io.incepted.cryptoaddresstracker.activities.DetailActivity;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
+import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.databinding.FragmentOverviewBinding;
+import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 
 
 /**

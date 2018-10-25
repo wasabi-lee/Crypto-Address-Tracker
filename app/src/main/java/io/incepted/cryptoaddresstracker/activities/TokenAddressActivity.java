@@ -1,14 +1,15 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import com.google.android.material.appbar.AppBarLayout;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+
+import androidx.appcompat.widget.Toolbar;
 import io.incepted.cryptoaddresstracker.R;
 
 public class TokenAddressActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {

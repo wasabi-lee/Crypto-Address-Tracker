@@ -1,9 +1,7 @@
 package io.incepted.cryptoaddresstracker.binding;
 
-import androidx.databinding.BindingAdapter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.widget.TextView;
@@ -16,6 +14,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.incepted.cryptoaddresstracker.adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;

@@ -1,24 +1,24 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.lifecycle.ViewModelProviders;
+import android.os.Bundle;
+import android.view.MenuItem;
+
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
-import android.os.Bundle;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.incepted.cryptoaddresstracker.adapters.TokenTransferAdapter;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.adapters.TokenTransferAdapter;
+import io.incepted.cryptoaddresstracker.databinding.ActivityTokenTransferBinding;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TokenTransferViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityTokenTransferBinding;
 
 public class TokenTransferActivity extends BaseActivity {
 

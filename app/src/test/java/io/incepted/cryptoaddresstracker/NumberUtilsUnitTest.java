@@ -1,9 +1,10 @@
 package io.incepted.cryptoaddresstracker;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import io.incepted.cryptoaddresstracker.utils.NumberUtils;
+
+import static org.junit.Assert.assertEquals;
 
 public class NumberUtilsUnitTest {
 

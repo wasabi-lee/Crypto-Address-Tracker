@@ -1,16 +1,16 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
-import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
 
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.fragments.SettingsFragment;
 import io.incepted.cryptoaddresstracker.listeners.OnThemeChangedListener;
-import io.incepted.cryptoaddresstracker.R;
 
 public class SettingsActivity extends BaseActivity implements OnThemeChangedListener {
 

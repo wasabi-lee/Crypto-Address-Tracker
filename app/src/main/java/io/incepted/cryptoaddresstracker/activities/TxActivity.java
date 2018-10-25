@@ -1,36 +1,30 @@
 package io.incepted.cryptoaddresstracker.activities;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.content.Intent;
-
-import androidx.databinding.DataBindingUtil;
-
-import com.google.android.material.appbar.AppBarLayout;
-
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Bundle;
-
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.widget.Toolbar;
-
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.material.appbar.AppBarLayout;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
+import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
-import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
 
 public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 

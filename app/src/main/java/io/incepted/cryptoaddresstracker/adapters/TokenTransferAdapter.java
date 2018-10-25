@@ -1,23 +1,23 @@
 package io.incepted.cryptoaddresstracker.adapters;
 
-import androidx.databinding.DataBindingUtil;
-import androidx.databinding.ViewDataBinding;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
+import androidx.recyclerview.widget.RecyclerView;
+import io.incepted.cryptoaddresstracker.R;
+import io.incepted.cryptoaddresstracker.databinding.TokenTransferListHeaderBinding;
+import io.incepted.cryptoaddresstracker.databinding.TokenTransferListItemBinding;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.viewModels.TokenTransferViewModel;
-import io.incepted.cryptoaddresstracker.databinding.TokenTransferListHeaderBinding;
-import io.incepted.cryptoaddresstracker.databinding.TokenTransferListItemBinding;
 
 public class TokenTransferAdapter extends RecyclerView.Adapter<TokenTransferAdapter.ViewHolder> {
 

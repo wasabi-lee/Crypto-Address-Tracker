@@ -1,9 +1,6 @@
 package io.incepted.cryptoaddresstracker.viewModelTest;
 
 import android.app.Application;
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Observer;
-import androidx.databinding.ObservableField;
 
 import com.google.common.collect.Lists;
 
@@ -17,12 +14,14 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.databinding.ObservableField;
+import androidx.lifecycle.Observer;
+import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
-import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.viewModels.TxDetailViewModel;
 
 import static junit.framework.Assert.assertEquals;

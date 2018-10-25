@@ -1,8 +1,6 @@
 package io.incepted.cryptoaddresstracker.viewModelTest;
 
 import android.app.Application;
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Observer;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,20 +12,17 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.Date;
 
-import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalRepository;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
-import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.TestUtils;
+import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.viewModels.NewAddressViewModel;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
-
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;

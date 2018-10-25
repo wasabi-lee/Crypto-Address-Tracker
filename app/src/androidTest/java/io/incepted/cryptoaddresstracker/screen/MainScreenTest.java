@@ -1,10 +1,5 @@
 package io.incepted.cryptoaddresstracker.screen;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -16,9 +11,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.filters.LargeTest;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.runner.AndroidJUnit4;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.MainActivity;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.LocalAddressRepositoryInjection;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 
@@ -36,9 +36,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.google.common.base.Preconditions.checkArgument;
-
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.not;
 
 
 @RunWith(AndroidJUnit4.class)

@@ -1,9 +1,10 @@
 package io.incepted.cryptoaddresstracker.utils;
 
 import android.graphics.Color;
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 public class SnackbarUtils {
     private static final String TAG = SnackbarUtils.class.getSimpleName();
