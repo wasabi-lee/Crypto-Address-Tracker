@@ -17,8 +17,7 @@ import androidx.lifecycle.Observer;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.viewModels.NewAddressViewModel;
 

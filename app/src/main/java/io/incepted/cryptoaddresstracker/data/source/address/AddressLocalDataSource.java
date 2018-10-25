@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker.data.source;
+package io.incepted.cryptoaddresstracker.data.source.address;
 
 import android.annotation.SuppressLint;
 

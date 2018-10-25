@@ -5,9 +5,9 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
 
 public class AddressRepository {
 

@@ -13,8 +13,7 @@ import org.mockito.MockitoAnnotations;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 import io.incepted.cryptoaddresstracker.TestUtils;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.viewModels.TokenTransferViewModel;
 

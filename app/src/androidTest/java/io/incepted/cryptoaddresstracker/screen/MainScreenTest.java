@@ -18,7 +18,7 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.MainActivity;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
 import io.incepted.cryptoaddresstracker.utils.AddressRepositoryInjection;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 

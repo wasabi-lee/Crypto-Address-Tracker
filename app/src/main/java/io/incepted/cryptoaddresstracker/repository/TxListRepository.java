@@ -3,12 +3,10 @@ package io.incepted.cryptoaddresstracker.repository;
 import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
-import io.incepted.cryptoaddresstracker.data.source.TxListContractDataSource;
-import io.incepted.cryptoaddresstracker.data.source.TxListEthDataSource;
-import io.incepted.cryptoaddresstracker.data.source.TxListTokenDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListTokenDataSource;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
-import io.incepted.cryptoaddresstracker.network.ApiManager;
-import io.reactivex.Scheduler;
 
 public class TxListRepository {
 

@@ -15,7 +15,7 @@ import androidx.test.runner.AndroidJUnit4;
 import io.incepted.cryptoaddresstracker.data.dbCompat.AddressDao;
 import io.incepted.cryptoaddresstracker.data.dbCompat.AppDatabase;
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
 import io.reactivex.schedulers.Schedulers;
 
 import static junit.framework.Assert.assertNotNull;

@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.repository.TxInfoRepository;
@@ -23,18 +22,17 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private static volatile ViewModelFactory INSTANCE;
 
     private final Application mApplication;
-    private final AddressRemoteRepository mRemoteRepository;
     private final AddressRepository mAddressRepository;
     private final TxListRepository mTxListRepository;
+    private final TxInfoRepository mTxInfoRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
             synchronized (ViewModelFactory.class) {
                 if (INSTANCE == null)
                     INSTANCE = new ViewModelFactory(application,
-                            RemoteAddressRepositoryInjection.provideAddressRepository(),
                             AddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
-                            null,
+                            TxInfoRepositoryInjection.provideTxListRepository(),
                             TxListRepositoryInjection.provideTxListRepository(),
                             null);
 
@@ -44,15 +42,14 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     }
 
     private ViewModelFactory(Application application,
-                             AddressRemoteRepository remoteRepository,
                              AddressRepository addressRepository,
                              TxInfoRepository txInfoRepository,
                              TxListRepository txListRepository,
                              PriceRepository priceRepository) {
         mApplication = application;
-        mRemoteRepository = remoteRepository;
         mAddressRepository = addressRepository;
         mTxListRepository = txListRepository;
+        mTxInfoRepository = txInfoRepository;
     }
 
     public static void destroyInstance() {
@@ -76,10 +73,10 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) new TxViewModel(mApplication, mAddressRepository, mTxListRepository);
         } else if (modelClass.isAssignableFrom(TxDetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxDetailViewModel(mApplication, mRemoteRepository);
+            return (T) new TxDetailViewModel(mApplication, mTxInfoRepository);
         } else if (modelClass.isAssignableFrom(TokenTransferViewModel.class)) {
             //noinspection unchecked
-            return (T) new TokenTransferViewModel(mApplication, mRemoteRepository);
+            return (T) new TokenTransferViewModel(mApplication, mTxInfoRepository);
         } else if (modelClass.isAssignableFrom(TxScanViewModel.class)) {
             //noinspection unchecked
             return (T) new TxScanViewModel(mApplication);

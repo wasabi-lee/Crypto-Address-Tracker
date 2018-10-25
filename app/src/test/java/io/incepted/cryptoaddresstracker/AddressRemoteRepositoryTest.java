@@ -10,8 +10,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.network.NetworkService;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;

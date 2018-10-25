@@ -12,23 +12,20 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.TxInfoCallbacks;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.Operation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
+import io.incepted.cryptoaddresstracker.repository.TxInfoRepository;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class TxDetailViewModel extends AndroidViewModel {
 
     private static final String TAG = TxDetailViewModel.class.getSimpleName();
 
-    private AddressRemoteRepository mRemoteRepository;
+    private TxInfoRepository mTxInfoRepository;
 
     private String txHash;
 
@@ -41,9 +38,9 @@ public class TxDetailViewModel extends AndroidViewModel {
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxDetailViewModel(@NonNull Application application,
-                             @NonNull AddressRemoteRepository remoteRepository) {
+                             @NonNull TxInfoRepository txInfoRepository) {
         super(application);
-        mRemoteRepository = remoteRepository;
+        mTxInfoRepository = txInfoRepository;
     }
 
     public void start(String txHash) {
@@ -61,8 +58,7 @@ public class TxDetailViewModel extends AndroidViewModel {
 
         // show progress bar
 
-        mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
-                new TxInfoCallbacks.TransactionInfoListener() {
+        mTxInfoRepository.fetchTransactionDetail(txHash, new TxInfoCallbacks.TransactionInfoListener() {
                     @Override
                     public void onCallReady() {
                         isLoading.set(true);

@@ -18,8 +18,6 @@ import androidx.lifecycle.MutableLiveData;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
@@ -28,8 +26,6 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class TxViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener {
 

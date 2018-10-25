@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker.data.source;
+package io.incepted.cryptoaddresstracker.data.source.txlist;
 
 import android.annotation.SuppressLint;
 
@@ -7,7 +7,6 @@ import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 import io.incepted.cryptoaddresstracker.network.ApiManager;
 import io.incepted.cryptoaddresstracker.network.NetworkManager;
 import io.incepted.cryptoaddresstracker.network.NetworkService;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 

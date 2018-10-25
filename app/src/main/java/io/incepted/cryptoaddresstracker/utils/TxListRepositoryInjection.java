@@ -1,8 +1,8 @@
 package io.incepted.cryptoaddresstracker.utils;
 
-import io.incepted.cryptoaddresstracker.data.source.TxListContractDataSource;
-import io.incepted.cryptoaddresstracker.data.source.TxListEthDataSource;
-import io.incepted.cryptoaddresstracker.data.source.TxListTokenDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListTokenDataSource;
 import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 
 public class TxListRepositoryInjection {

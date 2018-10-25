@@ -4,8 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.data.dbCompat.AppDatabase;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
+import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 
 import static com.google.common.base.Preconditions.checkNotNull;
