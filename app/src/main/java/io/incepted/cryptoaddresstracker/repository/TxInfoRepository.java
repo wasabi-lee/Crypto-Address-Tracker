@@ -12,7 +12,7 @@ public class TxInfoRepository {
     private volatile static TxInfoRepository INSTANCE = null;
 
     private final TxInfoDataSource mTxInfoDataSource;
-    public TxInfoRepository(TxInfoDataSource txInfoDataSource) {
+    private TxInfoRepository(TxInfoDataSource txInfoDataSource) {
         this.mTxInfoDataSource = txInfoDataSource;
     }
 

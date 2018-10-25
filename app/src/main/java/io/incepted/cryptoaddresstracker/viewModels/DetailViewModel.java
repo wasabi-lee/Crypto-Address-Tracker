@@ -20,18 +20,16 @@ import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
-import io.incepted.cryptoaddresstracker.network.PriceFetcher;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
+import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
         AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener {
@@ -39,6 +37,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     private static final String TAG = DetailViewModel.class.getSimpleName();
 
     private AddressRepository mAddressRepository;
+    private PriceRepository mPriceRepository;
 
     private int mAddressId;
 
@@ -60,10 +59,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 
     public DetailViewModel(@NonNull Application application,
-                           @NonNull AddressRepository addressRepository) {
+                           @NonNull AddressRepository addressRepository,
+                           @NonNull PriceRepository priceRepository) {
         super(application);
         mAddressRepository = addressRepository;
-
+        mPriceRepository = priceRepository;
     }
 
     public void start(int addressId) {
@@ -85,9 +85,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
 
-        PriceFetcher.loadCurrentPrice(tsym, Schedulers.io(),
-                AndroidSchedulers.mainThread(),
-                new PriceFetcher.OnPriceLoadedListener() {
+        mPriceRepository.loadCurrentPrice(tsym, new PriceRepository.OnPriceLoadedListener() {
                     @Override
                     public void onPriceLoaded(CurrentPrice currentPrice) {
                         mCurrentPrice.set(currentPrice);

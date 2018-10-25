@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker.utils;
+package io.incepted.cryptoaddresstracker.di;
 
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSource;

@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import io.incepted.cryptoaddresstracker.network.NetworkService;
-import io.incepted.cryptoaddresstracker.network.PriceFetcher;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;

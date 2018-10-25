@@ -5,6 +5,10 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import io.incepted.cryptoaddresstracker.di.AddressRepositoryInjection;
+import io.incepted.cryptoaddresstracker.di.PriceRepositoryInjection;
+import io.incepted.cryptoaddresstracker.di.TxInfoRepositoryInjection;
+import io.incepted.cryptoaddresstracker.di.TxListRepositoryInjection;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.repository.TxInfoRepository;
@@ -25,6 +29,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final AddressRepository mAddressRepository;
     private final TxListRepository mTxListRepository;
     private final TxInfoRepository mTxInfoRepository;
+    private final PriceRepository mPriceRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
@@ -34,7 +39,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                             AddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
                             TxInfoRepositoryInjection.provideTxListRepository(),
                             TxListRepositoryInjection.provideTxListRepository(),
-                            null);
+                            PriceRepositoryInjection.providePriceRepository());
 
             }
         }
@@ -50,6 +55,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         mAddressRepository = addressRepository;
         mTxListRepository = txListRepository;
         mTxInfoRepository = txInfoRepository;
+        mPriceRepository = priceRepository;
     }
 
     public static void destroyInstance() {
@@ -67,7 +73,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) new NewAddressViewModel(mApplication, mAddressRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new DetailViewModel(mApplication, mAddressRepository);
+            return (T) new DetailViewModel(mApplication, mAddressRepository, mPriceRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
             return (T) new TxViewModel(mApplication, mAddressRepository, mTxListRepository);

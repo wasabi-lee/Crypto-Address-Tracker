@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker.utils;
+package io.incepted.cryptoaddresstracker.di;
 
 import android.content.Context;
 
