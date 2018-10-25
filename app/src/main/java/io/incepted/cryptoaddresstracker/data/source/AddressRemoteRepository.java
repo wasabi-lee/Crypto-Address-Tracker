@@ -49,36 +49,6 @@ public class AddressRemoteRepository {
     }
 
     @SuppressLint("CheckResult")
-    public void fetchMultipleSimpleAddressInfo(@NonNull List<Address> addresses,
-                                               @NonNull Scheduler bkgdScheduler,
-                                               @NonNull Scheduler mainScheduler,
-                                               @NonNull AddressRemoteCallbacks.SimpleAddressInfoListener callback) {
-        callback.onCallReady();
-        Observable.fromIterable(addresses)
-                .flatMap(address ->
-                        Observable.zip(Observable.just(address),
-                                mSimpleAddressInfoService.getSimpleAddressInfo(address.getAddrValue(),
-                                        ApiManager.API_KEY_ETHPLORER, true),
-                                (emittedAddress, simpleAddressInfo) -> {
-                                    emittedAddress.setRemoteAddressInfo(simpleAddressInfo);
-                                    return emittedAddress;
-                                }))
-                .subscribeOn(bkgdScheduler)
-                .observeOn(mainScheduler)
-                .subscribe(callback::onNextSimpleAddressInfoLoaded,
-                        callback::onDataNotAvailable,
-                        callback::onSimpleAddressInfoLoadingCompleted);
-    }
-
-
-    @SuppressLint("CheckResult")
-    public void fetchDetailedAddressInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
-                                         @NonNull Scheduler mainScheduler,
-                                         @NonNull AddressRemoteCallbacks.DetailAddressInfoListener callback) {
-
-    }
-
-    @SuppressLint("CheckResult")
     public void fetchEthTransactionListInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
                                             @NonNull Scheduler mainScheduler,
                                             @NonNull TxListCallbacks.EthTransactionListInfoListener callback) {

@@ -25,6 +25,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
     private final Application mApplication;
     private final AddressRemoteRepository mRemoteRepository;
     private final AddressRepository mAddressRepository;
+    private final TxListRepository mTxListRepository;
 
     public static ViewModelFactory getInstance(Application application) {
         if (INSTANCE == null) {
@@ -34,7 +35,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                             RemoteAddressRepositoryInjection.provideAddressRepository(),
                             AddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
                             null,
-                            null,
+                            TxListRepositoryInjection.provideTxListRepository(),
                             null);
 
             }
@@ -51,6 +52,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         mApplication = application;
         mRemoteRepository = remoteRepository;
         mAddressRepository = addressRepository;
+        mTxListRepository = txListRepository;
     }
 
     public static void destroyInstance() {
@@ -71,7 +73,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) new DetailViewModel(mApplication, mAddressRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
-            return (T) new TxViewModel(mApplication, mRemoteRepository, mAddressRepository);
+            return (T) new TxViewModel(mApplication, mAddressRepository, mTxListRepository);
         } else if (modelClass.isAssignableFrom(TxDetailViewModel.class)) {
             //noinspection unchecked
             return (T) new TxDetailViewModel(mApplication, mRemoteRepository);

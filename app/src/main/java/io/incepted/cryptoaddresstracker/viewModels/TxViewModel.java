@@ -26,6 +26,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
+import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -34,8 +35,8 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
     private static final String TAG = TxViewModel.class.getSimpleName();
 
-    private AddressRemoteRepository mRemoteRepository;
     private AddressRepository mAddressRepository;
+    private TxListRepository mTxListRepository;
 
 
     public ObservableField<Address> mAddress = new ObservableField<>();
@@ -61,11 +62,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     public TxViewModel(@NonNull Application application,
-                       @NonNull AddressRemoteRepository remoteRepository,
-                       @NonNull AddressRepository addressRepository) {
+                       @NonNull AddressRepository addressRepository,
+                       @NonNull TxListRepository txListRepository) {
         super(application);
-        mRemoteRepository = remoteRepository;
         mAddressRepository = addressRepository;
+        mTxListRepository = txListRepository;
 
     }
 
@@ -96,7 +97,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
             // When fetching Ethereum transactions
 
-            mRemoteRepository.fetchEthTransactionListInfo(address, Schedulers.io(), AndroidSchedulers.mainThread(),
+            mTxListRepository.fetchEthTransactionListInfo(address,
                     new TxListCallbacks.EthTransactionListInfoListener() {
                         @Override
                         public void onCallReady() {
@@ -139,8 +140,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
             };
 
                 // Using 'getAddressHistory' API call for the normal address
-                mRemoteRepository.fetchTokenTransactionListInfo(address, tokenAddress, Schedulers.io(),
-                        AndroidSchedulers.mainThread(), callback);
+                mTxListRepository.fetchTokenTransactionListInfo(address, tokenAddress, callback);
 
         }
     }
