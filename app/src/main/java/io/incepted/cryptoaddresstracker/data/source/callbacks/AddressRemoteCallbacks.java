@@ -1,4 +1,4 @@
-package io.incepted.cryptoaddresstracker.data.source;
+package io.incepted.cryptoaddresstracker.data.source.callbacks;
 
 import java.util.List;
 
@@ -27,29 +27,6 @@ public interface AddressRemoteCallbacks {
         void onDataNotAvailable(Throwable throwable);
     }
 
-    interface TransactionListInfoListener {
-        void onCallReady();
-
-        void onTransactionListInfoLoaded(TransactionListInfo transactionListInfo);
-
-        void onDataNotAvailable(Throwable throwable);
-    }
-
-    interface EthTransactionListInfoListener {
-        void onCallReady();
-
-        void onEthTransactionListInfoReady(List<EthOperation> ethOperationList);
-
-        void onDataNotAvailable(Throwable throwable);
-    }
-
-    interface TransactionInfoListener {
-        void onCallReady();
-
-        void onTransactionDetailReady(TransactionInfo transactionDetail);
-
-        void onDataNotAvailable(Throwable throwable);
-    }
 
 
 }

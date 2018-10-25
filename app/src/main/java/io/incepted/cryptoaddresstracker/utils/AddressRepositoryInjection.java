@@ -10,7 +10,7 @@ import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-public class LocalAddressRepositoryInjection {
+public class AddressRepositoryInjection {
 
     public static AddressLocalDataSource provideLocalDataSource(@NonNull Context context) {
         checkNotNull(context);

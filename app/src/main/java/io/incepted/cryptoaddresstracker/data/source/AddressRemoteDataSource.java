@@ -6,6 +6,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.network.ApiManager;
 import io.incepted.cryptoaddresstracker.network.NetworkManager;
 import io.incepted.cryptoaddresstracker.network.NetworkService;

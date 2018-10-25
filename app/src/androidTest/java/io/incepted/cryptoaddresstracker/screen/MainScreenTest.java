@@ -19,7 +19,7 @@ import androidx.test.runner.AndroidJUnit4;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.MainActivity;
 import io.incepted.cryptoaddresstracker.data.source.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.utils.LocalAddressRepositoryInjection;
+import io.incepted.cryptoaddresstracker.utils.AddressRepositoryInjection;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -54,7 +54,7 @@ public class MainScreenTest {
     @Before
     public void resetState() {
         ViewModelFactory.destroyInstance();
-        LocalAddressRepositoryInjection.provideAddressLocalRepository(InstrumentationRegistry.getTargetContext())
+        AddressRepositoryInjection.provideAddressLocalRepository(InstrumentationRegistry.getTargetContext())
                 .deleteAllAddresses(new AddressLocalDataSource.OnAllAddressDeletedListener() {
                     @Override
                     public void onAddressesDeleted() {

@@ -6,6 +6,9 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.data.model.Address;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.TxInfoCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 import io.incepted.cryptoaddresstracker.network.ApiManager;
 import io.incepted.cryptoaddresstracker.network.NetworkManager;
 import io.incepted.cryptoaddresstracker.network.NetworkService;
@@ -78,7 +81,7 @@ public class AddressRemoteRepository {
     @SuppressLint("CheckResult")
     public void fetchEthTransactionListInfo(@NonNull String address, @NonNull Scheduler bkgdScheduler,
                                             @NonNull Scheduler mainScheduler,
-                                            @NonNull AddressRemoteCallbacks.EthTransactionListInfoListener callback) {
+                                            @NonNull TxListCallbacks.EthTransactionListInfoListener callback) {
         callback.onCallReady();
         mDefaultAddressInfoService
                 .getEthTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER)
@@ -92,7 +95,7 @@ public class AddressRemoteRepository {
     public void fetchContractTokenTransactionListInfo(@NonNull String address,
                                                       @NonNull Scheduler bkgdScheduler,
                                                       @NonNull Scheduler mainScheduler,
-                                                      @NonNull AddressRemoteCallbacks.TransactionListInfoListener callback) {
+                                                      @NonNull TxListCallbacks.TransactionListInfoListener callback) {
         callback.onCallReady();
 
         mDefaultAddressInfoService
@@ -107,7 +110,7 @@ public class AddressRemoteRepository {
     public void fetchTokenTransactionListInfo(@NonNull String address, @NonNull String tokenAddress,
                                               @NonNull Scheduler bkgdScheduler,
                                               @NonNull Scheduler mainScheduler,
-                                              @NonNull AddressRemoteCallbacks.TransactionListInfoListener callback) {
+                                              @NonNull TxListCallbacks.TransactionListInfoListener callback) {
         callback.onCallReady();
 
         mDefaultAddressInfoService
@@ -121,7 +124,7 @@ public class AddressRemoteRepository {
     @SuppressLint("CheckResult")
     public void fetchTransactionDetail(@NonNull String txHash, @NonNull Scheduler bkgdScheduler,
                                        @NonNull Scheduler mainScheduler,
-                                       @NonNull AddressRemoteCallbacks.TransactionInfoListener callback) {
+                                       @NonNull TxInfoCallbacks.TransactionInfoListener callback) {
         callback.onCallReady();
         mDefaultAddressInfoService
                 .getTransactionDetail(txHash, ApiManager.API_KEY_ETHPLORER)

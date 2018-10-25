@@ -32,7 +32,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
                 if (INSTANCE == null)
                     INSTANCE = new ViewModelFactory(application,
                             RemoteAddressRepositoryInjection.provideAddressRepository(),
-                            LocalAddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
+                            AddressRepositoryInjection.provideAddressRepository(application.getApplicationContext()),
                             null,
                             null,
                             null);

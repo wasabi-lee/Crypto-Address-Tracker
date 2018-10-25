@@ -17,9 +17,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
@@ -96,7 +97,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
             // When fetching Ethereum transactions
 
             mRemoteRepository.fetchEthTransactionListInfo(address, Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteCallbacks.EthTransactionListInfoListener() {
+                    new TxListCallbacks.EthTransactionListInfoListener() {
                         @Override
                         public void onCallReady() {
                             /* empty */
@@ -117,8 +118,8 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
         } else {
 
-            AddressRemoteCallbacks.TransactionListInfoListener callback =
-                    new AddressRemoteCallbacks.TransactionListInfoListener() {
+            TxListCallbacks.TransactionListInfoListener callback =
+                    new TxListCallbacks.TransactionListInfoListener() {
                 @Override
                 public void onCallReady() {
                     /* empty */

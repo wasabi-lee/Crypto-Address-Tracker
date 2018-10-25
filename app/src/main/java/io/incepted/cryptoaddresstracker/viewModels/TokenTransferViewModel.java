@@ -9,8 +9,10 @@ import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 import io.incepted.cryptoaddresstracker.R;
-import io.incepted.cryptoaddresstracker.data.source.AddressRemoteCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.AddressRemoteRepository;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.TxInfoCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
@@ -53,7 +55,7 @@ public class TokenTransferViewModel extends AndroidViewModel {
 
         if (ConnectivityChecker.isConnected(getApplication())) {
             mRemoteRepository.fetchTransactionDetail(txHash, Schedulers.io(), AndroidSchedulers.mainThread(),
-                    new AddressRemoteCallbacks.TransactionInfoListener() {
+                    new TxInfoCallbacks.TransactionInfoListener() {
                         @Override
                         public void onCallReady() {
                             isLoading.set(true);
