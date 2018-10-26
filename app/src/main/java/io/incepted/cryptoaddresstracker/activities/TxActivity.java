@@ -13,7 +13,9 @@ import com.google.android.material.appbar.AppBarLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
@@ -58,6 +61,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private String mTokenName;
     private String mTokenAddress;
     private boolean mIsContractAddress;
+    private TxAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,13 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
 
     private void setupObservers() {
         mViewModel.getOpenTxDetail().observe(this, this::toTxDetailActivity);
+
+        mViewModel.getEthTxList().observe(this, new Observer<PagedList<EthOperation>>() {
+            @Override
+            public void onChanged(PagedList<EthOperation> ethOperations) {
+                adapter.submitList(ethOperations);
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -122,8 +133,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mTxList.setItemAnimator(new DefaultItemAnimator());
         mTxList.setLayoutManager(new LinearLayoutManager(this));
 
-        TxAdapter mAdapter = new TxAdapter(mViewModel);
-        mTxList.setAdapter(mAdapter);
+        adapter = new TxAdapter(EthOperation.DIFF_CALLBACK, mViewModel);
+        mTxList.setAdapter(adapter);
     }
 
     private void toTxDetailActivity(String txHash) {

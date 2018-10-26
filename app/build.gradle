@@ -81,6 +81,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 
+    // Debuging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
     // Testing
     testImplementation 'junit:junit:4.12'
     testImplementation "org.mockito:mockito-core:$mockito_version"

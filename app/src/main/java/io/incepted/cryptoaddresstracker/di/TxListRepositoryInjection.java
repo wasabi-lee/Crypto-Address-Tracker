@@ -14,7 +14,7 @@ public class TxListRepositoryInjection {
     }
 
     private static TxListEthDataSource provideTxListEthDataSource() {
-        return TxListEthDataSource.getInstance();
+        return new TxListEthDataSource();
     }
 
     private static TxListTokenDataSource provideTxListTokenDataSource() {

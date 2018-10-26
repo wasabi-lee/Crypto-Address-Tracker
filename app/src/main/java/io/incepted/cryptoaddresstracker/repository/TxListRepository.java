@@ -39,9 +39,8 @@ public class TxListRepository {
 
 
     @SuppressLint("CheckResult")
-    public void fetchEthTransactionListInfo(@NonNull String address,
-                                            @NonNull TxListCallbacks.EthTransactionListInfoListener callback) {
-        mEthDataSource.fetchEthTransactionListInfo(address, callback);
+    public void fetchEthTransactionListInfo(@NonNull String address) {
+//        mEthDataSource.fetchEthTransactionListInfo(address, callback);
     }
 
     @SuppressLint("CheckResult")

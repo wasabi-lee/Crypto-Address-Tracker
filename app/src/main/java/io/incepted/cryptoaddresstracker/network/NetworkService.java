@@ -26,12 +26,12 @@ public interface NetworkService {
 
     @GET("getAddressInfo/{address}")
     Single<RemoteAddressInfo> getDetailedAddressInfo(@Path("address") String address,
-                                                         @Query("apiKey") String apiKey,
-                                                         @Query("showETHTotals") boolean showEthTotals);
+                                                     @Query("apiKey") String apiKey,
+                                                     @Query("showETHTotals") boolean showEthTotals);
 
     @GET("getTokenHistory/{address}")
     Single<TransactionListInfo> getContractTokenTransactionListInfo(@Path("address") String address,
-                                                                        @Query("apiKey") String apiKey);
+                                                                    @Query("apiKey") String apiKey);
 
     @GET("getAddressHistory/{address}")
     Single<TransactionListInfo> getTokenTransactionListInfo(@Path("address") String address,
@@ -40,7 +40,8 @@ public interface NetworkService {
 
     @GET("getAddressTransactions/{address}")
     Single<List<EthOperation>> getEthTransactionListInfo(@Path("address") String address,
-                                                      @Query("apiKey") String apiKey);
+                                                         @Query("apiKey") String apiKey,
+                                                         @Query("timestamp") Long timestamp);
 
 
     @GET("getTxInfo/{txHash}")

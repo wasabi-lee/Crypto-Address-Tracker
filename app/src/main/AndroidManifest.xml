@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <application
-        android:name="androidx.multidex.MultiDexApplication"
+        android:name=".CryptoAddressTracker"
         android:allowBackup="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"

@@ -1,6 +1,22 @@
 package io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
+
 public class EthOperation extends OperationWrapper {
+
+    public static DiffUtil.ItemCallback<EthOperation> DIFF_CALLBACK = new DiffUtil.ItemCallback<EthOperation>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull EthOperation oldItem, @NonNull EthOperation newItem) {
+            return oldItem.hash.equals(newItem.hash);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull EthOperation oldItem, @NonNull EthOperation newItem) {
+            return oldItem.hash.equals(newItem.hash);
+        }
+    };
+
     private Long timestamp;
     private String from;
     private String to;

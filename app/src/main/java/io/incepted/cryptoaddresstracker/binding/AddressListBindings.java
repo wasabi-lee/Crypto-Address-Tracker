@@ -51,7 +51,7 @@ public class AddressListBindings {
     public static void setTxItems(RecyclerView recyclerView, List<OperationWrapper> items) {
         TxAdapter adapter = (TxAdapter) recyclerView.getAdapter();
         if (adapter != null) {
-            adapter.replaceData(items);
+//            adapter.replaceData(items);
         }
     }
 
