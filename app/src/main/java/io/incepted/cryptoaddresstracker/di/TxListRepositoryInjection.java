@@ -1,7 +1,7 @@
 package io.incepted.cryptoaddresstracker.di;
 
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
-import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSource;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListTokenDataSource;
 import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 
@@ -13,8 +13,8 @@ public class TxListRepositoryInjection {
                 provideTxListContractDataSource());
     }
 
-    private static TxListEthDataSource provideTxListEthDataSource() {
-        return new TxListEthDataSource();
+    private static TxListDataSource provideTxListEthDataSource() {
+        return new TxListDataSource();
     }
 
     private static TxListTokenDataSource provideTxListTokenDataSource() {

@@ -14,17 +14,18 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
 
-public class TxAdapter extends PagedListAdapter<EthOperation, TxAdapter.ViewHolder> {
+public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHolder> {
 
     private TxViewModel mViewModel;
 //    private List<OperationWrapper> mOperations;
 
-    public TxAdapter(@NonNull DiffUtil.ItemCallback<EthOperation> diffCallback, TxViewModel mViewModel) {
+    public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback, TxViewModel mViewModel) {
         super(diffCallback);
         this.mViewModel = mViewModel;
     }
@@ -54,12 +55,12 @@ public class TxAdapter extends PagedListAdapter<EthOperation, TxAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TxListItemBinding itemBinding = holder.getItemBinding();
-        EthOperation currentItem = getItem(position);
+        SimpleTxItem currentItem = getItem(position);
 
-        boolean fetchEthTx = currentItem.getTxType() == OperationWrapper.TX_TYPE_ETHEREUM;
+        boolean fetchEthTx = currentItem.isEthTx();
         itemBinding.setFetchEthTx(fetchEthTx);
         if (fetchEthTx) {
-            itemBinding.setEthOperation((EthOperation) currentItem);
+            itemBinding.setItem(currentItem);
         }
 //        else {
 //            itemBinding.setTokenOperation((TokenOperation) currentItem);

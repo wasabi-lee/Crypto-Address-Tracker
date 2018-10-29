@@ -6,6 +6,8 @@ import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSour
 import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
 import io.incepted.cryptoaddresstracker.network.NetworkManager;
 import io.incepted.cryptoaddresstracker.network.NetworkService;
+import io.incepted.cryptoaddresstracker.network.deserializer.CurrentPriceDeserializer;
+import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
@@ -17,7 +19,8 @@ public class PriceDataSource {
     private static final String FSYM = "ETH";
 
     private static NetworkService mApiCallObservable =
-            NetworkManager.getCurrentPrice(NetworkManager.BASE_URL_CRYPTOCOMPARE);
+            NetworkManager.getCustomNetworkService(NetworkManager.BASE_URL_CRYPTOCOMPARE,
+                    CurrentPrice.class, new CurrentPriceDeserializer());
 
     private PriceDataSource() {
     }

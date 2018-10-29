@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 
 import androidx.annotation.NonNull;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
-import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSource;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListTokenDataSource;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
 
@@ -12,11 +12,11 @@ public class TxListRepository {
 
     private volatile static TxListRepository INSTANCE = null;
 
-    private final TxListEthDataSource mEthDataSource;
+    private final TxListDataSource mEthDataSource;
     private final TxListTokenDataSource mTokenDataSource;
     private final TxListContractDataSource mContractDataSource;
 
-    public TxListRepository(TxListEthDataSource ethDataSource,
+    public TxListRepository(TxListDataSource ethDataSource,
                             TxListTokenDataSource tokenDataSource,
                             TxListContractDataSource contractDataSource) {
         this.mEthDataSource = ethDataSource;
@@ -24,7 +24,7 @@ public class TxListRepository {
         this.mContractDataSource = contractDataSource;
     }
 
-    public static TxListRepository getInstance(TxListEthDataSource ethDataSource,
+    public static TxListRepository getInstance(TxListDataSource ethDataSource,
                                                TxListTokenDataSource tokenDataSource,
                                                TxListContractDataSource contractDataSource) {
         if (INSTANCE == null) {

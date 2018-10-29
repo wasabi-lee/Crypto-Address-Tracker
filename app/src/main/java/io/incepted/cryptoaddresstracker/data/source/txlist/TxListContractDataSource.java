@@ -36,11 +36,10 @@ public class TxListContractDataSource {
         callback.onCallReady();
 
         mDefaultAddressInfoService
-                .getContractTokenTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER)
+                .getContractTokenTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER, 10)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(callback::onTransactionListInfoLoaded,
-                        callback::onDataNotAvailable);
+                .subscribe();
     }
 
 }

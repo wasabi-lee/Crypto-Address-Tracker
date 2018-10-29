@@ -10,9 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -23,11 +21,11 @@ import androidx.paging.PagedList;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.txlist.TxListEthDataSourceFactory;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSourceFactory;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TxListInfoResult;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
@@ -39,21 +37,24 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     private AddressRepository mAddressRepository;
     private TxListRepository mTxListRepository;
 
-    private LiveData<TxListInfoResult> result;
-    private LiveData<PagedList<EthOperation>> ethTxList ;
+    private LiveData<SimpleTxItemResult> result;
+    private LiveData<PagedList<SimpleTxItem>> ethTxList;
+    private LiveData<String> networkError;
+    private LiveData<Boolean> isLoading;
+
+    private TxListDataSourceFactory factory;
 
     public MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<String> tokenName = new ObservableField<>("-");
     public ObservableField<String> mTokenAddress = new ObservableField<>("-");
-    private boolean isContractAddress =false;
+    private boolean isContractAddress = false;
     public ObservableField<String> lastUpdated = new ObservableField<>();
 
     public boolean fetchEthTx;
     public Calendar calendar;
 
-    public ObservableArrayList<OperationWrapper> mTxOperations = new ObservableArrayList<>();
-    public ObservableBoolean isLoading = new ObservableBoolean(false);
+    public ObservableArrayList<SimpleTxItem> mTxOperations = new ObservableArrayList<>();
 
     private SingleLiveEvent<String> mOpenTxDetail = new SingleLiveEvent<>();
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
@@ -65,20 +66,12 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         super(application);
         mAddressRepository = addressRepository;
         mTxListRepository = txListRepository;
+        factory = new TxListDataSourceFactory();
 
-        result = Transformations.map(mAddrValue, new Function<String, TxListInfoResult>() {
-            @Override
-            public TxListInfoResult apply(String input) {
-                return loadTransactions(input, mTokenAddress.get());
-            }
-        });
-        ethTxList = Transformations.switchMap(result, new Function<TxListInfoResult, LiveData<PagedList<EthOperation>>>() {
-            @Override
-            public LiveData<PagedList<EthOperation>> apply(TxListInfoResult input) {
-                return input.data;
-            }
-        });
-
+        result = Transformations.map(mAddrValue, input -> loadTransactions(input, mTokenAddress.get()));
+        ethTxList = Transformations.switchMap(result, SimpleTxItemResult::getItemLiveDataList);
+        networkError = Transformations.switchMap(factory.getDataSourceLiveData(), TxListDataSource::getErrorMessage);
+        isLoading = Transformations.switchMap(factory.getDataSourceLiveData(), TxListDataSource::getIsLoading);
     }
 
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
@@ -99,73 +92,24 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     }
 
     public void loadAddress(int addressId) {
-        isLoading.set(true);
         mAddressRepository.getAddress(addressId, this);
     }
 
     @SuppressLint("CheckResult")
-    private TxListInfoResult loadTransactions(String address, String tokenAddress) {
-//        if (fetchEthTx) {
-//            // When fetching Ethereum transactions
-//            mTxListRepository.fetchEthTransactionListInfo(address,
-//                    new TxListCallbacks.EthTransactionListInfoListener() {
-//                        @Override
-//                        public void onCallReady() {
-//                            /* empty */
-//                        }
-//
-//                        @Override
-//                        public void onEthTransactionListInfoReady(List<EthOperation> ethOperationList) {
-//                            isLoading.set(false);
-//                            refreshList(ethOperationList);
-//                        }
-//
-//                        @Override
-//                        public void onDataNotAvailable(Throwable throwable) {
-//                            isLoading.set(false);
-//                            handleError(throwable);
-//                        }
-//                    });
-//
-//        } else {
-//
-//            TxListCallbacks.TransactionListInfoListener callback =
-//                    new TxListCallbacks.TransactionListInfoListener() {
-//                @Override
-//                public void onCallReady() {
-//                    /* empty */
-//                }
-//
-//                @Override
-//                public void onTransactionListInfoLoaded(TransactionListInfo transactionListInfo) {
-//                    isLoading.set(false);
-//                    refreshList(transactionListInfo.getTokenTxList());
-//                }
-//
-//                @Override
-//                public void onDataNotAvailable(Throwable throwable) {
-//                    isLoading.set(false);
-//                    handleError(throwable);
-//                }
-//            };
-//                // Using 'getAddressHistory' API call for the normal address
-//                mTxListRepository.fetchTokenTransactionListInfo(address, mTokenAddress, callback);
-//        }
-
-        TxListEthDataSourceFactory factory = new TxListEthDataSourceFactory();
-//        PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
-//                .setEnablePlaceholders(false)
-//                .setPageSize(20)
-//                .build();
-
-        ethTxList = new LivePagedListBuilder<>(factory, 10)
+    private SimpleTxItemResult loadTransactions(String address, String tokenAddress) {
+        PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
+                .setEnablePlaceholders(false)
+                .setPageSize(TxListDataSource.PAGE_SIZE)
                 .build();
 
-        return new TxListInfoResult(ethTxList);
+        ethTxList = new LivePagedListBuilder<>(factory, pagedListConfig)
+                .build();
+
+        return new SimpleTxItemResult(ethTxList);
 
     }
 
-    private void refreshList(List<? extends OperationWrapper> operations) {
+    private void refreshList(List<? extends SimpleTxItem> operations) {
         mTxOperations.clear();
         mTxOperations.addAll(operations);
     }
@@ -175,7 +119,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     }
 
 
-    public LiveData<PagedList<EthOperation>> getEthTxList() {
+    public LiveData<PagedList<SimpleTxItem>> getEthTxList() {
         return ethTxList;
     }
 
@@ -195,6 +139,14 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         return mSnackbarTextResource;
     }
 
+    public LiveData<String> getNetworkError() {
+        return networkError;
+    }
+
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
+
     public void setFetchEthTx(boolean fetchEthTx) {
         this.fetchEthTx = fetchEthTx;
     }
@@ -205,7 +157,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
     @Override
     public void onAddressLoaded(Address address) {
-        this.mAddress.set(address);
         this.mAddrValue.setValue(address.getAddrValue());
         if (ConnectivityChecker.isConnected(getApplication())) {
             loadTransactions(address.getAddrValue(), mTokenAddress.get());
@@ -217,7 +168,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     @Override
     public void onAddressNotAvailable() {
         handleError();
-        isLoading.set(false);
     }
 
 

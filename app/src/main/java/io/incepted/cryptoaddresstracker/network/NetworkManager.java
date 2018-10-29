@@ -4,7 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.incepted.cryptoaddresstracker.network.deserializer.CurrentPriceDeserializer;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItemDeserializer;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TxListInfoResult;
 import retrofit2.Retrofit;
 
 public class NetworkManager {
@@ -23,12 +26,6 @@ public class NetworkManager {
 
     public static NetworkService getDefaultNetworkService(String base_url) {
         Retrofit retrofit = RetrofitHelper.createRetrofitWithRxConverter(base_url);
-        return retrofit.create(NetworkService.class);
-    }
-
-    public static NetworkService getCurrentPrice(String base_url) {
-        Retrofit retrofit = RetrofitHelper.createRetrofitWithRxConverter(base_url,
-                createGsonBuilder(CurrentPrice.class, new CurrentPriceDeserializer()));
         return retrofit.create(NetworkService.class);
     }
 

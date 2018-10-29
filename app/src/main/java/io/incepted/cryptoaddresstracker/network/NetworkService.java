@@ -6,6 +6,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.Curren
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionInfo.TransactionInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TransactionListInfo;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -30,18 +31,21 @@ public interface NetworkService {
                                                      @Query("showETHTotals") boolean showEthTotals);
 
     @GET("getTokenHistory/{address}")
-    Single<TransactionListInfo> getContractTokenTransactionListInfo(@Path("address") String address,
-                                                                    @Query("apiKey") String apiKey);
+    Single<SimpleTxItemResult> getContractTokenTransactionListInfo(@Path("address") String address,
+                                                                   @Query("apiKey") String apiKey,
+                                                                   @Query("limit") int pageSize);
 
     @GET("getAddressHistory/{address}")
-    Single<TransactionListInfo> getTokenTransactionListInfo(@Path("address") String address,
-                                                            @Query("apiKey") String apiKey,
-                                                            @Query("token") String tokenAddress);
+    Single<SimpleTxItemResult> getTokenTransactionListInfo(@Path("address") String address,
+                                                           @Query("apiKey") String apiKey,
+                                                           @Query("token") String tokenAddress,
+                                                           @Query("limit") int pageSize);
 
     @GET("getAddressTransactions/{address}")
-    Single<List<EthOperation>> getEthTransactionListInfo(@Path("address") String address,
+    Single<SimpleTxItemResult> getEthTransactionListInfo(@Path("address") String address,
                                                          @Query("apiKey") String apiKey,
-                                                         @Query("timestamp") Long timestamp);
+                                                         @Query("timestamp") Long timestamp,
+                                                         @Query("limit") int pageSize);
 
 
     @GET("getTxInfo/{txHash}")

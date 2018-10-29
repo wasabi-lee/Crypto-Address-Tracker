@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -24,10 +25,12 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.ActivityTxBinding;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
+import timber.log.Timber;
 
 public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -51,6 +54,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     Toolbar mToolbar;
     @BindView(R.id.tx_recycler_view)
     RecyclerView mTxList;
+    @BindView(R.id.tx_progress_bar)
+    ProgressBar mProgessBar;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -119,12 +124,14 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private void setupObservers() {
         mViewModel.getOpenTxDetail().observe(this, this::toTxDetailActivity);
 
-        mViewModel.getEthTxList().observe(this, new Observer<PagedList<EthOperation>>() {
-            @Override
-            public void onChanged(PagedList<EthOperation> ethOperations) {
-                adapter.submitList(ethOperations);
-            }
+        mViewModel.getEthTxList().observe(this, items -> adapter.submitList(items));
+
+        mViewModel.getIsLoading().observe(this, isLoading -> {
+            Timber.d("Isloading: " + isLoading);
+            mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
         });
+
+        mViewModel.getNetworkError().observe(this, this::showSnackbar);
     }
 
     private void setupRecyclerView() {
@@ -133,7 +140,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mTxList.setItemAnimator(new DefaultItemAnimator());
         mTxList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new TxAdapter(EthOperation.DIFF_CALLBACK, mViewModel);
+        adapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
         mTxList.setAdapter(adapter);
     }
 

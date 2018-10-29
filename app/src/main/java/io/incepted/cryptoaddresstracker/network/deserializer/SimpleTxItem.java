@@ -1,10 +1,23 @@
 package io.incepted.cryptoaddresstracker.network.deserializer;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import io.incepted.cryptoaddresstracker.network.networkModel.ErrorResponse;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
 
 public class SimpleTxItem {
 
+    public static DiffUtil.ItemCallback<SimpleTxItem> DIFF_CALLBACK = new DiffUtil.ItemCallback<SimpleTxItem>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull SimpleTxItem oldItem, @NonNull SimpleTxItem newItem) {
+            return oldItem.hash.equals(newItem.hash);
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull SimpleTxItem oldItem, @NonNull SimpleTxItem newItem) {
+            return oldItem.hash.equals(newItem.hash);
+        }
+    };
 
     private String hash;
     private Long timestamp;
