@@ -122,8 +122,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public void toTxActivity(String tokenName, String tokenAddress) {
         try {
+//            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId,
+//                    tokenName, tokenAddress, isContractAddress.get());
             TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId,
-                    tokenName, tokenAddress, isContractAddress.get());
+                    tokenName, tokenAddress);
             mOpenTokenTransactions.setValue(wrapper);
         } catch (NullPointerException e) {
             handleError(e);
@@ -239,7 +241,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
             return;
         }
 
-        isContractAddress.set(remoteAddressInfo.getContractInfo() != null);
+//        isContractAddress.set(remoteAddressInfo.getContractInfo() != null);
         realignTokenList(remoteAddressInfo);
         updateTokenList(remoteAddressInfo.getTokens());
 
@@ -260,9 +262,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     }
 
     private void putEthInfoFront(RemoteAddressInfo remoteAddressInfo) {
+        Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
+
+        if (ethBalance == 0)
+            return;
+
         Token eth = new Token();
         TokenInfo ethInfo = new TokenInfo();
-        Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
 
         ethInfo.setAddress("base_currency_ethereum");
         ethInfo.setSymbol("ETH");

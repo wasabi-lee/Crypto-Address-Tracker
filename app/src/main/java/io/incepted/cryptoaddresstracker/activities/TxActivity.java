@@ -65,7 +65,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private int mAddressId;
     private String mTokenName;
     private String mTokenAddress;
-    private boolean mIsContractAddress;
+//    private boolean mIsContractAddress;
     private TxAdapter adapter;
 
     @Override
@@ -97,7 +97,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mAddressId = getIntent().getIntExtra(TX_ADDRESS_ID_EXTRA_KEY, 0);
         mTokenName = getIntent().getStringExtra(TX_TOKEN_NAME_EXTRA_KEY);
         mTokenAddress = getIntent().getStringExtra(TX_TOKEN_ADDRESS_EXTRA_KEY);
-        mIsContractAddress = getIntent().getBooleanExtra(TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, false);
+//        mIsContractAddress = getIntent().getBooleanExtra(TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, false);
     }
 
     private void initToolbar() {
@@ -126,7 +126,11 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
 
         mViewModel.getEthTxList().observe(this, items -> adapter.submitList(items));
 
-        mViewModel.getIsLoading().observe(this, isLoading -> mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
+        mViewModel.getIsLoading().observe(this, isLoading ->
+        {
+            Timber.d("loading: " + isLoading);
+            mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
+        });
 
         mViewModel.getNetworkError().observe(this, this::showSnackbar);
     }
@@ -208,7 +212,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     @Override
     protected void onResume() {
         super.onResume();
-        mViewModel.start(mAddressId, mTokenName, mTokenAddress, mIsContractAddress);
+//        mViewModel.start(mAddressId, mTokenName, mTokenAddress, mIsContractAddress);
+        mViewModel.start(mAddressId, mTokenName, mTokenAddress);
     }
 
     @Override

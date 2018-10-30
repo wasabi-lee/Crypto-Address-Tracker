@@ -167,7 +167,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         intent.putExtra(TxActivity.TX_ADDRESS_ID_EXTRA_KEY, wrapper.getAddressId());
         intent.putExtra(TxActivity.TX_TOKEN_NAME_EXTRA_KEY, wrapper.getTokenName());
         intent.putExtra(TxActivity.TX_TOKEN_ADDRESS_EXTRA_KEY, wrapper.getTokenAddress());
-        intent.putExtra(TxActivity.TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, wrapper.isContractAddress());
+//        intent.putExtra(TxActivity.TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, wrapper.isContractAddress());
         startActivity(intent);
     }
 

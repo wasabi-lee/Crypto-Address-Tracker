@@ -46,10 +46,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<String> tokenName = new ObservableField<>("-");
     public ObservableField<String> mTokenAddress = new ObservableField<>("-");
-    private boolean isContractAddress = false;
     public ObservableField<String> lastUpdated = new ObservableField<>();
 
     public boolean fetchEthTx;
+    //    private boolean isContractAddress = false;
+
     public Calendar calendar;
 
     public ObservableArrayList<SimpleTxItem> mTxOperations = new ObservableArrayList<>();
@@ -71,10 +72,10 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         isLoading = Transformations.switchMap(result, SimpleTxItemResult::getIsLoading);
     }
 
-    public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
+    public void start(int addressId, String tokenName, String tokenAddress) {
         this.tokenName.set(tokenName);
         this.mTokenAddress.set(tokenAddress);
-        this.isContractAddress = isContractAddress;
+//        this.isContractAddress = isContractAddress;
         this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
         this.lastUpdated.set(getCurrentTimeInString());
         loadAddress(addressId);
@@ -97,9 +98,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         TxListRepository.Type type;
         if (fetchEthTx) {
             type = TxListRepository.Type.ETH_TXS;
-        } else if (isContractAddress) {
-            type = TxListRepository.Type.CONTRACT_TXS;
-        } else {
+        }
+//        else if (isContractAddress) {
+//            type = TxListRepository.Type.CONTRACT_TXS;
+//        }
+        else {
             type = TxListRepository.Type.TOKEN_TXS;
         }
         return mTxListRepository.getTxs(type, address, tokenAddress);
@@ -147,9 +150,9 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         this.fetchEthTx = fetchEthTx;
     }
 
-    public void setContractAddress(boolean contractAddress) {
-        isContractAddress = contractAddress;
-    }
+//    public void setContractAddress(boolean contractAddress) {
+//        isContractAddress = contractAddress;
+//    }
 
     @Override
     public void onAddressLoaded(Address address) {

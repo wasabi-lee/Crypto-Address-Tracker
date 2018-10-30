@@ -19,8 +19,6 @@ import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 
 public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> {
 
-    private static final String TAG = TokenAdapter.class.getSimpleName();
-
     private DetailViewModel mViewModel;
     private List<Token> mTokens;
     private TokenItemActionListener mListener;
@@ -61,7 +59,6 @@ public class TokenAdapter extends RecyclerView.Adapter<TokenAdapter.ViewHolder> 
         itemBinding.setToken(currentItem);
         itemBinding.setListener(mListener);
         itemBinding.executePendingBindings();
-        Log.d(TAG, "onBindViewHolder: " + currentItem.getTokenInfo().getName());
     }
 
     @Override

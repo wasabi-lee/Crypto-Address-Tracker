@@ -153,7 +153,7 @@ public class AddressListBindings {
     @BindingAdapter({"app:success"})
     public static void setSuccess(TextView textView, Boolean success) {
         if (success == null) return;
-        textView.setText(success ? "Success" : "Pending");
+        textView.setText(success ? "Success" : "Failed");
         textView.setTextColor(Color.parseColor(success ? "#3cb271" : "#e65454"));
     }
 
