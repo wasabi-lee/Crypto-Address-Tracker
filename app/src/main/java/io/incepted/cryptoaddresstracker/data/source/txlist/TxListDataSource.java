@@ -13,6 +13,8 @@ import io.incepted.cryptoaddresstracker.network.NetworkService;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItemDeserializer;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
+import io.incepted.cryptoaddresstracker.repository.TxListRepository;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
@@ -28,28 +30,30 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
+    private TxListRepository.Type type;
+    private String address;
+    private String tokenAddress;
+
     public TxListDataSource() {
     }
+
+    public TxListDataSource(TxListRepository.Type type, String address, String tokenAddress) {
+        this.type = type;
+        this.address = address;
+        this.tokenAddress = tokenAddress;
+    }
+
 
     @SuppressLint("CheckResult")
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<SimpleTxItem> callback) {
-        //TODO handle error
         Timber.d("Load initial");
-        mNetworkService
-                .getEthTransactionListInfo("0x7a4ef3fBBB7a4DB8FfDc62B34242Bfed45cb61f5",
-                        ApiManager.API_KEY_ETHPLORER,
-                        new Date().getTime() / 1000,
-                        PAGE_SIZE)
-                .subscribeOn(Schedulers.io())
+        getNetworkServiceSingle(type, address, tokenAddress, getCurrentTimestamp())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
                 .subscribe(simpleTxItemResult -> {
-                            Timber.d("list size: " + simpleTxItemResult.getItems().size());
                             callback.onResult(simpleTxItemResult.getItems());
                             isLoading.setValue(false);
-                            if (simpleTxItemResult.getError() != null)
-                                errorMessage.postValue(simpleTxItemResult.getError().getMessage());
                         },
                         throwable -> {
                             Timber.e(throwable);
@@ -62,20 +66,13 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     @Override
     public void loadAfter(@NonNull LoadParams<Long> params, @NonNull LoadCallback<SimpleTxItem> callback) {
         Timber.d("Load after: %s", params.key);
-        mNetworkService
-                .getEthTransactionListInfo("0x7a4ef3fBBB7a4DB8FfDc62B34242Bfed45cb61f5",
-                        ApiManager.API_KEY_ETHPLORER,
-                        params.key,
-                        PAGE_SIZE)
+        getNetworkServiceSingle(type, address, tokenAddress, params.key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
                 .subscribe(simpleTxItemResult -> {
-                    Timber.d("list size: " + simpleTxItemResult.getItems().size());
                             callback.onResult(simpleTxItemResult.getItems());
                             isLoading.setValue(false);
-                            if (simpleTxItemResult.getError() != null)
-                                errorMessage.postValue(simpleTxItemResult.getError().getMessage());
                         },
                         throwable -> {
                             Timber.e(throwable);
@@ -83,6 +80,40 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
                             isLoading.setValue(false);
                         });
     }
+
+
+    private static long getCurrentTimestamp() {
+        return new Date().getTime() / 1000;
+    }
+
+
+    private Single<SimpleTxItemResult> getNetworkServiceSingle(TxListRepository.Type type,
+                                                               String address,
+                                                               String tokenAddress,
+                                                               long lastTimestamp) {
+        switch (type) {
+            case ETH_TXS:
+                return mNetworkService.getEthTransactionListInfo(address,
+                        ApiManager.API_KEY_ETHPLORER,
+                        lastTimestamp,
+                        PAGE_SIZE);
+
+            case TOKEN_TXS:
+                return mNetworkService.getTokenTransactionListInfo(address,
+                        tokenAddress,
+                        ApiManager.API_KEY_ETHPLORER,
+                        lastTimestamp,
+                        PAGE_SIZE);
+
+            case CONTRACT_TXS:
+                return mNetworkService.getContractTokenTransactionListInfo(address,
+                        ApiManager.API_KEY_ETHPLORER,
+                        lastTimestamp,
+                        PAGE_SIZE);
+        }
+        return null;
+    }
+
 
     @Override
     public void loadBefore(@NonNull LoadParams<Long> params, @NonNull LoadCallback<SimpleTxItem> callback) {

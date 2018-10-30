@@ -33,12 +33,14 @@ public interface NetworkService {
     @GET("getTokenHistory/{address}")
     Single<SimpleTxItemResult> getContractTokenTransactionListInfo(@Path("address") String address,
                                                                    @Query("apiKey") String apiKey,
+                                                                   @Query("timestamp") long timestamp,
                                                                    @Query("limit") int pageSize);
 
     @GET("getAddressHistory/{address}")
     Single<SimpleTxItemResult> getTokenTransactionListInfo(@Path("address") String address,
-                                                           @Query("apiKey") String apiKey,
                                                            @Query("token") String tokenAddress,
+                                                           @Query("apiKey") String apiKey,
+                                                           @Query("timestamp") long timestamp,
                                                            @Query("limit") int pageSize);
 
     @GET("getAddressTransactions/{address}")

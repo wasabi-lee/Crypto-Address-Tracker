@@ -23,7 +23,6 @@ import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
 public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHolder> {
 
     private TxViewModel mViewModel;
-//    private List<OperationWrapper> mOperations;
 
     public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback, TxViewModel mViewModel) {
         super(diffCallback);
@@ -56,32 +55,10 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         TxListItemBinding itemBinding = holder.getItemBinding();
         SimpleTxItem currentItem = getItem(position);
-
-        boolean fetchEthTx = currentItem.isEthTx();
-        itemBinding.setFetchEthTx(fetchEthTx);
-        if (fetchEthTx) {
-            itemBinding.setItem(currentItem);
-        }
-//        else {
-//            itemBinding.setTokenOperation((TokenOperation) currentItem);
-//        }
-
+        itemBinding.setItem(currentItem);
         itemBinding.setViewmodel(mViewModel);
         itemBinding.executePendingBindings();
     }
 
-//    @Override
-//    public int getItemCount() {
-//        return mOperations != null ? mOperations.size() : 0;
-//    }
-//
-//    private void setList(List<OperationWrapper> txInfoList) {
-//        this.mOperations = txInfoList;
-//        notifyDataSetChanged();
-//    }
-//
-//    public void replaceData(List<OperationWrapper> txInfoList) {
-//        setList(txInfoList);
-//    }
 
 }

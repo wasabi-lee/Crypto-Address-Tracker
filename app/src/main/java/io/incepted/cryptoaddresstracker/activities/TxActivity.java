@@ -126,10 +126,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
 
         mViewModel.getEthTxList().observe(this, items -> adapter.submitList(items));
 
-        mViewModel.getIsLoading().observe(this, isLoading -> {
-            Timber.d("Isloading: " + isLoading);
-            mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE);
-        });
+        mViewModel.getIsLoading().observe(this, isLoading -> mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
 
         mViewModel.getNetworkError().observe(this, this::showSnackbar);
     }

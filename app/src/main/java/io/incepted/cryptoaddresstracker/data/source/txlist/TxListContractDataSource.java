@@ -33,13 +33,7 @@ public class TxListContractDataSource {
     @SuppressLint("CheckResult")
     public void fetchContractTokenTransactionListInfo(@NonNull String address,
                                                       @NonNull TxListCallbacks.TransactionListInfoListener callback) {
-        callback.onCallReady();
 
-        mDefaultAddressInfoService
-                .getContractTokenTransactionListInfo(address, ApiManager.API_KEY_ETHPLORER, 10)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
     }
 
 }

@@ -1,36 +1,32 @@
 package io.incepted.cryptoaddresstracker.repository;
 
-import android.annotation.SuppressLint;
-
-import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Transformations;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+import androidx.paging.PagedListAdapter;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListContractDataSource;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSource;
+import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSourceFactory;
 import io.incepted.cryptoaddresstracker.data.source.txlist.TxListTokenDataSource;
-import io.incepted.cryptoaddresstracker.data.source.callbacks.TxListCallbacks;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
 
 public class TxListRepository {
 
+
     private volatile static TxListRepository INSTANCE = null;
 
-    private final TxListDataSource mEthDataSource;
-    private final TxListTokenDataSource mTokenDataSource;
-    private final TxListContractDataSource mContractDataSource;
 
-    public TxListRepository(TxListDataSource ethDataSource,
-                            TxListTokenDataSource tokenDataSource,
-                            TxListContractDataSource contractDataSource) {
-        this.mEthDataSource = ethDataSource;
-        this.mTokenDataSource = tokenDataSource;
-        this.mContractDataSource = contractDataSource;
+    public TxListRepository() {
     }
 
-    public static TxListRepository getInstance(TxListDataSource ethDataSource,
-                                               TxListTokenDataSource tokenDataSource,
-                                               TxListContractDataSource contractDataSource) {
+
+    public static TxListRepository getInstance() {
         if (INSTANCE == null) {
             synchronized (TxListRepository.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = new TxListRepository(ethDataSource, tokenDataSource, contractDataSource);
+                    INSTANCE = new TxListRepository();
                 }
             }
         }
@@ -38,21 +34,29 @@ public class TxListRepository {
     }
 
 
-    @SuppressLint("CheckResult")
-    public void fetchEthTransactionListInfo(@NonNull String address) {
-//        mEthDataSource.fetchEthTransactionListInfo(address, callback);
+    public SimpleTxItemResult getTxs(TxListRepository.Type type, String address, String tokenAddress) {
+
+        TxListDataSourceFactory factory = new TxListDataSourceFactory(type, address, tokenAddress);
+        LiveData<String> networkError = Transformations.switchMap(factory.getDataSourceLiveData(),
+                TxListDataSource::getErrorMessage);
+        LiveData<Boolean> isLoading = Transformations.switchMap(factory.getDataSourceLiveData(),
+                TxListDataSource::getIsLoading);
+
+        PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
+                .setEnablePlaceholders(false)
+                .setPageSize(TxListDataSource.PAGE_SIZE)
+                .build();
+
+        LiveData<PagedList<SimpleTxItem>> data =  new LivePagedListBuilder<>(factory, pagedListConfig)
+                .build();
+
+        return new SimpleTxItemResult(data, networkError, isLoading);
     }
 
-    @SuppressLint("CheckResult")
-    public void fetchContractTokenTransactionListInfo(@NonNull String address,
-                                                      @NonNull TxListCallbacks.TransactionListInfoListener callback) {
-        mContractDataSource.fetchContractTokenTransactionListInfo(address, callback);
-    }
 
-    @SuppressLint("CheckResult")
-    public void fetchTokenTransactionListInfo(@NonNull String address, @NonNull String tokenAddress,
-                                              @NonNull TxListCallbacks.TransactionListInfoListener callback) {
-        mTokenDataSource.fetchTokenTransactionListInfo(address, tokenAddress, callback);
+    public enum Type {
+        ETH_TXS,
+        TOKEN_TXS,
+        CONTRACT_TXS
     }
-
 }

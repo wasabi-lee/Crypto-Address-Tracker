@@ -9,6 +9,7 @@ import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+import androidx.lifecycle.MediatorLiveData;
 import io.incepted.cryptoaddresstracker.network.networkModel.ErrorResponse;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
@@ -46,11 +47,7 @@ public class SimpleTxItemDeserializer implements JsonDeserializer {
             } else {
                 JsonObject data = json.getAsJsonObject();
 
-                // Check if the object is actually an error message object
-                if (data.has("error")) {
-                    result.setError(getErrorResponse(data));
-
-                } else {
+                if (!data.has("error")) {
                     // The response is a list of token transactions
                     // (starts with an object that wraps the array with the key 'operations')
                     for (JsonElement element : data.get("operations").getAsJsonArray()) {
@@ -63,13 +60,6 @@ public class SimpleTxItemDeserializer implements JsonDeserializer {
 
         result.setItems(itemList);
         return result;
-    }
-
-
-    private ErrorResponse getErrorResponse(JsonObject json) {
-        JsonObject error = json.getAsJsonObject("error");
-        return new ErrorResponse(error.get("code").getAsInt(),
-                error.get("message").getAsString());
     }
 
 
@@ -100,7 +90,7 @@ public class SimpleTxItemDeserializer implements JsonDeserializer {
      */
     private SimpleTxItem getSimpleTxItemForToken(JsonObject json) {
         SimpleTxItem txItem = new SimpleTxItem();
-        txItem.setHash(json.get("TransactionHash").getAsString());
+        txItem.setHash(json.get("transactionHash").getAsString());
         txItem.setFrom(json.get("from").getAsString());
         txItem.setTo(json.get("to").getAsString());
         txItem.setTimestamp(json.get("timestamp").getAsLong());

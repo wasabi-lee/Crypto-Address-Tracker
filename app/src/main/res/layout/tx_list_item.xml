@@ -4,11 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
-        <variable
-            name="fetchEthTx"
-            type="boolean" />
-
         <variable
             name="viewmodel"
             type="io.incepted.cryptoaddresstracker.viewModels.TxViewModel" />

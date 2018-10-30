@@ -42,8 +42,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     private LiveData<String> networkError;
     private LiveData<Boolean> isLoading;
 
-    private TxListDataSourceFactory factory;
-
     public MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<String> tokenName = new ObservableField<>("-");
@@ -66,12 +64,11 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         super(application);
         mAddressRepository = addressRepository;
         mTxListRepository = txListRepository;
-        factory = new TxListDataSourceFactory();
 
         result = Transformations.map(mAddrValue, input -> loadTransactions(input, mTokenAddress.get()));
         ethTxList = Transformations.switchMap(result, SimpleTxItemResult::getItemLiveDataList);
-        networkError = Transformations.switchMap(factory.getDataSourceLiveData(), TxListDataSource::getErrorMessage);
-        isLoading = Transformations.switchMap(factory.getDataSourceLiveData(), TxListDataSource::getIsLoading);
+        networkError = Transformations.switchMap(result, SimpleTxItemResult::getError);
+        isLoading = Transformations.switchMap(result, SimpleTxItemResult::getIsLoading);
     }
 
     public void start(int addressId, String tokenName, String tokenAddress, boolean isContractAddress) {
@@ -97,16 +94,15 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
 
     @SuppressLint("CheckResult")
     private SimpleTxItemResult loadTransactions(String address, String tokenAddress) {
-        PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
-                .setEnablePlaceholders(false)
-                .setPageSize(TxListDataSource.PAGE_SIZE)
-                .build();
-
-        ethTxList = new LivePagedListBuilder<>(factory, pagedListConfig)
-                .build();
-
-        return new SimpleTxItemResult(ethTxList);
-
+        TxListRepository.Type type;
+        if (fetchEthTx) {
+            type = TxListRepository.Type.ETH_TXS;
+        } else if (isContractAddress) {
+            type = TxListRepository.Type.CONTRACT_TXS;
+        } else {
+            type = TxListRepository.Type.TOKEN_TXS;
+        }
+        return mTxListRepository.getTxs(type, address, tokenAddress);
     }
 
     private void refreshList(List<? extends SimpleTxItem> operations) {
@@ -158,6 +154,8 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddrValue.setValue(address.getAddrValue());
+        this.mAddress.set(address);
+        this.mAddress.notifyChange();
         if (ConnectivityChecker.isConnected(getApplication())) {
             loadTransactions(address.getAddrValue(), mTokenAddress.get());
         } else {
