@@ -18,6 +18,7 @@ import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallba
 import io.incepted.cryptoaddresstracker.navigators.AddressStateNavigator;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class NewAddressViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressSavedListener {
 
@@ -45,16 +46,16 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressLoca
 
     public void saveAddress() {
         mAddressState.setValue(AddressStateNavigator.SAVE_IN_PROGRESS);
-
-        if (!address.get().startsWith("0x")) {
+        String input = address.get();
+        if (input == null || input.isEmpty() || input.startsWith("0x") || input.length() != 42) {
             mEditTextErrorText.setValue(R.string.error_not_address);
             mAddressState.setValue(AddressStateNavigator.SAVE_ERROR);
             return;
         }
 
         try {
-            String nameInput = name.get().equals("") ? address.get() : name.get();
-            String addressInput = address.get().trim();
+            String nameInput = name.get().equals("") ? input : name.get();
+            String addressInput = input.trim();
             mAddressRepository.saveAddress(new Address(nameInput, addressInput, getCurrentTimestamp()), this);
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -73,7 +74,7 @@ public class NewAddressViewModel extends AndroidViewModel implements AddressLoca
     public void handleActivityResult(IntentResult result) {
         if (result.getContents() == null) {
             // Cancel
-            Log.d(TAG, "handleActivityResult: Scan cancelled");
+            Timber.d("handleActivityResult: Scan cancelled");
         } else {
             // Scanned successfully
             String scannedText = result.getContents();

@@ -128,7 +128,7 @@ public class AddressListBindings {
         }
 
         boolean sent = (address.toLowerCase()).equals(from.toLowerCase());
-        String result = (sent ? "-" : "+") + formattedAmount;
+        String result = (sent ? "- " : "+ ") + formattedAmount;
         String textColor = sent ? "#e65454" : "#3cb271";
 
         textView.setText(result);

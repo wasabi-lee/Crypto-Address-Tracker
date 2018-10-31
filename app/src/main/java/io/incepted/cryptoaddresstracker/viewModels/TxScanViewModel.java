@@ -9,7 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class TxScanViewModel extends AndroidViewModel {
 
@@ -30,7 +32,13 @@ public class TxScanViewModel extends AndroidViewModel {
 
 
     public void toTxDetailActivity() {
-        mOpenTxDetail.setValue(mTxHashInput.get());
+        String input = mTxHashInput.get();
+        if (input == null || input.isEmpty() ||
+                input.length() != 66 || !input.startsWith("0x")) {
+            getSnackbarTextResource().setValue(R.string.error_not_txhash);
+        } else {
+            mOpenTxDetail.setValue(input);
+        }
     }
 
     public void initiateScan() {
@@ -40,7 +48,7 @@ public class TxScanViewModel extends AndroidViewModel {
     public void handleActivityResult(IntentResult result) {
         if (result.getContents() == null) {
             // Cancel
-            Log.d(TAG, "handleActivityResult: Scan cancelled");
+            Timber.d("handleActivityResult: Scan cancelled");
         } else {
             // Scanned successfully
             String scannedText = result.getContents();

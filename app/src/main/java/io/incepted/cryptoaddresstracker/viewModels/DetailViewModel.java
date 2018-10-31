@@ -49,6 +49,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public ObservableField<Boolean> isLoading = new ObservableField<>();
     public ObservableField<Boolean> isContractAddress = new ObservableField<>(false);
+    public ObservableField<Boolean> noTokenFound = new ObservableField<>(false);
 
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
@@ -243,6 +244,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 //        isContractAddress.set(remoteAddressInfo.getContractInfo() != null);
         realignTokenList(remoteAddressInfo);
+
         updateTokenList(remoteAddressInfo.getTokens());
 
         updateAddressInfo(remoteAddressInfo);
@@ -253,7 +255,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
         if (remoteAddressInfo.getTokens() == null) {
-            // No tokens in this address. Initiate arraylist and put eth alone.
+            // No tokens in this address. Initiate arraylist.
             remoteAddressInfo.setTokens(new ArrayList<>());
         } else {
             sortTokenList(remoteAddressInfo.getTokens());
@@ -287,6 +289,9 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     }
 
     private void updateTokenList(List<Token> tokens) {
+        if (tokens.size() == 0)
+            noTokenFound.set(true);
+
         mTokens.clear();
         mTokens.addAll(tokens);
     }

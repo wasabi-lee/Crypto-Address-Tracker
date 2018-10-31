@@ -36,7 +36,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_balance_dummy"
-                        style="@style/TextSmallSemiBoldAppearance"
+                        style="@style/TextMediumSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/balance"
@@ -63,7 +63,7 @@
 
                         <TextView
                             android:id="@+id/overview_frag_balance_unit"
-                            style="@style/TextSmallSemiBoldAppearance"
+                            style="@style/TextMediumSemiBoldAppearance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/spacing_xxsmall"
@@ -73,7 +73,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_basecurrency_value"
-                        style="@style/TextSecondarySmallAppearance"
+                        style="@style/TextSecondaryAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:eth_balance="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.balance}"
@@ -84,7 +84,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_basecurrency_rate"
-                        style="@style/TextSecondarySmallAppearance"
+                        style="@style/TextSecondaryAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{`(1 ETH = ` + viewmodel.mCurrentPrice.formattedPriceAndSymbol + `)`}"
@@ -103,7 +103,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total_received_dummy"
-                        style="@style/TextSmallRegularAppearance"
+                        style="@style/TextMediumRegularAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_normal"
@@ -113,7 +113,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total_sent_dummy"
-                        style="@style/TextSmallRegularAppearance"
+                        style="@style/TextMediumRegularAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xsmall"
@@ -123,7 +123,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total_txs"
-                        style="@style/TextSmallRegularAppearance"
+                        style="@style/TextMediumRegularAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_xsmall"
@@ -134,7 +134,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total_received"
-                        style="@style/TextSmallSemiBoldAppearance"
+                        style="@style/TextMediumSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalIn}"
@@ -143,7 +143,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total_sent"
-                        style="@style/TextSmallSemiBoldAppearance"
+                        style="@style/TextMediumSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalOut}"
@@ -152,7 +152,7 @@
 
                     <TextView
                         android:id="@+id/overview_frag_total"
-                        style="@style/TextSmallSemiBoldAppearance"
+                        style="@style/TextMediumSemiBoldAppearance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:double_text="@{viewmodel.mAddress.remoteAddressInfo.countTxs}"

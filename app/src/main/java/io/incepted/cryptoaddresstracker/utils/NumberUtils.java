@@ -46,7 +46,7 @@ public class NumberUtils {
     }
 
     public static String formatDouble(Double value) {
-        DecimalFormat df = new DecimalFormat(value < 10 ? "#,###.0000" : "#,###.00");
+        DecimalFormat df = new DecimalFormat(value < 10 ? "0.0000" : "#,###.00");
         return df.format(value);
     }
 }
