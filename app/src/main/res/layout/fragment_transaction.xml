@@ -15,10 +15,10 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.TokenFragment">
+        tools:context=".fragments.TransactionFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/token_frag_recycler_view"
+            android:id="@+id/transaction_frag_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true"

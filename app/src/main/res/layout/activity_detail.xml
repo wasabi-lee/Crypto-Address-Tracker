@@ -34,7 +34,7 @@
                 android:fitsSystemWindows="true"
                 app:contentScrim="@android:color/transparent"
                 app:expandedTitleTextAppearance="@style/TextLargeSemiBoldAppearance"
-                app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed"
+                app:layout_scrollFlags="scroll|enterAlways|exitUntilCollapsed"
                 app:titleEnabled="false">
 
                 <LinearLayout

@@ -9,29 +9,24 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
-import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;
-import io.incepted.cryptoaddresstracker.databinding.FragmentTokenBinding;
+import io.incepted.cryptoaddresstracker.databinding.FragmentTransactionBinding;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TokenFragment extends Fragment {
+public class TransactionFragment extends Fragment {
 
-    private static final String TAG = TokenFragment.class.getSimpleName();
+    private static final String TAG = TransactionFragment.class.getSimpleName();
 
     private DetailViewModel mViewModel;
-    private FragmentTokenBinding mBinding;
+    private FragmentTransactionBinding mBinding;
 
-    public TokenFragment() {
+    public TransactionFragment() {
         // Required empty public constructor
     }
 
@@ -40,12 +35,12 @@ public class TokenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_token, container, false);
+        View view = inflater.inflate(R.layout.fragment_transaction, container, false);
 
         ButterKnife.bind(this, view);
 
         if (mBinding == null) {
-            mBinding = FragmentTokenBinding.bind(view);
+            mBinding = FragmentTransactionBinding.bind(view);
         }
 
         mViewModel = DetailActivity.obtainViewModel(getActivity());

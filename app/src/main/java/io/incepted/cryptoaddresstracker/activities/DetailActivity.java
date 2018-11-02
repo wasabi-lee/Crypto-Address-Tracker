@@ -27,7 +27,7 @@ import io.incepted.cryptoaddresstracker.adapters.ViewPagerAdapter;
 import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.databinding.ActivityDetailBinding;
 import io.incepted.cryptoaddresstracker.fragments.OverviewFragment;
-import io.incepted.cryptoaddresstracker.fragments.TokenFragment;
+import io.incepted.cryptoaddresstracker.fragments.TransactionFragment;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
@@ -110,7 +110,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     private void initFragments() {
         ViewPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mAdapter.addFragment(ViewPagerAdapter.FARG_POSITION_OVERVIEW, new OverviewFragment(), "Overview");
-        mAdapter.addFragment(ViewPagerAdapter.FARG_POSITION_TOKEN, new TokenFragment(), "Token");
+        mAdapter.addFragment(ViewPagerAdapter.FARG_POSITION_TOKEN, new TransactionFragment(), "Transactions");
         mViewPager.setAdapter(mAdapter);
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
