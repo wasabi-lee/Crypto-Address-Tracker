@@ -38,7 +38,7 @@ public class TokenAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tokenListItemBinding = binding;
         }
 
-        public HoldingsListItemBinding getItemBinding() {
+        HoldingsListItemBinding getItemBinding() {
             return tokenListItemBinding;
         }
     }

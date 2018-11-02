@@ -31,6 +31,7 @@ import io.incepted.cryptoaddresstracker.fragments.TransactionFragment;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
+import timber.log.Timber;
 
 public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -87,7 +88,9 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
 
     public static DetailViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
-        return ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
+        DetailViewModel a = ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
+        Timber.d("added %s", a);
+        return a;
     }
 
     private int unpackExtra() {
@@ -185,7 +188,6 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
 
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
-
             if (!mIsTheTitleVisible) {
                 startAlphaAnimation(mTitle, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
                 mIsTheTitleVisible = true;

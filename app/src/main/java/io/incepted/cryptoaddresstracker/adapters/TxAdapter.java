@@ -3,9 +3,6 @@ package io.incepted.cryptoaddresstracker.adapters;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
@@ -14,19 +11,30 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
+import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.EthOperation;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.OperationWrapper;
-import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.TokenOperation;
+import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
 
 public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHolder> {
 
-    private TxViewModel mViewModel;
+    private TxViewModel mTxViewModel;
+    private DetailViewModel mDetailViewModel;
+    private TxItemActionListener mListener;
 
-    public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback, TxViewModel mViewModel) {
+    public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback,
+                     TxViewModel txViewModel,
+                     DetailViewModel detailViewModel) {
         super(diffCallback);
-        this.mViewModel = mViewModel;
+        this.mTxViewModel = txViewModel;
+        this.mDetailViewModel = detailViewModel;
+        this.mListener = transactionHash -> {
+            if (mDetailViewModel != null) {
+                mDetailViewModel.toTxDetailActivity(transactionHash);
+            } else if (mTxViewModel != null) {
+                mTxViewModel.toTxDetailActivity(transactionHash);
+            }
+        };
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,7 +64,8 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
         TxListItemBinding itemBinding = holder.getItemBinding();
         SimpleTxItem currentItem = getItem(position);
         itemBinding.setItem(currentItem);
-        itemBinding.setViewmodel(mViewModel);
+        itemBinding.setListener(mListener);
+        itemBinding.setAddress(mDetailViewModel != null ? mDetailViewModel.mAddress.get().getAddrValue() : mTxViewModel.mAddress.get().getAddrValue());
         itemBinding.executePendingBindings();
     }
 

@@ -133,6 +133,13 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         }
     }
 
+
+    public void toTxDetailActivity(String transactionHash) {
+
+    }
+
+
+
     private void updateNameChangeToView(Address address) {
         // Updating the view with the new name
         this.mAddress.get().setName(address.getName());

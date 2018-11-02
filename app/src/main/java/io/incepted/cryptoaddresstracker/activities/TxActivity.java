@@ -141,7 +141,7 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mTxList.setItemAnimator(new DefaultItemAnimator());
         mTxList.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
+        adapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel, null);
         mTxList.setAdapter(adapter);
     }
 

@@ -4,9 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
-            name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.viewModels.TxViewModel" />
+            name="listener"
+            type="io.incepted.cryptoaddresstracker.listeners.TxItemActionListener" />
+
+        <variable
+            name="address"
+            type="String" />
 
         <variable
             name="item"
@@ -18,11 +23,11 @@
         android:id="@+id/token_frag_item_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_xsmall"
-        android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
-        android:onClick="@{() -> viewmodel.toTxDetailActivity(item.hash)}"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_xsmall"
+        android:onClick="@{() -> listener.onTxItemClicked(item.hash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
         app:cardElevation="@dimen/card_xsmall_elevation">
 
@@ -57,9 +62,9 @@
                 android:id="@+id/linearLayout2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xxsmall"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="@dimen/spacing_xxsmall"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/tx_item_divider"
@@ -92,8 +97,8 @@
                 android:id="@+id/linearLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
                 android:gravity="end|bottom"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -116,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    app:address="@{viewmodel.mAddress.addrValue}"
+                    app:address="@{address}"
                     app:decimal="@{item.isEthTx() ? 0 : item.tokenInfo.decimals}"
                     app:from="@{item.from}"
                     app:tx_amount="@{item.value}" />
