@@ -146,6 +146,13 @@ public class TokenInfo {
         this.ethTransfersCount = ethTransfersCount;
     }
 
+    // Setting self as an Ethereum token object
+    public void convertToEthInfoObject() {
+        setAddress("base_currency_ethereum");
+        setSymbol("ETH");
+        setName("Ethereum");
+    }
+
 //    public Price getPrice() {
 //        return price;
 //    }

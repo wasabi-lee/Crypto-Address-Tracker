@@ -85,4 +85,6 @@
     <string name="error_not_address">This is not an Ethereum address. Please type a valid address.</string>
     <string name="error_not_txhash">Malformed transaction hash. Please type a valid transaction hash.</string>
     <string name="no_balance">No ETH / token balance found</string>
+    <string name="holdings">Holdings</string>
+    <string name="summary">Summary</string>
 </resources>

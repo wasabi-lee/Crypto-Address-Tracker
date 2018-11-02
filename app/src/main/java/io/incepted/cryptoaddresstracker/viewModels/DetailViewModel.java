@@ -87,17 +87,17 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
 
         mPriceRepository.loadCurrentPrice(tsym, new PriceRepository.OnPriceLoadedListener() {
-                    @Override
-                    public void onPriceLoaded(CurrentPrice currentPrice) {
-                        mCurrentPrice.set(currentPrice);
-                        mCurrentPrice.notifyChange();
-                    }
+            @Override
+            public void onPriceLoaded(CurrentPrice currentPrice) {
+                mCurrentPrice.set(currentPrice);
+                mCurrentPrice.notifyChange();
+            }
 
-                    @Override
-                    public void onError(Throwable throwable) {
-                        handleError(throwable);
-                    }
-                });
+            @Override
+            public void onError(Throwable throwable) {
+                handleError(throwable);
+            }
+        });
 
     }
 
@@ -249,52 +249,52 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
         updateAddressInfo(remoteAddressInfo);
 
-        // hide progress bar
         isLoading.set(false);
     }
 
+
     private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
-        if (remoteAddressInfo.getTokens() == null) {
-            // No tokens in this address. Initiate arraylist.
-            remoteAddressInfo.setTokens(new ArrayList<>());
-        } else {
+        ArrayList<Token> tokens = new ArrayList<>();
+
+        attachEthObject(tokens, remoteAddressInfo);
+
+        if (remoteAddressInfo.getTokens() != null) {
             sortTokenList(remoteAddressInfo.getTokens());
+            tokens.addAll(remoteAddressInfo.getTokens());
         }
-        putEthInfoFront(remoteAddressInfo);
+        remoteAddressInfo.setTokens(tokens);
     }
 
-    private void putEthInfoFront(RemoteAddressInfo remoteAddressInfo) {
+
+
+    private void attachEthObject(ArrayList<Token> tokens, RemoteAddressInfo remoteAddressInfo) {
         Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
 
+        // don't attach ETH object if the eth balance is 0.
         if (ethBalance == 0)
             return;
 
         Token eth = new Token();
-        TokenInfo ethInfo = new TokenInfo();
-
-        ethInfo.setAddress("base_currency_ethereum");
-        ethInfo.setSymbol("ETH");
-        ethInfo.setName("Ethereum");
-
-        eth.setTokenInfo(ethInfo);
-        eth.setBalance(ethBalance);
-
-        remoteAddressInfo.getTokens().add(0, eth);
+        eth.convertToEthObject(ethBalance);
+        tokens.add(eth);
     }
+
 
     private void sortTokenList(List<Token> tokens) {
-        Collections.sort(tokens, (obj1, obj2) ->
-                obj1.getTokenInfo().getName()
-                        .compareToIgnoreCase(obj2.getTokenInfo().getName()));
+        if (tokens != null)
+            Collections.sort(tokens, (obj1, obj2) ->
+                    obj1.getTokenInfo().getName()
+                            .compareToIgnoreCase(obj2.getTokenInfo().getName()));
     }
+
 
     private void updateTokenList(List<Token> tokens) {
         if (tokens.size() == 0)
             noTokenFound.set(true);
-
         mTokens.clear();
         mTokens.addAll(tokens);
     }
+
 
     private void updateAddressInfo(RemoteAddressInfo remoteAddressInfo) {
         Address updatedAddress = mAddress.get();

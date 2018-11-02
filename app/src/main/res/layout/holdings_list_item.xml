@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="token"
+            type="io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token" />
+
+        <variable
+            name="listener"
+            type="io.incepted.cryptoaddresstracker.listeners.TokenItemActionListener" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/default_card_background"
+        android:onClick="@{()-> listener.onTokenItemClicked(token.tokenInfo.name, token.tokenInfo.address)}"
+        android:padding="@dimen/spacing_normal">
+
+        <View
+            android:id="@+id/holdings_item_divider"
+            android:layout_width="0.5dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/holdings_item_token_name"
+            style="@style/TextMediumRegularAppearance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{token.tokenInfo.name == null ? `N/A` : token.tokenInfo.name}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/holdings_item_divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Ethereum" />
+
+        <LinearLayout
+            android:id="@+id/holdings__amount_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end|bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/holdings_item_divider">
+
+
+            <TextView
+                android:id="@+id/holdings_item_token_symbol"
+                style="@style/TextXSmallRegularAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_marginEnd="@dimen/spacing_xxsmall"
+                android:layout_marginRight="@dimen/spacing_xxsmall"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{token.tokenInfo.symbol}"
+                tools:text="ETH" />
+
+            <TextView
+                android:id="@+id/holdings_item_amount_value"
+                style="@style/TextMediumRegularAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:ellipsize="end"
+                android:maxLines="1"
+                app:decimal="@{token.tokenInfo.decimals}"
+                app:double_text="@{token.balance}"
+                tools:text="3.3456" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

@@ -28,9 +28,6 @@ public class TokenFragment extends Fragment {
 
     private static final String TAG = TokenFragment.class.getSimpleName();
 
-    @BindView(R.id.token_frag_recycler_view)
-    RecyclerView mTokenList;
-
     private DetailViewModel mViewModel;
     private FragmentTokenBinding mBinding;
 
@@ -62,17 +59,7 @@ public class TokenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerView();
     }
 
-    private void setupRecyclerView() {
-        mTokenList.setHasFixedSize(true);
-        mTokenList.setNestedScrollingEnabled(true);
-        mTokenList.setItemAnimator(new DefaultItemAnimator());
-        mTokenList.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        TokenAdapter adapter = new TokenAdapter(mViewModel);
-        mTokenList.setAdapter(adapter);
-    }
 }
 

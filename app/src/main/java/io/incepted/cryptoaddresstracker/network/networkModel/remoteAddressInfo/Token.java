@@ -44,4 +44,13 @@ public class Token {
     public void setTotalOut(Double totalOut) {
         this.totalOut = totalOut;
     }
+
+
+    // setting itself as an ETH token object.
+    public void convertToEthObject(Double ethBalance) {
+        TokenInfo ethInfo = new TokenInfo();
+        ethInfo.convertToEthInfoObject();
+        setTokenInfo(ethInfo);
+        setBalance(ethBalance);
+    }
 }

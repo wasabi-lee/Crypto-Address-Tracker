@@ -19,18 +19,18 @@
         android:id="@+id/token_frag_item_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/spacing_xsmall"
-        android:layout_marginEnd="@dimen/spacing_small"
         android:layout_marginStart="@dimen/spacing_small"
         android:layout_marginTop="@dimen/spacing_xsmall"
-        android:onClick="@{()-> listener.onTokenItemClicked(token.tokenInfo.name, token.tokenInfo.address)}"
+        android:layout_marginEnd="@dimen/spacing_small"
+        android:layout_marginBottom="@dimen/spacing_xsmall"
         app:cardCornerRadius="@dimen/card_small_radius"
-        app:cardElevation="@dimen/cardview_default_elevation">
+        app:cardElevation="@dimen/card_xsmall_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/default_card_background"
+            android:onClick="@{()-> listener.onTokenItemClicked(token.tokenInfo.name, token.tokenInfo.address)}"
             android:padding="@dimen/spacing_normal">
 
             <View

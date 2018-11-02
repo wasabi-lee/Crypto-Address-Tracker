@@ -24,7 +24,7 @@
         android:layout_marginTop="@dimen/spacing_xsmall"
         android:onClick="@{() -> viewmodel.toTxDetailActivity(item.hash)}"
         app:cardCornerRadius="@dimen/card_small_radius"
-        app:cardElevation="@dimen/card_medium_elevation">
+        app:cardElevation="@dimen/card_xsmall_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
