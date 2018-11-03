@@ -82,4 +82,12 @@ public class RemoteAddressInfo {
     public boolean isError() {
         return error != null;
     }
+
+    public boolean isContract() {
+        return contractInfo != null;
+    }
+
+    public boolean isTokenAddress() {
+        return tokenInfo != null;
+    }
 }

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
@@ -80,6 +81,17 @@ public class TransactionFragment extends Fragment {
         transaction.show(ethFragment);
         transaction.commit();
         mSwitchDescription.setText(getText(R.string.latest_eth_transactions));
+
+        setupObservers();
+
+    }
+
+
+    private void setupObservers() {
+        mViewModel.getIsTokenAddress().observe(this, isTokenAddress -> {
+            mSwitch.setChecked(false);
+            mSwitch.setEnabled(false);
+        });
     }
 
 

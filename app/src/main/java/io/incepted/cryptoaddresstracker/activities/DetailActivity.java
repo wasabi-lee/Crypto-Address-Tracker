@@ -156,7 +156,10 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
                 }
         });
 
-        mViewModel.getNetworkError().observe(this, s -> showSnackbar(s));
+        mViewModel.getNetworkError().observe(this, s -> {
+            if (s != null)
+                showSnackbar(s);
+        });
     }
 
 
