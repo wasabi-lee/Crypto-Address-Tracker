@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.Observer;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +32,7 @@ public class TxListEthFragment extends Fragment {
     private DetailViewModel mViewModel;
 
     private FragmentTxListEthBinding mBinding;
+    private TxAdapter mAdapter;
 
     public TxListEthFragment() {
         // Required empty public constructor
@@ -57,6 +60,7 @@ public class TxListEthFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView();
+        setupObservers();
     }
 
     private void setupRecyclerView() {
@@ -65,10 +69,15 @@ public class TxListEthFragment extends Fragment {
         mEthTxListView.setNestedScrollingEnabled(true);
         mEthTxListView.setItemAnimator(new DefaultItemAnimator());
         mEthTxListView.setLayoutManager(lm);
-        mEthTxListView.addItemDecoration(new DividerItemDecoration(getContext(), lm.getOrientation()));
 
-        TxAdapter adapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, null, mViewModel);
-        mEthTxListView.setAdapter(adapter);
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
+        mEthTxListView.setAdapter(mAdapter);
+    }
+
+    private void setupObservers() {
+        mViewModel.getEthTxList().observe(this, simpleTxItems ->
+                mAdapter.submitList(simpleTxItems)
+        );
     }
 
 }

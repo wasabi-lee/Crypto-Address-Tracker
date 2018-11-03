@@ -73,7 +73,7 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
             return (T) new NewAddressViewModel(mApplication, mAddressRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             //noinspection unchecked
-            return (T) new DetailViewModel(mApplication, mAddressRepository, mPriceRepository);
+            return (T) new DetailViewModel(mApplication, mAddressRepository, mPriceRepository, mTxListRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
             return (T) new TxViewModel(mApplication, mAddressRepository, mTxListRepository);

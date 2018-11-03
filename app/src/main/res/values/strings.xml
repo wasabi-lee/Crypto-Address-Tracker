@@ -92,4 +92,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="latest_eth_transactions">Latest Eth Transactions</string>
     <string name="latest_token_transactions">Latest Token Transactions</string>
+    <string name="no_ethereum_transactions_found">No Ethereum transactions found</string>
+    <string name="no_token_transactions_found">No Token transactions found</string>
 </resources>

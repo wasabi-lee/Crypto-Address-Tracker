@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.lifecycle.Observer;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +33,7 @@ import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 public class TxListTokenFragment extends Fragment {
     private FragmentTxListTokenBinding mBinding;
     private DetailViewModel mViewModel;
-
+    private TxAdapter mAdapter;
 
     @BindView(R.id.tx_token_recycler_view)
     RecyclerView mTokenTxListView;
@@ -63,6 +65,7 @@ public class TxListTokenFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView();
+        setupObservers();
     }
 
     private void setupRecyclerView() {
@@ -71,10 +74,15 @@ public class TxListTokenFragment extends Fragment {
         mTokenTxListView.setNestedScrollingEnabled(true);
         mTokenTxListView.setItemAnimator(new DefaultItemAnimator());
         mTokenTxListView.setLayoutManager(lm);
-        mTokenTxListView.addItemDecoration(new DividerItemDecoration(getContext(), lm.getOrientation()));
 
-        TxAdapter adapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, null, mViewModel);
-        mTokenTxListView.setAdapter(adapter);
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
+        mTokenTxListView.setAdapter(mAdapter);
+    }
+
+    private void setupObservers() {
+        mViewModel.getTokenTxList().observe(this, simpleTxItems ->
+                mAdapter.submitList(simpleTxItems)
+        );
     }
 
 }

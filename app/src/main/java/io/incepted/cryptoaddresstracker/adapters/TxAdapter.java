@@ -20,21 +20,24 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
 
     private TxViewModel mTxViewModel;
     private DetailViewModel mDetailViewModel;
-    private TxItemActionListener mListener;
+    private TxItemActionListener mListener = transactionHash -> {
+        if (mDetailViewModel != null) {
+            mDetailViewModel.toTxDetailActivity(transactionHash);
+        } else if (mTxViewModel != null) {
+            mTxViewModel.toTxDetailActivity(transactionHash);
+        }
+    };
 
     public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback,
-                     TxViewModel txViewModel,
-                     DetailViewModel detailViewModel) {
+                     TxViewModel txViewModel) {
         super(diffCallback);
         this.mTxViewModel = txViewModel;
+    }
+
+    public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback,
+                     DetailViewModel detailViewModel) {
+        super(diffCallback);
         this.mDetailViewModel = detailViewModel;
-        this.mListener = transactionHash -> {
-            if (mDetailViewModel != null) {
-                mDetailViewModel.toTxDetailActivity(transactionHash);
-            } else if (mTxViewModel != null) {
-                mTxViewModel.toTxDetailActivity(transactionHash);
-            }
-        };
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -29,6 +29,7 @@ import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class TxViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener {
 
@@ -75,7 +76,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     public void start(int addressId, String tokenName, String tokenAddress) {
         this.tokenName.set(tokenName);
         this.mTokenAddress.set(tokenAddress);
-//        this.isContractAddress = isContractAddress;
         this.fetchEthTx = tokenAddress.equals("base_currency_ethereum");
         this.lastUpdated.set(getCurrentTimeInString());
         loadAddress(addressId);
@@ -98,20 +98,12 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         TxListRepository.Type type;
         if (fetchEthTx) {
             type = TxListRepository.Type.ETH_TXS;
-        }
-//        else if (isContractAddress) {
-//            type = TxListRepository.Type.CONTRACT_TXS;
-//        }
-        else {
-            type = TxListRepository.Type.TOKEN_TXS;
+        } else {
+            type = TxListRepository.Type.TOKEN_TXS_SPECIFIC;
         }
         return mTxListRepository.getTxs(type, address, tokenAddress);
     }
 
-    private void refreshList(List<? extends SimpleTxItem> operations) {
-        mTxOperations.clear();
-        mTxOperations.addAll(operations);
-    }
 
     public void toTxDetailActivity(String transactionHash) {
         mOpenTxDetail.setValue(transactionHash);
@@ -150,13 +142,12 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         this.fetchEthTx = fetchEthTx;
     }
 
-//    public void setContractAddress(boolean contractAddress) {
-//        isContractAddress = contractAddress;
-//    }
 
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddrValue.setValue(address.getAddrValue());
+        Timber.d("hasObservers: " + mAddrValue.hasObservers() + "\n"
+        + "hasActiveObservers: " + mAddrValue.hasActiveObservers());
         this.mAddress.set(address);
         this.mAddress.notifyChange();
         if (ConnectivityChecker.isConnected(getApplication())) {

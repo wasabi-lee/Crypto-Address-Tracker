@@ -8,10 +8,15 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.databinding.ObservableArrayList;
+import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
+import androidx.paging.PagedList;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
@@ -20,16 +25,20 @@ import io.incepted.cryptoaddresstracker.data.txExtraWrapper.TxExtraWrapper;
 import io.incepted.cryptoaddresstracker.listeners.CopyListener;
 import io.incepted.cryptoaddresstracker.navigators.DeletionStateNavigator;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
+import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.RemoteAddressInfo;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.Token;
 import io.incepted.cryptoaddresstracker.network.networkModel.remoteAddressInfo.TokenInfo;
+import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
+import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
         AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener {
@@ -38,22 +47,34 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     private AddressRepository mAddressRepository;
     private PriceRepository mPriceRepository;
+    private TxListRepository mTxListRepository;
+
+    private LiveData<SimpleTxItemResult> ethTxResult;
+    private LiveData<SimpleTxItemResult> tokenTxResult;
+    private LiveData<PagedList<SimpleTxItem>> tokenTxList;
+    private LiveData<PagedList<SimpleTxItem>> ethTxList;
+    private LiveData<String> networkError;
+
 
     private int mAddressId;
 
     private boolean shouldUpdateAddrName = false;
 
+    public MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     public ObservableField<Address> mAddress = new ObservableField<>();
     public ObservableField<CurrentPrice> mCurrentPrice = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
 
+    public ObservableBoolean noEthTxFound = new ObservableBoolean(false);
+    public ObservableBoolean noTokenTxFound = new ObservableBoolean(false);
+
     public ObservableField<Boolean> isLoading = new ObservableField<>();
-    public ObservableField<Boolean> isContractAddress = new ObservableField<>(false);
     public ObservableField<Boolean> noTokenFound = new ObservableField<>(false);
 
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
     private SingleLiveEvent<TxExtraWrapper> mOpenTokenTransactions = new SingleLiveEvent<>();
+    private SingleLiveEvent<String> mOpenTxDetailActivity = new SingleLiveEvent<>();
 
     private SingleLiveEvent<DeletionStateNavigator> mDeletionState = new SingleLiveEvent<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
@@ -61,11 +82,39 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public DetailViewModel(@NonNull Application application,
                            @NonNull AddressRepository addressRepository,
-                           @NonNull PriceRepository priceRepository) {
+                           @NonNull PriceRepository priceRepository,
+                           @NonNull TxListRepository txListRepository) {
         super(application);
         mAddressRepository = addressRepository;
         mPriceRepository = priceRepository;
+        mTxListRepository = txListRepository;
+
+        ethTxResult = Transformations.map(mAddrValue, address -> loadTransactions(TxListRepository.Type.ETH_TXS, address));
+
+        tokenTxResult = Transformations.map(mAddrValue, address -> loadTransactions(TxListRepository.Type.TOKEN_TXS, address));
+
+        ethTxList = Transformations.switchMap(ethTxResult, result -> {
+            if (result.getItemLiveDataList().getValue() != null)
+                noEthTxFound.set(result.getItemLiveDataList().getValue().size() == 0);
+            return result.getItemLiveDataList();
+        });
+
+        tokenTxList = Transformations.switchMap(tokenTxResult, result -> {
+            if (result.getItemLiveDataList().getValue() != null)
+                noTokenTxFound.set(result.getItemLiveDataList().getValue().size() == 0);
+            return result.getItemLiveDataList();
+        });
+
+        networkError = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getError);
+
+
     }
+
+    private SimpleTxItemResult loadTransactions(TxListRepository.Type type, String address) {
+        Timber.d("Triggered");
+        return mTxListRepository.getTxs(type, address, address);
+    }
+
 
     public void start(int addressId) {
         this.mAddressId = addressId;
@@ -77,15 +126,16 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         }
     }
 
+
     public void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         mAddressRepository.getAddress(addressId, this);
     }
 
+
     private void loadCurrentPrice() {
         int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
-
         mPriceRepository.loadCurrentPrice(tsym, new PriceRepository.OnPriceLoadedListener() {
             @Override
             public void onPriceLoaded(CurrentPrice currentPrice) {
@@ -122,22 +172,14 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     }
 
     public void toTxActivity(String tokenName, String tokenAddress) {
-        try {
-//            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId,
-//                    tokenName, tokenAddress, isContractAddress.get());
-            TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId,
-                    tokenName, tokenAddress);
-            mOpenTokenTransactions.setValue(wrapper);
-        } catch (NullPointerException e) {
-            handleError(e);
-        }
+        TxExtraWrapper wrapper = new TxExtraWrapper(mAddressId, tokenName, tokenAddress);
+        mOpenTokenTransactions.setValue(wrapper);
     }
 
 
     public void toTxDetailActivity(String transactionHash) {
-
+        mOpenTxDetailActivity.setValue(transactionHash);
     }
-
 
 
     private void updateNameChangeToView(Address address) {
@@ -168,6 +210,22 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         return mOpenTokenTransactions;
     }
 
+    public SingleLiveEvent<String> getOpenTxDetailActivity() {
+        return mOpenTxDetailActivity;
+    }
+
+    public LiveData<PagedList<SimpleTxItem>> getTokenTxList() {
+        return tokenTxList;
+    }
+
+    public LiveData<PagedList<SimpleTxItem>> getEthTxList() {
+        return ethTxList;
+    }
+
+    public LiveData<String> getNetworkError() {
+        return networkError;
+    }
+
 
     // ----------------------------- Setters ---------------------------
 
@@ -181,6 +239,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     @SuppressLint("CheckResult")
     @Override
     public void onAddressLoaded(Address address) {
+        this.mAddrValue.setValue(address.getAddrValue());
 
         if (shouldUpdateAddrName) {
             // Retrieving the updated address name only.
@@ -191,6 +250,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
             // Notifying databinding layout the data change first
             this.mAddress.set(address);
+            this.mAddress.notifyChange();
 
             // Network call after
             mAddressRepository.fetchDetailedAddressInfo(address.getAddrValue(),
@@ -241,30 +301,23 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         mSnackbarTextResource.setValue(R.string.unexpected_error);
     }
 
-    public void updateViews(RemoteAddressInfo remoteAddressInfo) {
 
+    public void updateViews(RemoteAddressInfo remoteAddressInfo) {
         if (remoteAddressInfo.isError()) {
             getSnackbarText().setValue(remoteAddressInfo.getError().getMessage());
             isLoading.set(false);
             return;
         }
-
-//        isContractAddress.set(remoteAddressInfo.getContractInfo() != null);
         realignTokenList(remoteAddressInfo);
-
         updateTokenList(remoteAddressInfo.getTokens());
-
         updateAddressInfo(remoteAddressInfo);
-
         isLoading.set(false);
     }
 
 
     private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
         ArrayList<Token> tokens = new ArrayList<>();
-
         attachEthObject(tokens, remoteAddressInfo);
-
         if (remoteAddressInfo.getTokens() != null) {
             sortTokenList(remoteAddressInfo.getTokens());
             tokens.addAll(remoteAddressInfo.getTokens());
@@ -273,14 +326,12 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     }
 
 
-
     private void attachEthObject(ArrayList<Token> tokens, RemoteAddressInfo remoteAddressInfo) {
         Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
 
         // don't attach ETH object if the eth balance is 0.
         if (ethBalance == 0)
             return;
-
         Token eth = new Token();
         eth.convertToEthObject(ethBalance);
         tokens.add(eth);

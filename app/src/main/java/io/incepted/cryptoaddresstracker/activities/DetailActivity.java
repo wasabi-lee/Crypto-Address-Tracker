@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -137,6 +138,8 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     private void setupObservers() {
         mViewModel.getOpenTokenTransactions().observe(this, this::toTxActivity);
 
+        mViewModel.getOpenTxDetailActivity().observe(this, this::toTxDetailActivity);
+
         mViewModel.getDeletionState().observe(this, deletionStateNavigator -> {
             if (deletionStateNavigator != null)
                 switch (deletionStateNavigator) {
@@ -152,6 +155,8 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
                         break;
                 }
         });
+
+        mViewModel.getNetworkError().observe(this, s -> showSnackbar(s));
     }
 
 
@@ -170,7 +175,12 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         intent.putExtra(TxActivity.TX_ADDRESS_ID_EXTRA_KEY, wrapper.getAddressId());
         intent.putExtra(TxActivity.TX_TOKEN_NAME_EXTRA_KEY, wrapper.getTokenName());
         intent.putExtra(TxActivity.TX_TOKEN_ADDRESS_EXTRA_KEY, wrapper.getTokenAddress());
-//        intent.putExtra(TxActivity.TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, wrapper.isContractAddress());
+        startActivity(intent);
+    }
+
+    private void toTxDetailActivity(String txHash) {
+        Intent intent = new Intent(this, TxDetailActivity.class);
+        intent.putExtra(TxDetailActivity.TX_DETAIL_HASH_EXTRA_KEY, txHash);
         startActivity(intent);
     }
 

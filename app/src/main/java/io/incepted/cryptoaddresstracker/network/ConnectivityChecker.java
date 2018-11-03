@@ -14,8 +14,6 @@ public class ConnectivityChecker {
         if (manager != null) {
             activeNetwork = manager.getActiveNetworkInfo();
         }
-        Timber.d("ActiveNetwork is null?: " + (activeNetwork == null) + "\n"
-        + "IsConnected?: " + activeNetwork.isConnected());
         return activeNetwork != null && activeNetwork.isConnected();
     }
 

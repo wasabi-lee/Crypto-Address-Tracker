@@ -37,11 +37,17 @@ public interface NetworkService {
                                                                    @Query("limit") int pageSize);
 
     @GET("getAddressHistory/{address}")
+    Single<SimpleTxItemResult> getSpecificTokenTransactionListInfo(@Path("address") String address,
+                                                                   @Query("token") String tokenAddress,
+                                                                   @Query("apiKey") String apiKey,
+                                                                   @Query("timestamp") long timestamp,
+                                                                   @Query("limit") int pageSize);
+
+    @GET("getAddressHistory/{address}")
     Single<SimpleTxItemResult> getTokenTransactionListInfo(@Path("address") String address,
-                                                           @Query("token") String tokenAddress,
-                                                           @Query("apiKey") String apiKey,
-                                                           @Query("timestamp") long timestamp,
-                                                           @Query("limit") int pageSize);
+                                                                   @Query("apiKey") String apiKey,
+                                                                   @Query("timestamp") long timestamp,
+                                                                   @Query("limit") int pageSize);
 
     @GET("getAddressTransactions/{address}")
     Single<SimpleTxItemResult> getEthTransactionListInfo(@Path("address") String address,

@@ -57,6 +57,7 @@ public class TxListRepository {
     public enum Type {
         ETH_TXS,
         TOKEN_TXS,
+        TOKEN_TXS_SPECIFIC,
         CONTRACT_TXS
     }
 }

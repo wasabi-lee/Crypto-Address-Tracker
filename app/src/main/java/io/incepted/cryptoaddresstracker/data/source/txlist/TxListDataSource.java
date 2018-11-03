@@ -100,6 +100,12 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
 
             case TOKEN_TXS:
                 return mNetworkService.getTokenTransactionListInfo(address,
+                        ApiManager.API_KEY_ETHPLORER,
+                        lastTimestamp,
+                        PAGE_SIZE);
+
+            case TOKEN_TXS_SPECIFIC:
+                return mNetworkService.getSpecificTokenTransactionListInfo(address,
                         tokenAddress,
                         ApiManager.API_KEY_ETHPLORER,
                         lastTimestamp,

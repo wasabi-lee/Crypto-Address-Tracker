@@ -198,7 +198,7 @@ public class AddressRemoteRepositoryTest {
 
     @Test
     public void getTokenTransactionListInfo_onSuccess() {
-        when(mNetworkService.getTokenTransactionListInfo(any(), any(), any()))
+        when(mNetworkService.getSpecificTokenTransactionListInfo(any(), any(), any()))
                 .thenReturn(Single.just(new TransactionListInfo()));
 
         mRemoteRepository.setDefaultAddressInfoService(mNetworkService);
@@ -217,7 +217,7 @@ public class AddressRemoteRepositoryTest {
     public void getTokenTransactionListInfo_onError() {
         Exception exception = new Exception();
 
-        when(mNetworkService.getTokenTransactionListInfo(any(), any(), any()))
+        when(mNetworkService.getSpecificTokenTransactionListInfo(any(), any(), any()))
                 .thenReturn(Single.error(exception));
 
         mRemoteRepository.setDefaultAddressInfoService(mNetworkService);

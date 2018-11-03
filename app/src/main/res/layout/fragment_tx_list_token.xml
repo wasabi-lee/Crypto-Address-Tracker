@@ -4,6 +4,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewmodel"
             type="io.incepted.cryptoaddresstracker.viewModels.DetailViewModel" />
@@ -21,6 +23,15 @@
             android:layout_height="match_parent"
             android:fillViewport="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_normal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:text="@string/no_token_transactions_found"
+            style="@style/TextSecondaryMediumSemiBoldAppearance"
+            android:visibility="@{viewmodel.noTokenTxFound ? View.VISIBLE : View.GONE}"/>
     </FrameLayout>
 
 </layout>
