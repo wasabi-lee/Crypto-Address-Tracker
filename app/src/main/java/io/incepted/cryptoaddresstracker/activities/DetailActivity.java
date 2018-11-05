@@ -18,7 +18,6 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -156,10 +155,9 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
                 }
         });
 
-        mViewModel.getNetworkError().observe(this, s -> {
-            if (s != null)
-                showSnackbar(s);
-        });
+        mViewModel.getEthNetworkError().observe(this, this::showSnackbar);
+
+        mViewModel.getTokenNetworkError().observe(this, this::showSnackbar);
     }
 
 

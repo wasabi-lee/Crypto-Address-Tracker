@@ -3,6 +3,7 @@ package io.incepted.cryptoaddresstracker.network.networkModel.transactionListInf
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PagedList;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.networkModel.ErrorResponse;
@@ -14,6 +15,12 @@ public class SimpleTxItemResult {
     private LiveData<Boolean> isLoading;
 
     public SimpleTxItemResult() {
+    }
+
+    public static SimpleTxItemResult getEmptyReference() {
+        return new SimpleTxItemResult(new MutableLiveData<>(),
+                new MutableLiveData<>(),
+                new MutableLiveData<>());
     }
 
     public SimpleTxItemResult(LiveData<PagedList<SimpleTxItem>> itemLiveDataList) {

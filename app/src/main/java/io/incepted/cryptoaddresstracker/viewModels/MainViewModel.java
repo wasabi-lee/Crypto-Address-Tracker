@@ -157,12 +157,14 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         mAddressList.addAll(addresses);
     }
 
+
     public List<Address> tagListWithPositions(List<Address> addresses) {
         for (int i = 0; i < addresses.size(); i++) {
             addresses.get(i).setListPosition(i);
         }
         return addresses;
     }
+
 
     @Override
     public void onAddressesNotAvailable() {

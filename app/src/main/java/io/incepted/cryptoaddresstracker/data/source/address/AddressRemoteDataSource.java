@@ -65,7 +65,7 @@ public class AddressRemoteDataSource {
                                 }))
                 .subscribeOn(backgroundScheduler)
                 .observeOn(mainScheduler)
-                .subscribe(callback::onNextSimpleAddressInfoLoaded,
+                .subscribe(callback::onNextSimpleAddressInfoLoaded, // onNext
                         callback::onDataNotAvailable,
                         callback::onSimpleAddressInfoLoadingCompleted);
     }
@@ -79,7 +79,7 @@ public class AddressRemoteDataSource {
                 .getDetailedAddressInfo(address, ApiManager.API_KEY_ETHPLORER, true)
                 .subscribeOn(backgroundScheduler)
                 .observeOn(mainScheduler)
-                .subscribe(callback::onSimpleAddressInfoLoaded,
+                .subscribe(callback::onRemoteAddressInfoLoaded,
                         callback::onDataNotAvailable);
     }
 

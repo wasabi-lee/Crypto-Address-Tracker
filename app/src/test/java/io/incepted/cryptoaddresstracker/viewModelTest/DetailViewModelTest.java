@@ -111,7 +111,7 @@ public class DetailViewModelTest {
 
         // Init test object
         mDetailViewModel = new DetailViewModel(mContext, mLocalRepository, mRemoteRepository);
-        mDetailViewModel.setmAddressId(ID_TEST);
+        mDetailViewModel.setAddressId(ID_TEST);
     }
 
     private void setupContext() {

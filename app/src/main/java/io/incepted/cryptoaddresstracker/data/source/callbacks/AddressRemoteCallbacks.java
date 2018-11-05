@@ -22,7 +22,7 @@ public interface AddressRemoteCallbacks {
     interface DetailAddressInfoListener {
         void onCallReady();
 
-        void onSimpleAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo);
+        void onRemoteAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo);
 
         void onDataNotAvailable(Throwable throwable);
     }

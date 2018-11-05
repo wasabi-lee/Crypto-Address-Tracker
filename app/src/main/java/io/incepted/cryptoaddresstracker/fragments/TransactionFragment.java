@@ -89,8 +89,8 @@ public class TransactionFragment extends Fragment {
 
     private void setupObservers() {
         mViewModel.getIsTokenAddress().observe(this, isTokenAddress -> {
-            mSwitch.setChecked(false);
-            mSwitch.setEnabled(false);
+                mSwitch.setChecked(!isTokenAddress);
+                mSwitch.setEnabled(!isTokenAddress);
         });
     }
 
