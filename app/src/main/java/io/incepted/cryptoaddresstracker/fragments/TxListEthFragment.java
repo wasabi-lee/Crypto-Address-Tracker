@@ -77,7 +77,8 @@ public class TxListEthFragment extends Fragment {
     private void setupObservers() {
         mViewModel.getEthTxList().observe(this, simpleTxItems -> {
                     if (simpleTxItems != null)
-                                mAdapter.submitList(simpleTxItems);
+                        mViewModel.noEthTxFound.set(simpleTxItems.size() == 0);
+                    mAdapter.submitList(simpleTxItems);
                 }
         );
     }

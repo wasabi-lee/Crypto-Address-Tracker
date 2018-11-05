@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
+import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
@@ -71,6 +72,5 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
         itemBinding.setAddress(mDetailViewModel != null ? mDetailViewModel.mAddress.get().getAddrValue() : mTxViewModel.mAddress.get().getAddrValue());
         itemBinding.executePendingBindings();
     }
-
 
 }

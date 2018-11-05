@@ -89,7 +89,6 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
     public static DetailViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
         DetailViewModel a = ViewModelProviders.of(activity, factory).get(DetailViewModel.class);
-        Timber.d("added %s", a);
         return a;
     }
 

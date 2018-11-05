@@ -82,7 +82,8 @@ public class TxListTokenFragment extends Fragment {
     private void setupObservers() {
         mViewModel.getTokenTxList().observe(this, simpleTxItems -> {
                     if (simpleTxItems != null)
-                        mAdapter.submitList(simpleTxItems);
+                        mViewModel.noTokenFound.set(simpleTxItems.size() == 0);
+                    mAdapter.submitList(simpleTxItems);
                 }
         );
     }

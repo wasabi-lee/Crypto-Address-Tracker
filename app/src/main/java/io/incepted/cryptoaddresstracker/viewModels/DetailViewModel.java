@@ -36,6 +36,7 @@ import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
         AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener,
@@ -153,15 +154,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 
     private LiveData<PagedList<SimpleTxItem>> getEthTxsListFromResult(SimpleTxItemResult result) {
-        if (result.getItemLiveDataList().getValue() != null)
-            noEthTxFound.set(result.getItemLiveDataList().getValue().size() == 0);
         return result.getItemLiveDataList();
     }
 
 
     private LiveData<PagedList<SimpleTxItem>> getTokenTxsListFromResult(SimpleTxItemResult result) {
-        if (result.getItemLiveDataList().getValue() != null)
-            noTokenTxFound.set(result.getItemLiveDataList().getValue().size() == 0);
         return result.getItemLiveDataList();
     }
 
