@@ -21,6 +21,7 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.databinding.ActivityMainBinding;
+import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
@@ -28,7 +29,6 @@ import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
 
 public class MainActivity extends BaseActivity {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
     private static final int SETTINGS_REQUEST_CODE = 34;
 
     @BindView(R.id.main_toolbar)
@@ -40,6 +40,10 @@ public class MainActivity extends BaseActivity {
 
     private MainViewModel mViewModel;
     private boolean mIsDarkMode;
+    private boolean shouldShowEthInitial;
+    private AddressAdapter mAdapter;
+
+    private MenuItem mCurrencyMenu;
 
 
     @Override
@@ -54,6 +58,8 @@ public class MainActivity extends BaseActivity {
         mIsDarkMode = SharedPreferenceHelper.getThemeFlag(this);
 
         initToolbar();
+        initPreferences();
+        setupObservers();
         setupTransitionObservers();
         setupSnackbar();
         setupRecyclerView();
@@ -73,13 +79,31 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    private void initPreferences() {
+        shouldShowEthInitial = SharedPreferenceHelper.getIsLastShownCurrencyEth(getApplicationContext());
+    }
+
+    private String getBaseCurrency() {
+        int baseCurrencyIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplicationContext());
+        return CurrencyUtils.getBaseCurrencyString(baseCurrencyIntValue);
+    }
+
+
     private void setupRecyclerView() {
-        AddressAdapter adapter = new AddressAdapter(new ArrayList<>(0), mViewModel);
+        mAdapter = new AddressAdapter(new ArrayList<>(0),
+                mViewModel, CurrencyUtils.getPlaceholderObject(shouldShowEthInitial));
         mAddressList.setHasFixedSize(true);
         mAddressList.setItemAnimator(new DefaultItemAnimator());
         mAddressList.setLayoutManager(new LinearLayoutManager(this));
-        mAddressList.setAdapter(adapter);
+        mAddressList.setAdapter(mAdapter);
     }
+
+
+    private void setupObservers() {
+        mViewModel.getCurrentPrice().observe(this, currentPrice ->
+                mAdapter.toggleDisplayCurrency(currentPrice));
+    }
+
 
     private void setupSnackbar() {
         mViewModel.getSnackbarText().observe(this, this::showSnackbar);
@@ -87,6 +111,7 @@ public class MainActivity extends BaseActivity {
         mViewModel.getSnackbarTextResource().observe(this, stringResource ->
                 showSnackbar(getString(stringResource)));
     }
+
 
     private void setupTransitionObservers() {
         mViewModel.getActivityNavigator().observe(this, activityNavigator -> {
@@ -139,15 +164,28 @@ public class MainActivity extends BaseActivity {
         startActivityForResult(intent, SETTINGS_REQUEST_CODE);
     }
 
+
+    // ------------------------- currency setting --------------------------
+
+    private void setCurrencyMenuTitleText() {
+        if (mCurrencyMenu != null) {
+            mCurrencyMenu.setTitle(mViewModel.getShouldDisplayEthPrice() ? "ETH" : getBaseCurrency());
+        }
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
-        mViewModel.start();
+        setCurrencyMenuTitleText();
+        mViewModel.start(getBaseCurrency(), shouldShowEthInitial);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu, menu);
+        mCurrencyMenu = menu.findItem(R.id.main_currency_conversion);
+        setCurrencyMenuTitleText();
         return true;
     }
 
@@ -157,12 +195,22 @@ public class MainActivity extends BaseActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.main_currency_conversion:
+                item.setTitle(mViewModel.toggleDisplayCurrency() ? "ETH" : getBaseCurrency());
+                return true;
             case R.id.main_add_new_address:
                 mViewModel.addNewAddress();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SharedPreferenceHelper.writeIsLastShownCurrencyEth(getApplicationContext(),
+                mViewModel.getShouldDisplayEthPrice());
     }
 
     @Override

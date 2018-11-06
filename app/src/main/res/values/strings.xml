@@ -94,4 +94,7 @@
     <string name="latest_token_transactions">Latest Token Transactions</string>
     <string name="no_ethereum_transactions_found">No Ethereum transactions found</string>
     <string name="no_token_transactions_found">No Token transactions found</string>
+    <string name="price_loading_error">Error occurred while loading price data. Please try again later!</string>
+
+    <string name="pref_key_last_currency_setting_show_eth">pref_key_last_currency_setting_show_eth</string>
 </resources>

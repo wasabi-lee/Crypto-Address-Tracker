@@ -30,6 +30,11 @@ import io.incepted.cryptoaddresstracker.utils.NumberUtils;
 
 public class AddressListBindings {
 
+    @BindingAdapter({"app:double_text", "app:price"})
+    public static void setBalance(TextView view, double balance, double price) {
+        double calculatedBalance = balance * price;
+        view.setText(NumberUtils.formatDouble(calculatedBalance));
+    }
 
     @BindingAdapter({"app:address_items"})
     public static void setAddressItems(RecyclerView recyclerView, List<Address> items) {

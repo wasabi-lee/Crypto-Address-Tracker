@@ -26,6 +26,7 @@ import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.FragmentTxListTokenBinding;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
+import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,8 +82,11 @@ public class TxListTokenFragment extends Fragment {
 
     private void setupObservers() {
         mViewModel.getTokenTxList().observe(this, simpleTxItems -> {
-                    if (simpleTxItems != null)
-                        mViewModel.noTokenFound.set(simpleTxItems.size() == 0);
+                    if (simpleTxItems != null) {
+                        boolean noTokenTx = simpleTxItems.size()==0;
+                        Timber.d("NoTokenTx: %s", noTokenTx);
+                        mViewModel.noTokenTxFound.set(noTokenTx);
+                    }
                     mAdapter.submitList(simpleTxItems);
                 }
         );

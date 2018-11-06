@@ -10,6 +10,16 @@ public class CurrentPrice {
     private String formattedPrice;
     private String formattedPriceAndSymbol;
 
+    public static CurrentPrice getDefaultBaseCurrencyObject() {
+        // Returns a placeholder object for databinding
+        // This object will be bound to layout until the network call gets delivered
+        return new CurrentPrice("--", 0d);
+    }
+
+    public static CurrentPrice getEthCurrencyObject() {
+        return new CurrentPrice("ETH", 1d);
+    }
+
     public CurrentPrice(String tsym, Double price) {
         this.tsym = tsym.toUpperCase();
         this.price = price;

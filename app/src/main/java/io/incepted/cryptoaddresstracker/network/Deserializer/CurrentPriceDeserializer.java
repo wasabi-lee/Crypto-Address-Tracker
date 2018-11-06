@@ -14,8 +14,6 @@ import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.Curren
 
 public class CurrentPriceDeserializer implements JsonDeserializer {
 
-    private static final String TAG = CurrentPriceDeserializer.class.getSimpleName();
-
 
     /**
      * <Sample Response>
@@ -29,8 +27,6 @@ public class CurrentPriceDeserializer implements JsonDeserializer {
 
         String tsym = json.getAsJsonObject().keySet().iterator().next();
         Double price = json.getAsJsonObject().get(tsym).getAsDouble();
-
-        Log.d(TAG, "deserialize: " + tsym + " " + price);
 
         return new CurrentPrice(tsym, price);
     }

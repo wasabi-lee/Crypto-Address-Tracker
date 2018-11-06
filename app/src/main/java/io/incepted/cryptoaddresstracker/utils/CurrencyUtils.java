@@ -1,5 +1,7 @@
 package io.incepted.cryptoaddresstracker.utils;
 
+import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
+
 public class CurrencyUtils {
 
     private static final int USD_INT_VALUE = 0;
@@ -12,6 +14,7 @@ public class CurrencyUtils {
     private static final int GBP_INT_VALUE = 7;
     private static final int CHF_INT_VALUE = 8;
     private static final int AUD_INT_VALUE = 9;
+    private static final int HKD_INT_VALUE = 10;
 
     private static final String USD_STR_VALUE = "USD";
     private static final String BTC_STR_VALUE = "BTC";
@@ -23,6 +26,7 @@ public class CurrencyUtils {
     private static final String GBP_STR_VALUE = "GBP";
     private static final String CHF_STR_VALUE = "CHF";
     private static final String AUD_STR_VALUE = "AUD";
+    private static final String HKD_STR_VALUE = "HKD";
 
     public static String getBaseCurrencyString(int value) {
         switch (value) {
@@ -46,6 +50,8 @@ public class CurrencyUtils {
                 return CHF_STR_VALUE;
             case AUD_INT_VALUE:
                 return AUD_STR_VALUE;
+            case HKD_INT_VALUE:
+                return HKD_STR_VALUE;
             default:
                 return USD_STR_VALUE;
         }
@@ -73,8 +79,15 @@ public class CurrencyUtils {
                 return CHF_INT_VALUE;
             case AUD_STR_VALUE:
                 return AUD_INT_VALUE;
+            case HKD_STR_VALUE:
+                return HKD_INT_VALUE;
             default:
                 return USD_INT_VALUE;
         }
+    }
+
+    public static CurrentPrice getPlaceholderObject(boolean displayEth) {
+        return displayEth ? CurrentPrice.getEthCurrencyObject() :
+                CurrentPrice.getDefaultBaseCurrencyObject();
     }
 }

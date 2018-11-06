@@ -16,6 +16,7 @@ import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
+import timber.log.Timber;
 
 public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHolder> {
 
@@ -73,4 +74,9 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
         itemBinding.executePendingBindings();
     }
 
+    @Override
+    public void submitList(PagedList<SimpleTxItem> pagedList) {
+        super.submitList(pagedList);
+        Timber.d("real size: %s" , pagedList.size());
+    }
 }

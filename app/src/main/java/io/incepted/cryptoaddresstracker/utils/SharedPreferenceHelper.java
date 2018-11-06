@@ -25,4 +25,16 @@ public class SharedPreferenceHelper {
         return Integer.valueOf(baseCurrencySetting);
     }
 
+    public static boolean getIsLastShownCurrencyEth(Context context) {
+        return getSharedPref(context)
+                .getBoolean(context.getString(R.string.pref_key_last_currency_setting_show_eth), true);
+    }
+
+    public static void writeIsLastShownCurrencyEth(Context context, boolean isLastShownCurrencyEth) {
+        SharedPreferences sharedPreferences = SharedPreferenceHelper.getSharedPref(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(context.getString(R.string.pref_key_last_currency_setting_show_eth), isLastShownCurrencyEth);
+        editor.apply();
+    }
+
 }

@@ -13,7 +13,9 @@ import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.databinding.AddressListItemBinding;
 import io.incepted.cryptoaddresstracker.listeners.AddressItemActionListener;
+import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
+import timber.log.Timber;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHolder> {
 
@@ -22,10 +24,12 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     private MainViewModel mViewModel;
     private List<Address> mAddresses;
     private AddressItemActionListener mListener;
+    private CurrentPrice mCurrentPrice;
 
-    public AddressAdapter(List<Address> addresses, MainViewModel viewModel) {
+    public AddressAdapter(List<Address> addresses, MainViewModel viewModel, CurrentPrice currentPrice) {
         this.mViewModel = viewModel;
         this.mListener = addressId -> mViewModel.openAddressDetail(addressId);
+        this.mCurrentPrice = currentPrice;
         setList(addresses);
     }
 
@@ -56,6 +60,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
         Address currentItem = mAddresses.get(position);
         AddressListItemBinding itemBinding = holder.getItemBinding();
         itemBinding.setAddress(currentItem);
+        itemBinding.setPrice(mCurrentPrice);
         itemBinding.setListener(mListener);
         itemBinding.executePendingBindings();
     }
@@ -72,5 +77,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
 
     public void replaceData(List<Address> addresses) {
         setList(addresses);
+    }
+
+    public void toggleDisplayCurrency(CurrentPrice currentPrice) {
+        mCurrentPrice = currentPrice;
+        notifyDataSetChanged();
     }
 }

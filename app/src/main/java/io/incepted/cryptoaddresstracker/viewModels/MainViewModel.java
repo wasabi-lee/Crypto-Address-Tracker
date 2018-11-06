@@ -18,14 +18,25 @@ import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallba
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
+import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
+import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
-public class MainViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressesLoadedListener {
+public class MainViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressesLoadedListener,
+        PriceRepository.OnPriceLoadedListener {
 
-    private static final String TAG = MainViewModel.class.getSimpleName();
 
     private AddressRepository mAddressRepository;
+    private PriceRepository mPriceRepository;
+
+    private boolean isBalanceLoading = false;
+    private boolean isPriceLoading = false;
+    private CurrentPrice mBaseCurrencyPrice = CurrentPrice.getDefaultBaseCurrencyObject();
+
+    public SingleLiveEvent<CurrentPrice> mCurrentPrice = new SingleLiveEvent<>();
+
+    private boolean mDisplayEthPrice;
 
     public ObservableField<Boolean> addressesExist = new ObservableField<>();
     public ObservableField<Boolean> isDataLoading = new ObservableField<>(false);
@@ -39,22 +50,49 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
 
     public MainViewModel(@NonNull Application application,
-                         @NonNull AddressRepository addressRepository) {
+                         @NonNull AddressRepository addressRepository,
+                         @NonNull PriceRepository priceRepository) {
         super(application);
         mAddressRepository = addressRepository;
+        mPriceRepository = priceRepository;
     }
 
-    public void start() {
+    public void start(String baseCurrency, boolean displayEthInitially) {
+        // configure which currency setting should be shown fist
+        mDisplayEthPrice = displayEthInitially;
+        updateDisplayCurrency(mDisplayEthPrice);
+
+        // show progress bar
+        isDataLoading.set(true);
+
+        // load data
         loadAddresses();
+        loadEthPrice(baseCurrency);
+    }
+
+    private void updateDisplayCurrency(boolean displayEthPrice) {
+        if (displayEthPrice) {
+            mCurrentPrice.setValue(CurrentPrice.getEthCurrencyObject());
+        } else {
+            mCurrentPrice.setValue(mBaseCurrencyPrice);
+        }
     }
 
     public void loadAddresses() {
-        isDataLoading.set(true);
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            mAddressRepository.getAddresses(this);
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        isBalanceLoading = true;
+        mAddressRepository.getAddresses(this);
+    }
+
+
+    private void loadEthPrice(String baseCurrency) {
+        isPriceLoading = true;
+        mPriceRepository.loadCurrentPrice(baseCurrency, this);
+    }
+
+    public boolean toggleDisplayCurrency() {
+        mDisplayEthPrice = !mDisplayEthPrice;
+        updateDisplayCurrency(mDisplayEthPrice);
+        return mDisplayEthPrice;
     }
 
 
@@ -80,6 +118,8 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         mActivityNavigator.setValue(ActivityNavigator.TX_SCAN);
     }
 
+
+
     // ----------------------- Getters -------------------
 
 
@@ -99,6 +139,13 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         return mOpenAddressDetail;
     }
 
+    public SingleLiveEvent<CurrentPrice> getCurrentPrice() {
+        return mCurrentPrice;
+    }
+
+    public boolean getShouldDisplayEthPrice() {
+        return mDisplayEthPrice;
+    }
 
     // ----------------------- Callbacks -------------------------
 
@@ -109,9 +156,12 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         // show the 'no data' layout
         if (addresses.size() == 0) {
             addressesExist.set(false);
-            isDataLoading.set(false);
             populateAddressListView(new ArrayList<>());
+            updateBalanceLoadingStatus(false);
             return;
+        } else if (!ConnectivityChecker.isConnected(getApplication())) {
+            mSnackbarTextResource.setValue(R.string.error_offline);
+            updateBalanceLoadingStatus(false);
         }
 
         // hide the 'no data' layout
@@ -137,37 +187,73 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
                     @Override
                     public void onSimpleAddressInfoLoadingCompleted() {
-                        isDataLoading.set(false);
                         populateAddressListView(addresses);
+                        updateBalanceLoadingStatus(false);
                     }
 
                     @Override
                     public void onDataNotAvailable(Throwable throwable) {
                         throwable.printStackTrace();
-                        isDataLoading.set(false);
                         populateAddressListView(addresses);
                         mSnackbarTextResource.setValue(R.string.unexpected_error);
+                        updateBalanceLoadingStatus(false);
                     }
                 });
 
     }
 
-    public void populateAddressListView(List<Address> addresses) {
+    @Override
+    public void onAddressesNotAvailable() {
+        mSnackbarTextResource.setValue(R.string.address_loading_error);
+    }
+
+
+    // ------------ Price load callbacks -----------
+
+    @Override
+    public void onPriceLoaded(CurrentPrice currentPrice) {
+        mBaseCurrencyPrice = currentPrice;
+        updateDisplayCurrency(mDisplayEthPrice);
+        updatePriceLoadingStatus(false);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        mSnackbarTextResource.setValue(R.string.price_loading_error);
+        updatePriceLoadingStatus(false);
+    }
+
+
+    private void updateBalanceLoadingStatus(boolean isLoading) {
+        isBalanceLoading = isLoading;
+        setLoadingStatus();
+    }
+
+
+    private void updatePriceLoadingStatus(boolean isLoading) {
+        isPriceLoading = isLoading;
+        setLoadingStatus();
+    }
+
+
+    private void setLoadingStatus() {
+        if (!isBalanceLoading && !isPriceLoading) {
+            isDataLoading.set(false);
+        }
+    }
+
+
+    private void populateAddressListView(List<Address> addresses) {
         mAddressList.clear();
         mAddressList.addAll(addresses);
     }
 
 
-    public List<Address> tagListWithPositions(List<Address> addresses) {
+    private List<Address> tagListWithPositions(List<Address> addresses) {
         for (int i = 0; i < addresses.size(); i++) {
             addresses.get(i).setListPosition(i);
         }
         return addresses;
     }
 
-
-    @Override
-    public void onAddressesNotAvailable() {
-
-    }
 }
