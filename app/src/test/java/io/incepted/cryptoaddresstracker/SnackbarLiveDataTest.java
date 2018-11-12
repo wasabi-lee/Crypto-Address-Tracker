@@ -12,6 +12,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.never;
@@ -33,7 +34,7 @@ public class SnackbarLiveDataTest {
 
     private LifecycleRegistry mLifecycle;
 
-    private MutableLiveData<Integer> mSnackbarTextResource = new MutableLiveData<>();
+    private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
     @Before
     public void setupLifecycles() throws Exception {

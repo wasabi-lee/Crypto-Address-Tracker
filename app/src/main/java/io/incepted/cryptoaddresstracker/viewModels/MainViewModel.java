@@ -32,11 +32,11 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
     private boolean isBalanceLoading = false;
     private boolean isPriceLoading = false;
-    private CurrentPrice mBaseCurrencyPrice = CurrentPrice.getDefaultBaseCurrencyObject();
+    public CurrentPrice mBaseCurrencyPrice = CurrentPrice.getDefaultBaseCurrencyObject();
 
     public SingleLiveEvent<CurrentPrice> mCurrentPrice = new SingleLiveEvent<>();
 
-    private boolean mDisplayEthPrice;
+    public boolean mDisplayEthPrice = true;
 
     public ObservableField<Boolean> addressesExist = new ObservableField<>();
     public ObservableField<Boolean> isDataLoading = new ObservableField<>(false);
@@ -84,7 +84,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
     }
 
 
-    private void loadEthPrice(String baseCurrency) {
+    public void loadEthPrice(String baseCurrency) {
         isPriceLoading = true;
         mPriceRepository.loadCurrentPrice(baseCurrency, this);
     }
@@ -204,6 +204,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
     @Override
     public void onAddressesNotAvailable() {
+        updateBalanceLoadingStatus(false);
         mSnackbarTextResource.setValue(R.string.address_loading_error);
     }
 

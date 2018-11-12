@@ -20,11 +20,15 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.data.model.Address;
-import io.incepted.cryptoaddresstracker.data.source.address.AddressLocalDataSource;
-import io.incepted.cryptoaddresstracker.data.source.address.AddressRemoteDataSource;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
+import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
+import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
+import io.incepted.cryptoaddresstracker.repository.AddressRepository;
+import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -38,22 +42,26 @@ public class MainViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    private static List<Address> ADDRESSES;
-
-    @Mock
-    private AddressLocalRepository mLocalRepository;
-
-    @Mock
-    private AddressRemoteRepository mRemoteRepository;
-
     @Mock
     private Application mContext;
 
-    @Captor
-    private ArgumentCaptor<AddressLocalDataSource.OnAddressesLoadedListener> mAddressesLoadedCaptor;
+    @Mock
+    private AddressRepository addressRepository;
+
+    @Mock
+    private PriceRepository priceRepository;
 
     @Captor
-    private ArgumentCaptor<AddressRemoteDataSource.SimpleAddressInfoListener> mSimpleAddressInfoCaptor;
+    private ArgumentCaptor<AddressLocalCallbacks.OnAddressesLoadedListener> mAddressesLoadedCaptor;
+
+    @Captor
+    private ArgumentCaptor<AddressRemoteCallbacks.SimpleAddressInfoListener> mSimpleAddrInfoCaptor;
+
+    @Captor
+    private ArgumentCaptor<PriceRepository.OnPriceLoadedListener> mPriceInfoCaptor;
+
+
+    private static List<Address> ADDRESSES;
 
     private MainViewModel mMainViewModel;
 
@@ -63,28 +71,26 @@ public class MainViewModelTest {
 
         setupContext();
 
-        mMainViewModel = new MainViewModel(mContext, mLocalRepository, mRemoteRepository);
+        mMainViewModel = new MainViewModel(mContext, addressRepository, priceRepository);
 
         ADDRESSES = Lists.newArrayList(new Address("Title1", "Addr1", new Date()),
                 new Address("Title2", "Addr2", new Date()),
                 new Address("Title3", "Addr3", new Date()));
     }
 
+
     private void setupContext() {
         when(mContext.getApplicationContext()).thenReturn(mContext);
     }
 
-    @Test
-    public void loadAllAddressesFromRepository_dataLoaded() {
 
+    @Test
+    public void loadAddresses_onSuccess() {
         // Before loading
         mMainViewModel.loadAddresses();
 
         // Is getAddresses called
-        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
-
-        // Progress bar shown
-        assertTrue(mMainViewModel.isDataLoading.get());
+        verify(addressRepository).getAddresses(mAddressesLoadedCaptor.capture());
 
         // Setting dummy result
         mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
@@ -94,84 +100,96 @@ public class MainViewModelTest {
 
         // Do addresses exists?
         assertFalse(mMainViewModel.mAddressList.isEmpty());
-        assertTrue(mMainViewModel.mAddressList.size() == 3);
+        assertEquals(mMainViewModel.mAddressList.size(), 3);
 
         // Is the remote api call triggered?
-        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+        verify(addressRepository).fetchMultipleSimpleAddressInfo(any(), mSimpleAddrInfoCaptor.capture());
+    }
+
+
+    @Test
+    public void loadAddresses_onEmpty() {
+        // Before loading
+        mMainViewModel.loadAddresses();
+
+        // Is getAddresses called
+        verify(addressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+
+        // Setting dummy result
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(new ArrayList<>());
+
+        // Address shouldn't exists.
+        assertFalse(mMainViewModel.addressesExist.get());
+
+        // Do addresses exists?
+        assertTrue(mMainViewModel.mAddressList.isEmpty());
+        assertEquals(mMainViewModel.mAddressList.size(), 0);
+
+        // Is the remote api call triggered?
+        verify(addressRepository, times(0)).fetchMultipleSimpleAddressInfo(any(), mSimpleAddrInfoCaptor.capture());
 
     }
 
+
     @Test
-    public void loadAllAddressesFromRepository_emptyDataLoaded() {
+    public void loadAddresses_onError() {
+
+        // setup observer
+        Observer<Integer> observer = mock(Observer.class);
+        mMainViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
 
         // Before loading
         mMainViewModel.loadAddresses();
 
         // Is getAddresses called
-        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
-
-        // Progress bar shown
-        assertTrue(mMainViewModel.isDataLoading.get());
+        verify(addressRepository).getAddresses(mAddressesLoadedCaptor.capture());
 
         // Setting dummy result
-        mAddressesLoadedCaptor.getValue().onAddressesLoaded(new ArrayList<>());
+        mAddressesLoadedCaptor.getValue().onAddressesNotAvailable();
 
-        // Hide progress bar
-        assertFalse(mMainViewModel.isDataLoading.get());
+        // Is the remote api call triggered?
+        verify(addressRepository, times(0)).fetchMultipleSimpleAddressInfo(any(), mSimpleAddrInfoCaptor.capture());
 
-        // Address should exists. Hiding placeholder view.
-        assertFalse(mMainViewModel.addressesExist.get());
-
-        assertTrue(mMainViewModel.mAddressList.isEmpty());
+        // Is the error message shown
+        verify(observer).onChanged(any());
     }
 
 
     @Test
-    public void loadApiResponse_onCompleted() {
+    public void loadEthPrice_onSuccess() {
+        mMainViewModel.mDisplayEthPrice = false;
 
-        assertFalse(mMainViewModel.isDataLoading.get());
+        mMainViewModel.loadEthPrice("USD");
 
-        mMainViewModel.loadAddresses();
-        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
-        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+        verify(priceRepository).loadCurrentPrice(any(), mPriceInfoCaptor.capture());
 
-        assertTrue(mMainViewModel.isDataLoading.get());
+        CurrentPrice price = mock(CurrentPrice.class);
 
-        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+        mPriceInfoCaptor.getValue().onPriceLoaded(price);
 
-        mSimpleAddressInfoCaptor.getValue().onSimpleAddressInfoLoadingCompleted();
+        assertEquals(mMainViewModel.mBaseCurrencyPrice, price);
 
-        assertFalse(mMainViewModel.isDataLoading.get());
+        assertEquals(mMainViewModel.getCurrentPrice().getValue(), price);
 
     }
 
+
     @Test
-    public void loadApiResponse_onError() {
-        // setup observer
+    public void loadEthPrice_onError() {
+
         Observer<Integer> observer = mock(Observer.class);
+
         mMainViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
 
-        // make sure progress bar is hidden
-        assertFalse(mMainViewModel.isDataLoading.get());
+        mMainViewModel.mDisplayEthPrice = false;
 
-        mMainViewModel.loadAddresses();
-        verify(mLocalRepository).getAddresses(mAddressesLoadedCaptor.capture());
-        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+        mMainViewModel.loadEthPrice("USD");
 
-        // show progress bar
-        assertTrue(mMainViewModel.isDataLoading.get());
+        verify(priceRepository).loadCurrentPrice(any(), mPriceInfoCaptor.capture());
 
-        // Is the remote call triggered?
-        verify(mRemoteRepository).fetchMultipleSimpleAddressInfo(any(), any(), any(), mSimpleAddressInfoCaptor.capture());
+        mPriceInfoCaptor.getValue().onError(new Throwable());
 
-        // Throw exception
-        mSimpleAddressInfoCaptor.getValue().onDataNotAvailable(new Throwable());
-
-        // hide progress bar
-        assertFalse(mMainViewModel.isDataLoading.get());
-
-        // Is the snackbar message set
-        verify(observer, times(2)).onChanged(any());
+        verify(observer).onChanged(any());
     }
 
 
@@ -184,7 +202,7 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.addNewAddress();
 
-        verify(observer, times(2)).onChanged(any());
+        verify(observer).onChanged(any());
     }
 
 
@@ -197,7 +215,7 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.toSettings();
 
-        verify(observer, times(2)).onChanged(any());
+        verify(observer).onChanged(any());
     }
 
 
@@ -210,7 +228,7 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.toTxScan();
 
-        verify(observer, times(2)).onChanged(any());
+        verify(observer).onChanged(any());
     }
 
 
@@ -223,15 +241,6 @@ public class MainViewModelTest {
         // When adding a new address
         mMainViewModel.openAddressDetail(1);
 
-        verify(observer, times(2)).onChanged(any());
-    }
-
-
-    @Test
-    public void resetActivityNav_Test() {
-        Observer<ActivityNavigator> observer = mock(Observer.class);
-        mMainViewModel.getActivityNavigator().observe(TestUtils.TEST_OBSERVER, observer);
-        mMainViewModel.resetActivityNav();
         verify(observer).onChanged(any());
     }
 
