@@ -18,6 +18,7 @@ import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallba
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
+import io.incepted.cryptoaddresstracker.network.NetworkLiveData;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
@@ -48,6 +49,9 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
+//    private ConnectivityChecker connectivityChecker;
+
+    public NetworkLiveData networkLiveData;
 
     public MainViewModel(@NonNull Application application,
                          @NonNull AddressRepository addressRepository,
@@ -55,6 +59,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
         super(application);
         mAddressRepository = addressRepository;
         mPriceRepository = priceRepository;
+        networkLiveData = new NetworkLiveData(application);
     }
 
     public void start(String baseCurrency, boolean displayEthInitially) {
@@ -119,7 +124,6 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
     }
 
 
-
     // ----------------------- Getters -------------------
 
 
@@ -158,47 +162,48 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
             addressesExist.set(false);
             populateAddressListView(new ArrayList<>());
             updateBalanceLoadingStatus(false);
-            return;
-        } else if (!ConnectivityChecker.isConnected(getApplication())) {
+
+        } else if (networkLiveData.getValue() != null && !networkLiveData.getValue()) {
             mSnackbarTextResource.setValue(R.string.error_offline);
             updateBalanceLoadingStatus(false);
+
+        } else {
+            // hide the 'no data' layout
+            addressesExist.set(true);
+
+            // populate the RecyclerView
+            populateAddressListView(addresses);
+
+            // Tagging each item with their position to keep the list in order even after the flatMap() call.
+            List<Address> positionTaggedAddresses = tagListWithPositions(addresses);
+
+            mAddressRepository.fetchMultipleSimpleAddressInfo(positionTaggedAddresses,
+                    new AddressRemoteCallbacks.SimpleAddressInfoListener() {
+                        @Override
+                        public void onCallReady() {
+                            /* empty */
+                        }
+
+                        @Override
+                        public void onNextSimpleAddressInfoLoaded(Address addressInfo) {
+                            addresses.set(addressInfo.getListPosition(), addressInfo);
+                        }
+
+                        @Override
+                        public void onSimpleAddressInfoLoadingCompleted() {
+                            populateAddressListView(addresses);
+                            updateBalanceLoadingStatus(false);
+                        }
+
+                        @Override
+                        public void onDataNotAvailable(Throwable throwable) {
+                            throwable.printStackTrace();
+                            populateAddressListView(addresses);
+                            mSnackbarTextResource.setValue(R.string.unexpected_error);
+                            updateBalanceLoadingStatus(false);
+                        }
+                    });
         }
-
-        // hide the 'no data' layout
-        addressesExist.set(true);
-        // populate the RecyclerView
-        populateAddressListView(addresses);
-
-
-        // Tagging each item with their position to keep the list in order even after the flatMap() call.
-        List<Address> positionTaggedAddresses = tagListWithPositions(addresses);
-
-        mAddressRepository.fetchMultipleSimpleAddressInfo(positionTaggedAddresses,
-                new AddressRemoteCallbacks.SimpleAddressInfoListener() {
-                    @Override
-                    public void onCallReady() {
-                        /* empty */
-                    }
-
-                    @Override
-                    public void onNextSimpleAddressInfoLoaded(Address addressInfo) {
-                        addresses.set(addressInfo.getListPosition(), addressInfo);
-                    }
-
-                    @Override
-                    public void onSimpleAddressInfoLoadingCompleted() {
-                        populateAddressListView(addresses);
-                        updateBalanceLoadingStatus(false);
-                    }
-
-                    @Override
-                    public void onDataNotAvailable(Throwable throwable) {
-                        throwable.printStackTrace();
-                        populateAddressListView(addresses);
-                        mSnackbarTextResource.setValue(R.string.unexpected_error);
-                        updateBalanceLoadingStatus(false);
-                    }
-                });
 
     }
 

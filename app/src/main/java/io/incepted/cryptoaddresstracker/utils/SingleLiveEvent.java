@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import timber.log.Timber;
 
 public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
@@ -14,10 +15,6 @@ public class SingleLiveEvent<T> extends MutableLiveData<T> {
 
     @MainThread
     public void observe(@NonNull LifecycleOwner owner, @NonNull Observer<? super T> observer) {
-        if (hasActiveObservers()) {
-            //TODO implement timber
-        }
-
         super.observe(owner, t -> {
             if (mPending.compareAndSet(true, false)) {
                 observer.onChanged(t);

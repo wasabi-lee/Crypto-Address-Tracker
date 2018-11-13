@@ -18,11 +18,14 @@ import java.util.List;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
+import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.TestUtils;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressRemoteCallbacks;
 import io.incepted.cryptoaddresstracker.navigators.ActivityNavigator;
+import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
+import io.incepted.cryptoaddresstracker.network.NetworkLiveData;
 import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.CurrentPrice;
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
@@ -33,6 +36,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockingDetails;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -60,6 +64,8 @@ public class MainViewModelTest {
     @Captor
     private ArgumentCaptor<PriceRepository.OnPriceLoadedListener> mPriceInfoCaptor;
 
+    @Mock
+    private NetworkLiveData networkLiveData;
 
     private static List<Address> ADDRESSES;
 
@@ -71,7 +77,11 @@ public class MainViewModelTest {
 
         setupContext();
 
+        when(networkLiveData.getValue()).thenReturn(true);
+
         mMainViewModel = new MainViewModel(mContext, addressRepository, priceRepository);
+
+        mMainViewModel.networkLiveData = this.networkLiveData;
 
         ADDRESSES = Lists.newArrayList(new Address("Title1", "Addr1", new Date()),
                 new Address("Title2", "Addr2", new Date()),
@@ -191,6 +201,77 @@ public class MainViewModelTest {
 
         verify(observer).onChanged(any());
     }
+
+
+    @Test
+    public void fetchAddressInfo_onSuccess() {
+        mMainViewModel.loadAddresses();
+
+        // Is getAddresses called
+        verify(addressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+
+        // Setting dummy result
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+
+        // Address should exists. Hiding placeholder view.
+        assertTrue(mMainViewModel.addressesExist.get());
+
+        // Do addresses exists?
+        assertFalse(mMainViewModel.mAddressList.isEmpty());
+        assertEquals(mMainViewModel.mAddressList.size(), 3);
+
+        // Is the remote api call triggered?
+        verify(addressRepository).fetchMultipleSimpleAddressInfo(any(), mSimpleAddrInfoCaptor.capture());
+
+        ADDRESSES.get(0).setListPosition(0);
+        ADDRESSES.get(1).setListPosition(1);
+        ADDRESSES.get(2).setListPosition(2);
+
+        mSimpleAddrInfoCaptor.getValue().onNextSimpleAddressInfoLoaded(ADDRESSES.get(0));
+        mSimpleAddrInfoCaptor.getValue().onNextSimpleAddressInfoLoaded(ADDRESSES.get(1));
+        mSimpleAddrInfoCaptor.getValue().onNextSimpleAddressInfoLoaded(ADDRESSES.get(2));
+
+        mSimpleAddrInfoCaptor.getValue().onSimpleAddressInfoLoadingCompleted();
+
+        assertEquals(ADDRESSES, mMainViewModel.mAddressList);
+    }
+
+
+
+    @Test
+    public void fetchAddressInfo_onError() {
+
+        Observer<Integer> observer = mock(Observer.class);
+        mMainViewModel.getSnackbarTextResource().observe(TestUtils.TEST_OBSERVER, observer);
+
+        mMainViewModel.loadAddresses();
+
+        // Is getAddresses called
+        verify(addressRepository).getAddresses(mAddressesLoadedCaptor.capture());
+
+        // Setting dummy result
+        mAddressesLoadedCaptor.getValue().onAddressesLoaded(ADDRESSES);
+
+        // Address should exists. Hiding placeholder view.
+        assertTrue(mMainViewModel.addressesExist.get());
+
+        // Do addresses exists?
+        assertFalse(mMainViewModel.mAddressList.isEmpty());
+        assertEquals(mMainViewModel.mAddressList.size(), 3);
+
+        // Is the remote api call triggered?
+        verify(addressRepository).fetchMultipleSimpleAddressInfo(any(), mSimpleAddrInfoCaptor.capture());
+
+        Throwable throwable = mock(Throwable.class);
+
+        mSimpleAddrInfoCaptor.getValue().onDataNotAvailable(throwable);
+
+        verify(observer).onChanged(any());
+
+    }
+
+
+
 
 
     @Test
