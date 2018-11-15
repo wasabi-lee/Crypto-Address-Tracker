@@ -12,6 +12,7 @@ import androidx.databinding.ObservableField;
 import androidx.databinding.ObservableList;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import io.incepted.cryptoaddresstracker.CryptoAddressTracker;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
@@ -23,10 +24,10 @@ import io.incepted.cryptoaddresstracker.network.networkModel.currentPrice.Curren
 import io.incepted.cryptoaddresstracker.repository.AddressRepository;
 import io.incepted.cryptoaddresstracker.repository.PriceRepository;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class MainViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressesLoadedListener,
         PriceRepository.OnPriceLoadedListener {
-
 
     private AddressRepository mAddressRepository;
     private PriceRepository mPriceRepository;
@@ -49,17 +50,12 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
 
-//    private ConnectivityChecker connectivityChecker;
-
-    public NetworkLiveData networkLiveData;
-
     public MainViewModel(@NonNull Application application,
                          @NonNull AddressRepository addressRepository,
                          @NonNull PriceRepository priceRepository) {
         super(application);
         mAddressRepository = addressRepository;
         mPriceRepository = priceRepository;
-        networkLiveData = new NetworkLiveData(application);
     }
 
     public void start(String baseCurrency, boolean displayEthInitially) {
@@ -90,8 +86,10 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
 
 
     public void loadEthPrice(String baseCurrency) {
-        isPriceLoading = true;
-        mPriceRepository.loadCurrentPrice(baseCurrency, this);
+        if (ConnectivityChecker.isConnected(getApplication())) {
+            isPriceLoading = true;
+            mPriceRepository.loadCurrentPrice(baseCurrency, this);
+        }
     }
 
     public boolean toggleDisplayCurrency() {
@@ -163,7 +161,7 @@ public class MainViewModel extends AndroidViewModel implements AddressLocalCallb
             populateAddressListView(new ArrayList<>());
             updateBalanceLoadingStatus(false);
 
-        } else if (networkLiveData.getValue() != null && !networkLiveData.getValue()) {
+        } else if (!ConnectivityChecker.isConnected(getApplication())) {
             mSnackbarTextResource.setValue(R.string.error_offline);
             updateBalanceLoadingStatus(false);
 

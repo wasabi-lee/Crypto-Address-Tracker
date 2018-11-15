@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Objects;
+
 import androidx.lifecycle.Observer;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -24,6 +26,7 @@ import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.FragmentTxListTokenBinding;
+import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import timber.log.Timber;
@@ -76,7 +79,10 @@ public class TxListTokenFragment extends Fragment {
         mTokenTxListView.setItemAnimator(new DefaultItemAnimator());
         mTokenTxListView.setLayoutManager(lm);
 
-        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
+        TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
+//        String addrValue = Objects.requireNonNull(mViewModel.mAddress.get()).getAddrValue();
+
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, "", listener);
         mTokenTxListView.setAdapter(mAdapter);
     }
 

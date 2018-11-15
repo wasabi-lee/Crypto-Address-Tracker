@@ -83,8 +83,8 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         setupObservers();
         setupSnackbar();
 
-
     }
+
 
     public static DetailViewModel obtainViewModel(FragmentActivity activity) {
         ViewModelFactory factory = ViewModelFactory.getInstance(activity.getApplication());
@@ -92,9 +92,11 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         return a;
     }
 
+
     private int unpackExtra() {
         return getIntent().getIntExtra(ADDRESS_ID_EXTRA_KEY, 0);
     }
+
 
     private void initToolbar() {
         mToolbar.setTitle("");
@@ -104,10 +106,12 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         }
     }
 
+
     private void initAppbar() {
         mAppBarLayout.addOnOffsetChangedListener(this);
         startAlphaAnimation(mTitle, 0, View.INVISIBLE);
     }
+
 
     private void initFragments() {
         ViewPagerAdapter mAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -132,6 +136,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         });
         mTabLayout.setupWithViewPager(mViewPager);
     }
+
 
     private void setupObservers() {
         mViewModel.getOpenTokenTransactions().observe(this, this::toTxActivity);
@@ -178,6 +183,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         startActivity(intent);
     }
 
+
     private void toTxDetailActivity(String txHash) {
         Intent intent = new Intent(this, TxDetailActivity.class);
         intent.putExtra(TxDetailActivity.TX_DETAIL_HASH_EXTRA_KEY, txHash);
@@ -196,6 +202,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         handleToolbarTitleVisibility(percentage);
     }
 
+
     private void handleToolbarTitleVisibility(float percentage) {
         if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
             if (!mIsTheTitleVisible) {
@@ -212,6 +219,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         }
     }
 
+
     private void handleAlphaOnTitle(float percentage) {
         if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
             if (mIsTheTitleContainerVisible) {
@@ -227,6 +235,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
             }
         }
     }
+
 
     public static void startAlphaAnimation(View v, long duration, int visibility) {
         AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
@@ -248,11 +257,13 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         mViewModel.start(mAddressId);
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.detail_menu, menu);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -272,6 +283,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         return super.onOptionsItemSelected(item);
     }
 
+
     private void launchEditDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final View dialogView = getLayoutInflater().inflate(R.layout.address_name_edit_dialog, null);
@@ -288,6 +300,7 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
                 .show();
 
     }
+
 
     private void launchDeletionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

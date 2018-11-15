@@ -7,11 +7,15 @@ import com.squareup.leakcanary.LeakCanary;
 
 import androidx.annotation.Nullable;
 import androidx.multidex.MultiDexApplication;
+import io.incepted.cryptoaddresstracker.network.NetworkLiveData;
 import timber.log.Timber;
 
 import static android.util.Log.INFO;
 
 public class CryptoAddressTracker extends MultiDexApplication {
+
+    private NetworkLiveData networkLiveData;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -25,6 +29,11 @@ public class CryptoAddressTracker extends MultiDexApplication {
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
+
+        networkLiveData = new NetworkLiveData(this);
     }
 
+    public NetworkLiveData getNetworkLiveData() {
+        return networkLiveData;
+    }
 }

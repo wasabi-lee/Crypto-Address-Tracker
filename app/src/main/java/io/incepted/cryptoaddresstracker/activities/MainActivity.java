@@ -12,12 +12,14 @@ import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.incepted.cryptoaddresstracker.CryptoAddressTracker;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.adapters.AddressAdapter;
 import io.incepted.cryptoaddresstracker.databinding.ActivityMainBinding;
@@ -26,6 +28,7 @@ import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
+import timber.log.Timber;
 
 public class MainActivity extends BaseActivity {
 
@@ -100,6 +103,10 @@ public class MainActivity extends BaseActivity {
 
 
     private void setupObservers() {
+
+        ((CryptoAddressTracker) getApplication()).getNetworkLiveData()
+                .observe(this, connected -> Timber.d("Network: %s", connected ? "Connected" : "Disconnected"));
+
         mViewModel.getCurrentPrice().observe(this, currentPrice ->
                 mAdapter.toggleDisplayCurrency(currentPrice));
     }

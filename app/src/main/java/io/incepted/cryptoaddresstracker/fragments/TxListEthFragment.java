@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Objects;
+
 import androidx.lifecycle.Observer;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -22,6 +24,7 @@ import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.FragmentTxListEthBinding;
+import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import timber.log.Timber;
@@ -64,6 +67,7 @@ public class TxListEthFragment extends Fragment {
         setupObservers();
     }
 
+
     private void setupRecyclerView() {
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         mEthTxListView.setHasFixedSize(true);
@@ -71,9 +75,13 @@ public class TxListEthFragment extends Fragment {
         mEthTxListView.setItemAnimator(new DefaultItemAnimator());
         mEthTxListView.setLayoutManager(lm);
 
-        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, mViewModel);
+        TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
+        String addrValue = Objects.requireNonNull(mViewModel.mAddress.get()).getAddrValue();
+
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, addrValue, listener);
         mEthTxListView.setAdapter(mAdapter);
     }
+
 
     private void setupObservers() {
         mViewModel.getEthTxList().observe(this, simpleTxItems -> {

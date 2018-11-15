@@ -14,32 +14,18 @@ import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.databinding.TxListItemBinding;
 import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
-import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
-import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
 import timber.log.Timber;
 
 public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHolder> {
 
-    private TxViewModel mTxViewModel;
-    private DetailViewModel mDetailViewModel;
-    private TxItemActionListener mListener = transactionHash -> {
-        if (mDetailViewModel != null) {
-            mDetailViewModel.toTxDetailActivity(transactionHash);
-        } else if (mTxViewModel != null) {
-            mTxViewModel.toTxDetailActivity(transactionHash);
-        }
-    };
+
+    public TxItemActionListener mListener;
+    private String mOriginalAddress;
 
     public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback,
-                     TxViewModel txViewModel) {
+                     TxItemActionListener listener) {
         super(diffCallback);
-        this.mTxViewModel = txViewModel;
-    }
-
-    public TxAdapter(@NonNull DiffUtil.ItemCallback<SimpleTxItem> diffCallback,
-                     DetailViewModel detailViewModel) {
-        super(diffCallback);
-        this.mDetailViewModel = detailViewModel;
+        this.mListener = listener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,7 +56,7 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
         SimpleTxItem currentItem = getItem(position);
         itemBinding.setItem(currentItem);
         itemBinding.setListener(mListener);
-        itemBinding.setAddress(mDetailViewModel != null ? mDetailViewModel.mAddress.get().getAddrValue() : mTxViewModel.mAddress.get().getAddrValue());
+        itemBinding.setAddress(mOriginalAddress);
         itemBinding.executePendingBindings();
     }
 
@@ -78,5 +64,18 @@ public class TxAdapter extends PagedListAdapter<SimpleTxItem, TxAdapter.ViewHold
     public void submitList(PagedList<SimpleTxItem> pagedList) {
         super.submitList(pagedList);
         Timber.d("real size: %s" , pagedList.size());
+    }
+
+    /**
+     * Setting the PagedList and the original address value up to date.
+     * @param pagedList An updated PagedList
+     * @param originalAddress The address that the user is currently browsing.
+     *                        This data is used for determining either this transaction is IN or OUT.
+     *                        (e.g. If the API response of this Tx's "from" field is equal to this original address,
+     *                        this transaction is considered outbound (OUT) and vice versa.)
+     */
+    public void submitList(PagedList<SimpleTxItem> pagedList, String originalAddress) {
+        this.mOriginalAddress = originalAddress;
+        submitList(pagedList);
     }
 }
