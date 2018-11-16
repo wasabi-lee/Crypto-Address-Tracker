@@ -30,8 +30,6 @@ import timber.log.Timber;
 
 public class TxViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener {
 
-    private static final String TAG = TxViewModel.class.getSimpleName();
-
     private AddressRepository mAddressRepository;
     private TxListRepository mTxListRepository;
 
@@ -66,21 +64,10 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         mTxListRepository = txListRepository;
 
         result = Transformations.map(mAddrValue, input -> loadTransactions(input, mTokenAddress.get()));
-        ethTxList = Transformations.switchMap(result, new Function<SimpleTxItemResult, LiveData<PagedList<SimpleTxItem>>>() {
-            @Override
-            public LiveData<PagedList<SimpleTxItem>> apply(SimpleTxItemResult input) {
-                Timber.d("Got the result. Extracting the list.");
-                return input.getItemLiveDataList();
-            }
-        });
+        ethTxList = Transformations.switchMap(result, SimpleTxItemResult::getItemLiveDataList);
         networkError = Transformations.switchMap(result, SimpleTxItemResult::getError);
         isLoading = Transformations.switchMap(result, SimpleTxItemResult::getIsLoading);
-        itemExists = Transformations.switchMap(result, new Function<SimpleTxItemResult, LiveData<Boolean>>() {
-            @Override
-            public LiveData<Boolean> apply(SimpleTxItemResult input) {
-                return input.getItemExists();
-            }
-        });
+        itemExists = Transformations.switchMap(result, SimpleTxItemResult::getItemExists);
     }
 
     public void start(int addressId, String tokenName, String tokenAddress) {

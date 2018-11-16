@@ -43,8 +43,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:orientation="vertical"
-                    android:paddingBottom="@dimen/spacing_normal"
                     android:paddingLeft="50dp"
+                    android:paddingBottom="@dimen/spacing_normal"
                     app:layout_collapseMode="parallax">
 
                     <TextView
@@ -77,11 +77,11 @@
 
                     <TextView
                         android:id="@+id/tx_textview_title"
-                        android:textSize="18sp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:text="@{viewmodel.tokenName + ` Transactions`}" />
+                        android:text="@{viewmodel.tokenName + ` Transactions`}"
+                        android:textSize="18sp" />
 
                 </androidx.appcompat.widget.Toolbar>
 
@@ -95,9 +95,19 @@
             android:id="@+id/tx_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:scrollbars="vertical"
-            />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
+        <TextView
+            android:id="@+id/tx_no_tx_found"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_xxxlarge"
+            android:gravity="center"
+            android:text="@string/no_transaction_found"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
 
         <ProgressBar
             android:id="@+id/tx_progress_bar"

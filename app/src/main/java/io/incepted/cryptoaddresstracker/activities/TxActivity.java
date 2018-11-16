@@ -57,6 +57,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     RecyclerView mTxList;
     @BindView(R.id.tx_progress_bar)
     ProgressBar mProgessBar;
+    @BindView(R.id.tx_no_tx_found)
+    TextView mNoTxFound;
 
     private boolean mIsTheTitleVisible = false;
     private boolean mIsTheTitleContainerVisible = true;
@@ -129,12 +131,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
             mAdapter.submitList(items, addrValue);
         });
 
-        mViewModel.getItemExists().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean integer) {
-                //TODO placeholder needed
-            }
-        });
+        mViewModel.getItemExists().observe(this, itemExists ->
+                mNoTxFound.setVisibility(itemExists ? View.GONE : View.VISIBLE));
 
         mViewModel.getIsLoading().observe(this, isLoading ->
                 mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
