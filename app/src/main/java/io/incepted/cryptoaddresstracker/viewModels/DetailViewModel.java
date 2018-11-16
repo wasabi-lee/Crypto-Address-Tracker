@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
@@ -96,12 +97,8 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         mPriceRepository = priceRepository;
         mTxListRepository = txListRepository;
 
-        ethTxResult = Transformations.map(isTokenAddress, isTokenAddress -> {
-            if (!isTokenAddress)
-                return loadTransactions(TxListRepository.Type.ETH_TXS, mAddrValue.getValue());
-            else return SimpleTxItemResult.getEmptyInstance();
-        });
-        tokenTxResult = Transformations.map(mAddrValue, address -> loadTransactions(TxListRepository.Type.TOKEN_TXS, address));
+        ethTxResult = Transformations.map(isTokenAddress, this::getEthTxs);
+        tokenTxResult = Transformations.map(mAddrValue, this::getTokenTxs);
 
         ethTxList = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getItemLiveDataList);
         tokenTxList = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemLiveDataList);
@@ -158,17 +155,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     private SimpleTxItemResult getTokenTxs(String address) {
         return loadTransactions(TxListRepository.Type.TOKEN_TXS, address);
     }
-
-
-    private LiveData<PagedList<SimpleTxItem>> getEthTxsListFromResult(SimpleTxItemResult result) {
-        return result.getItemLiveDataList();
-    }
-
-
-    private LiveData<PagedList<SimpleTxItem>> getTokenTxsListFromResult(SimpleTxItemResult result) {
-        return result.getItemLiveDataList();
-    }
-
 
 
     // -------------------------- User Interactions ----------------------------
