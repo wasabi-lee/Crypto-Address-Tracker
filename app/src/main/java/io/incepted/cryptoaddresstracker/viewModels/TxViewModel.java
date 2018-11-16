@@ -7,22 +7,19 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.data.source.callbacks.AddressLocalCallbacks;
-import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSource;
-import io.incepted.cryptoaddresstracker.data.source.txlist.TxListDataSourceFactory;
 import io.incepted.cryptoaddresstracker.network.ConnectivityChecker;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.network.networkModel.transactionListInfo.SimpleTxItemResult;
@@ -42,6 +39,7 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     private LiveData<PagedList<SimpleTxItem>> ethTxList;
     private LiveData<String> networkError;
     private LiveData<Boolean> isLoading;
+    private LiveData<Boolean> itemExists;
 
     public MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     public ObservableField<Address> mAddress = new ObservableField<>();
@@ -68,9 +66,21 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         mTxListRepository = txListRepository;
 
         result = Transformations.map(mAddrValue, input -> loadTransactions(input, mTokenAddress.get()));
-        ethTxList = Transformations.switchMap(result, SimpleTxItemResult::getItemLiveDataList);
+        ethTxList = Transformations.switchMap(result, new Function<SimpleTxItemResult, LiveData<PagedList<SimpleTxItem>>>() {
+            @Override
+            public LiveData<PagedList<SimpleTxItem>> apply(SimpleTxItemResult input) {
+                Timber.d("Got the result. Extracting the list.");
+                return input.getItemLiveDataList();
+            }
+        });
         networkError = Transformations.switchMap(result, SimpleTxItemResult::getError);
         isLoading = Transformations.switchMap(result, SimpleTxItemResult::getIsLoading);
+        itemExists = Transformations.switchMap(result, new Function<SimpleTxItemResult, LiveData<Boolean>>() {
+            @Override
+            public LiveData<Boolean> apply(SimpleTxItemResult input) {
+                return input.getItemExists();
+            }
+        });
     }
 
     public void start(int addressId, String tokenName, String tokenAddress) {
@@ -138,6 +148,10 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
         return isLoading;
     }
 
+    public LiveData<Boolean> getItemExists() {
+        return itemExists;
+    }
+
     public void setFetchEthTx(boolean fetchEthTx) {
         this.fetchEthTx = fetchEthTx;
     }
@@ -146,8 +160,6 @@ public class TxViewModel extends AndroidViewModel implements AddressLocalCallbac
     @Override
     public void onAddressLoaded(Address address) {
         this.mAddrValue.setValue(address.getAddrValue());
-        Timber.d("hasObservers: " + mAddrValue.hasObservers() + "\n"
-        + "hasActiveObservers: " + mAddrValue.hasActiveObservers());
         this.mAddress.set(address);
         this.mAddress.notifyChange();
         if (ConnectivityChecker.isConnected(getApplication())) {

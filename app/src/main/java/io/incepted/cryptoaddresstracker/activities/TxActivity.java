@@ -16,6 +16,7 @@ import java.util.Objects;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +31,7 @@ import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.utils.SnackbarUtils;
 import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
+import timber.log.Timber;
 
 public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetChangedListener {
 
@@ -96,7 +98,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mAddressId = getIntent().getIntExtra(TX_ADDRESS_ID_EXTRA_KEY, 0);
         mTokenName = getIntent().getStringExtra(TX_TOKEN_NAME_EXTRA_KEY);
         mTokenAddress = getIntent().getStringExtra(TX_TOKEN_ADDRESS_EXTRA_KEY);
-//        mIsContractAddress = getIntent().getBooleanExtra(TX_IS_CONTRACT_ADDRESS_EXTRA_KEY, false);
     }
 
     private void initToolbar() {
@@ -123,7 +124,17 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     private void setupObservers() {
         mViewModel.getOpenTxDetail().observe(this, this::toTxDetailActivity);
 
-        mViewModel.getEthTxList().observe(this, items -> mAdapter.submitList(items));
+        mViewModel.getEthTxList().observe(this, items -> {
+            String addrValue = Objects.requireNonNull(mViewModel.getmAddress().get()).getAddrValue();
+            mAdapter.submitList(items, addrValue);
+        });
+
+        mViewModel.getItemExists().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean integer) {
+                //TODO placeholder needed
+            }
+        });
 
         mViewModel.getIsLoading().observe(this, isLoading ->
                 mProgessBar.setVisibility(isLoading ? View.VISIBLE : View.GONE));
@@ -138,9 +149,8 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
         mTxList.setLayoutManager(new LinearLayoutManager(this));
 
         TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
-        String addrValue = Objects.requireNonNull(mViewModel.mAddress.get()).getAddrValue();
 
-        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, addrValue, listener);
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mTxList.setAdapter(mAdapter);
     }
 
@@ -211,7 +221,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     @Override
     protected void onResume() {
         super.onResume();
-//        mViewModel.start(mAddressId, mTokenName, mTokenAddress, mIsContractAddress);
         mViewModel.start(mAddressId, mTokenName, mTokenAddress);
     }
 

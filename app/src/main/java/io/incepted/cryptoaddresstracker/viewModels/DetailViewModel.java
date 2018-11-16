@@ -9,7 +9,6 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
-import androidx.databinding.ObservableBoolean;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -36,7 +35,6 @@ import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
-import timber.log.Timber;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
         AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener,
@@ -55,10 +53,15 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 
     // ------------------------ TX list live data components ----------------------
+    private LiveData<SimpleTxItemResult> ethTxResult;
+    private LiveData<SimpleTxItemResult> tokenTxResult;
     private LiveData<PagedList<SimpleTxItem>> tokenTxList;
     private LiveData<PagedList<SimpleTxItem>> ethTxList;
     private LiveData<String> ethNetworkError;
     private LiveData<String> tokenNetworkError;
+    private LiveData<Boolean> ethTxExists;
+    private LiveData<Boolean> tokenTxExists;
+
     private MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     private SingleLiveEvent<Boolean> isTokenAddress = new SingleLiveEvent<>();
 
@@ -68,8 +71,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     public ObservableField<CurrentPrice> mCurrentPrice = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
     public ObservableField<Boolean> noTokenFound = new ObservableField<>(false);
-    public ObservableBoolean noEthTxFound = new ObservableBoolean(false);
-    public ObservableBoolean noTokenTxFound = new ObservableBoolean(false);
     public ObservableField<Boolean> isLoading = new ObservableField<>();
 
 
@@ -95,13 +96,19 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         mPriceRepository = priceRepository;
         mTxListRepository = txListRepository;
 
-        LiveData<SimpleTxItemResult> ethTxResult = Transformations.map(isTokenAddress, this::getEthTxs);
-        LiveData<SimpleTxItemResult> tokenTxResult = Transformations.map(mAddrValue, this::getTokenTxs);
+        ethTxResult = Transformations.map(isTokenAddress, isTokenAddress -> {
+            if (!isTokenAddress)
+                return loadTransactions(TxListRepository.Type.ETH_TXS, mAddrValue.getValue());
+            else return SimpleTxItemResult.getEmptyInstance();
+        });
+        tokenTxResult = Transformations.map(mAddrValue, address -> loadTransactions(TxListRepository.Type.TOKEN_TXS, address));
 
-        ethTxList = Transformations.switchMap(ethTxResult, this::getEthTxsListFromResult);
-        tokenTxList = Transformations.switchMap(tokenTxResult, this::getTokenTxsListFromResult);
+        ethTxList = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getItemLiveDataList);
+        tokenTxList = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemLiveDataList);
         ethNetworkError = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getError);
         tokenNetworkError = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getError);
+        ethTxExists = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getItemExists);
+        tokenTxExists = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemExists);
     }
 
 
@@ -144,7 +151,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         // since the ERC-20 token addresses cannot have external ETH transactions
         if (!isTokenAddress)
             return loadTransactions(TxListRepository.Type.ETH_TXS, mAddrValue.getValue());
-        else return SimpleTxItemResult.getEmptyReference();
+        else return SimpleTxItemResult.getEmptyInstance();
     }
 
 
@@ -413,6 +420,14 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public SingleLiveEvent<Boolean> getIsTokenAddress() {
         return isTokenAddress;
+    }
+
+    public LiveData<Boolean> getEthTxExists() {
+        return ethTxExists;
+    }
+
+    public LiveData<Boolean> getTokenTxExists() {
+        return tokenTxExists;
     }
 
     // ----------------------------- Setters ---------------------------

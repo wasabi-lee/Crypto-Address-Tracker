@@ -24,14 +24,14 @@
             android:fillViewport="true" />
 
         <TextView
+            android:id="@+id/tx_eth_no_tx_found"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_xxxlarge"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:text="@string/no_ethereum_transactions_found"
-            style="@style/TextSecondaryMediumSemiBoldAppearance"
-            android:visibility="@{viewmodel.noEthTxFound ? View.VISIBLE : View.GONE}"/>
+            style="@style/TextSecondaryMediumSemiBoldAppearance"/>
 
     </FrameLayout>
 

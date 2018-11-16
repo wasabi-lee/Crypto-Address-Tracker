@@ -3,6 +3,7 @@ package io.incepted.cryptoaddresstracker.data.source.txlist;
 import android.annotation.SuppressLint;
 
 import java.util.Date;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -29,6 +30,7 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
 
     private MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> itemExists = new MutableLiveData<>();
 
     private TxListRepository.Type type;
     private String address;
@@ -47,11 +49,12 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     @SuppressLint("CheckResult")
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<SimpleTxItem> callback) {
-        Timber.d("Load initial");
+        Timber.d("Type: %s, Load initial", type == TxListRepository.Type.ETH_TXS ? "eth" : "token");
         getNetworkServiceSingle(type, address, tokenAddress, getCurrentTimestamp())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
                 .subscribe(simpleTxItemResult -> {
+                            setItemAvailability(simpleTxItemResult.getItems());
                             callback.onResult(simpleTxItemResult.getItems());
                             isLoading.setValue(false);
                         },
@@ -65,12 +68,14 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     @SuppressLint("CheckResult")
     @Override
     public void loadAfter(@NonNull LoadParams<Long> params, @NonNull LoadCallback<SimpleTxItem> callback) {
-        Timber.d("Load after: %s", params.key);
+        Timber.d("Type: %s, Load after: %s", type == TxListRepository.Type.ETH_TXS ? "eth" : "token", params.key);
         getNetworkServiceSingle(type, address, tokenAddress, params.key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
                 .subscribe(simpleTxItemResult -> {
+//                            Timber.d("LoadAfter: loaded %s items: ", simpleTxItemResult.getItems().size());
+                            setItemAvailability(simpleTxItemResult.getItems());
                             callback.onResult(simpleTxItemResult.getItems());
                             isLoading.setValue(false);
                         },
@@ -86,6 +91,13 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
         return new Date().getTime() / 1000;
     }
 
+
+    private void setItemAvailability(List<SimpleTxItem> items) {
+        // don't explicitly set the value if the Livedata value is already true
+        if (itemExists.getValue() == null || !itemExists.getValue()) {
+            itemExists.setValue(items.size() != 0);
+        }
+    }
 
     private Single<SimpleTxItemResult> getNetworkServiceSingle(TxListRepository.Type type,
                                                                String address,
@@ -123,7 +135,7 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
 
     @Override
     public void loadBefore(@NonNull LoadParams<Long> params, @NonNull LoadCallback<SimpleTxItem> callback) {
-        Timber.d("Load before");
+        Timber.d("Type: %s, Load before", type == TxListRepository.Type.ETH_TXS ? "eth" : "token");
     }
 
     @NonNull
@@ -138,5 +150,9 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
 
     public MutableLiveData<Boolean> getIsLoading() {
         return isLoading;
+    }
+
+    public MutableLiveData<Boolean> getItemExists() {
+        return itemExists;
     }
 }

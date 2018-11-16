@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Objects;
 
@@ -33,6 +34,9 @@ public class TxListEthFragment extends Fragment {
 
     @BindView(R.id.tx_eth_recycler_view)
     RecyclerView mEthTxListView;
+    @BindView(R.id.tx_eth_no_tx_found)
+    TextView mNoTxFound;
+
     private DetailViewModel mViewModel;
 
     private FragmentTxListEthBinding mBinding;
@@ -76,23 +80,20 @@ public class TxListEthFragment extends Fragment {
         mEthTxListView.setLayoutManager(lm);
 
         TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
-        String addrValue = Objects.requireNonNull(mViewModel.mAddress.get()).getAddrValue();
 
-        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, addrValue, listener);
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mEthTxListView.setAdapter(mAdapter);
     }
 
 
     private void setupObservers() {
         mViewModel.getEthTxList().observe(this, simpleTxItems -> {
-                    if (simpleTxItems != null) {
-                        boolean noEthTx = simpleTxItems.size()==0;
-                        Timber.d("NoEthTx: %s", noEthTx);
-                        mViewModel.noEthTxFound.set(noEthTx);
-                    }
-                    mAdapter.submitList(simpleTxItems);
+                    String addrValue = Objects.requireNonNull(mViewModel.mAddress.get().getAddrValue());
+                    mAdapter.submitList(simpleTxItems, addrValue);
                 }
         );
+        mViewModel.getEthTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+
     }
 
 }

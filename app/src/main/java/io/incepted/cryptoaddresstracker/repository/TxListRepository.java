@@ -1,5 +1,6 @@
 package io.incepted.cryptoaddresstracker.repository;
 
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
@@ -41,16 +42,17 @@ public class TxListRepository {
                 TxListDataSource::getErrorMessage);
         LiveData<Boolean> isLoading = Transformations.switchMap(factory.getDataSourceLiveData(),
                 TxListDataSource::getIsLoading);
+        LiveData<Boolean> itemExists = Transformations.switchMap(factory.getDataSourceLiveData(), input -> input.getItemExists());
 
         PagedList.Config pagedListConfig = (new PagedList.Config.Builder())
                 .setEnablePlaceholders(false)
                 .setPageSize(TxListDataSource.PAGE_SIZE)
                 .build();
 
-        LiveData<PagedList<SimpleTxItem>> data =  new LivePagedListBuilder<>(factory, pagedListConfig)
+        LiveData<PagedList<SimpleTxItem>> data = new LivePagedListBuilder<>(factory, pagedListConfig)
                 .build();
 
-        return new SimpleTxItemResult(data, networkError, isLoading);
+        return new SimpleTxItemResult(data, networkError, isLoading, itemExists);
     }
 
 

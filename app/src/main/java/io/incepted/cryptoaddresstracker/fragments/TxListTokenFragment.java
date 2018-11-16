@@ -10,26 +10,23 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.Objects;
 
 import androidx.lifecycle.Observer;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
-import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
 import io.incepted.cryptoaddresstracker.databinding.FragmentTxListTokenBinding;
 import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
-import timber.log.Timber;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,6 +38,8 @@ public class TxListTokenFragment extends Fragment {
 
     @BindView(R.id.tx_token_recycler_view)
     RecyclerView mTokenTxListView;
+    @BindView(R.id.tx_token_no_tx_found)
+    TextView mNoTxFound;
 
     public TxListTokenFragment() {
         // Required empty public constructor
@@ -80,22 +79,19 @@ public class TxListTokenFragment extends Fragment {
         mTokenTxListView.setLayoutManager(lm);
 
         TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
-//        String addrValue = Objects.requireNonNull(mViewModel.mAddress.get()).getAddrValue();
 
-        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, "", listener);
+        mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mTokenTxListView.setAdapter(mAdapter);
     }
 
     private void setupObservers() {
         mViewModel.getTokenTxList().observe(this, simpleTxItems -> {
-                    if (simpleTxItems != null) {
-                        boolean noTokenTx = simpleTxItems.size()==0;
-                        Timber.d("NoTokenTx: %s", noTokenTx);
-                        mViewModel.noTokenTxFound.set(noTokenTx);
-                    }
-                    mAdapter.submitList(simpleTxItems);
+                    String addrValue = Objects.requireNonNull(mViewModel.mAddress.get().getAddrValue());
+                    mAdapter.submitList(simpleTxItems, addrValue);
                 }
         );
+
+        mViewModel.getTokenTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
     }
 
 }
