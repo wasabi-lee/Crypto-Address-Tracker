@@ -16,8 +16,11 @@ import io.incepted.cryptoaddresstracker.repository.TxListRepository;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.MainViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.NewAddressViewModel;
+import io.incepted.cryptoaddresstracker.viewModels.OverviewViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TokenTransferViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TxDetailViewModel;
+import io.incepted.cryptoaddresstracker.viewModels.TxListEthViewModel;
+import io.incepted.cryptoaddresstracker.viewModels.TxListTokenViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TxScanViewModel;
 import io.incepted.cryptoaddresstracker.viewModels.TxViewModel;
 
@@ -74,6 +77,15 @@ public class ViewModelFactory extends ViewModelProvider.NewInstanceFactory {
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             //noinspection unchecked
             return (T) new DetailViewModel(mApplication, mAddressRepository, mPriceRepository, mTxListRepository);
+        } else if (modelClass.isAssignableFrom(OverviewViewModel.class)) {
+            //noinspection unchecked
+            return (T) new OverviewViewModel(mApplication, mAddressRepository, mPriceRepository);
+        } else if (modelClass.isAssignableFrom(TxListEthViewModel.class)) {
+            //noinspection unchecked
+            return (T) new TxListEthViewModel(mApplication, mTxListRepository);
+        } else if (modelClass.isAssignableFrom(TxListTokenViewModel.class)) {
+            //noinspection unchecked
+            return (T) new TxListTokenViewModel(mApplication, mTxListRepository);
         } else if (modelClass.isAssignableFrom(TxViewModel.class)) {
             //noinspection unchecked
             return (T) new TxViewModel(mApplication, mAddressRepository, mTxListRepository);

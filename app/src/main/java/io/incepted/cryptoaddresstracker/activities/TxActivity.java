@@ -39,7 +39,6 @@ public class TxActivity extends BaseActivity implements AppBarLayout.OnOffsetCha
     public static final String TX_ADDRESS_ID_EXTRA_KEY = "tx_address_id_extra_key";
     public static final String TX_TOKEN_NAME_EXTRA_KEY = "tx_token_name_extra_key";
     public static final String TX_TOKEN_ADDRESS_EXTRA_KEY = "tx_token_address_extra_key";
-    public static final String TX_IS_CONTRACT_ADDRESS_EXTRA_KEY = "tx_is_contract_address_extra_key";
 
     private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR = 0.6f;
     private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS = 0.3f;
