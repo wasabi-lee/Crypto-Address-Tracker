@@ -36,10 +36,10 @@ import io.incepted.cryptoaddresstracker.utils.CopyUtils;
 import io.incepted.cryptoaddresstracker.utils.CurrencyUtils;
 import io.incepted.cryptoaddresstracker.utils.SharedPreferenceHelper;
 import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
+import timber.log.Timber;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
-        AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener,
-        AddressRemoteCallbacks.DetailAddressInfoListener {
+        AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener {
 
 
     private int mAddressId;
@@ -48,28 +48,21 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     // ------------------------ Repositories ---------------------------
     private AddressRepository mAddressRepository;
-    private PriceRepository mPriceRepository;
     private TxListRepository mTxListRepository;
 
 
     // ------------------------ TX list live data components ----------------------
-    private LiveData<SimpleTxItemResult> ethTxResult;
     private LiveData<SimpleTxItemResult> tokenTxResult;
     private LiveData<PagedList<SimpleTxItem>> tokenTxList;
-    private LiveData<PagedList<SimpleTxItem>> ethTxList;
-    private LiveData<String> ethNetworkError;
     private LiveData<String> tokenNetworkError;
-    private LiveData<Boolean> ethTxExists;
     private LiveData<Boolean> tokenTxExists;
 
     private MutableLiveData<String> mAddrValue = new MutableLiveData<>();
-    private SingleLiveEvent<Boolean> isTokenAddress = new SingleLiveEvent<>();
+    private MutableLiveData<Boolean> isTokenAddress = new MutableLiveData<>();
 
 
     // ------------------------ ObservableFields for databinding ----------------------
     public ObservableField<Address> mAddress = new ObservableField<>();
-    public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
-    public ObservableField<Boolean> noTokenFound = new ObservableField<>(false);
     public ObservableField<Boolean> isLoading = new ObservableField<>();
 
 
@@ -78,7 +71,7 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
     private SingleLiveEvent<TxExtraWrapper> mOpenTokenTransactions = new SingleLiveEvent<>();
     private SingleLiveEvent<String> mOpenTxDetailActivity = new SingleLiveEvent<>();
-    private SingleLiveEvent<Address> addressSLE = new SingleLiveEvent<>();
+    private MutableLiveData<Address> addressSLE = new MutableLiveData<>();
 
     // ------------------------- etc ------------------------------------
     private SingleLiveEvent<DeletionStateNavigator> mDeletionState = new SingleLiveEvent<>();
@@ -91,17 +84,12 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
                            @NonNull TxListRepository txListRepository) {
         super(application);
         mAddressRepository = addressRepository;
-        mPriceRepository = priceRepository;
         mTxListRepository = txListRepository;
 
-        ethTxResult = Transformations.map(isTokenAddress, this::getEthTxs);
         tokenTxResult = Transformations.map(mAddrValue, this::getTokenTxs);
 
-        ethTxList = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getItemLiveDataList);
         tokenTxList = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemLiveDataList);
-        ethNetworkError = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getError);
         tokenNetworkError = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getError);
-        ethTxExists = Transformations.switchMap(ethTxResult, SimpleTxItemResult::getItemExists);
         tokenTxExists = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemExists);
     }
 
@@ -122,18 +110,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     private SimpleTxItemResult loadTransactions(TxListRepository.Type type, String address) {
         return mTxListRepository.getTxs(type, address, address);
-    }
-
-
-    private SimpleTxItemResult getEthTxs(Boolean isTokenAddress) {
-        // For ETH transactions, boolean isTokenAddress works as a trigger of a SwitchMap,
-        // which means we trigger the loadTransaction() method ONLY when we know
-        // if the address we're looking at is a token address or not.
-        // We determine whether to call loadTransactions() or not by the isTokenAddress value
-        // since the ERC-20 token addresses cannot have external ETH transactions
-        if (!isTokenAddress)
-            return loadTransactions(TxListRepository.Type.ETH_TXS, mAddrValue.getValue());
-        else return SimpleTxItemResult.getEmptyInstance();
     }
 
 
@@ -194,30 +170,26 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     @Override
     public void onAddressLoaded(Address address) {
 
-        addressSLE.setValue(address);
-
         if (shouldUpdateAddrName) {
             // Retrieving the updated address name only.
             // Do not trigger API call because we want to just update the name alone.
             updateNameChangeToView(address);
         } else {
+            addressSLE.setValue(address);
+
             // Notifying databinding layout the data change first
             mAddress.set(address);
             mAddress.notifyChange();
 
             // This triggers the tokenTxResult SwitchMap call
             mAddrValue.setValue(address.getAddrValue());
-
-            // Network call after
-            mAddressRepository.fetchDetailedAddressInfo(address.getAddrValue(),
-                    this);
         }
     }
 
 
     @Override
     public void onAddressNotAvailable() {
-        mSnackbarTextResource.setValue(R.string.address_loading_error);
+        handleError();
     }
 
 
@@ -243,95 +215,17 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     public void onDeletionNotAvailable() {
         isLoading.set(false);
         mDeletionState.setValue(DeletionStateNavigator.DELETION_FAILED);
-        mSnackbarTextResource.setValue(R.string.unexpected_error);
+        handleError();
     }
 
-
-    // -------- RemoteAddressInfo fetch callbacks (network) -----------
-    @Override
-    public void onCallReady() {
-        /* empty */
-    }
-
-
-    @Override
-    public void onRemoteAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo) {
-        updateViews(remoteAddressInfo);
-    }
-
-
-    @Override
-    public void onDataNotAvailable(Throwable throwable) {
-        isLoading.set(false);
-        handleError(throwable);
-    }
 
 
     // ---------------------------------------- UI update ---------------------------------------
 
-    public void updateViews(RemoteAddressInfo remoteAddressInfo) {
-        if (remoteAddressInfo.isError()) {
-            getSnackbarText().setValue(remoteAddressInfo.getError().getMessage());
-            isLoading.set(false);
-            return;
-        }
-        realignTokenList(remoteAddressInfo);
-        updateTokenList(remoteAddressInfo.getTokens());
-        updateAddressInfo(remoteAddressInfo);
 
-        boolean tokenAddress = remoteAddressInfo.isTokenAddress();
-        isTokenAddress.setValue(tokenAddress);
-        isLoading.set(false);
+    private void handleError() {
+        getSnackbarTextResource().setValue(R.string.unexpected_error);
     }
-
-
-    private void realignTokenList(RemoteAddressInfo remoteAddressInfo) {
-        ArrayList<Token> tokens = new ArrayList<>();
-        attachEthObject(tokens, remoteAddressInfo);
-        if (remoteAddressInfo.getTokens() != null) {
-            sortTokenList(remoteAddressInfo.getTokens());
-            tokens.addAll(remoteAddressInfo.getTokens());
-        }
-        remoteAddressInfo.setTokens(tokens);
-    }
-
-
-    private void attachEthObject(ArrayList<Token> tokens, RemoteAddressInfo
-            remoteAddressInfo) {
-        Double ethBalance = remoteAddressInfo.getEthBalanceInfo().getBalance();
-
-        // don't attach ETH object if the eth balance is 0.
-        if (ethBalance == 0)
-            return;
-        Token eth = new Token();
-        eth.convertToEthObject(ethBalance);
-        tokens.add(eth);
-    }
-
-
-    private void sortTokenList(List<Token> tokens) {
-        if (tokens != null)
-            Collections.sort(tokens, (obj1, obj2) ->
-                    obj1.getTokenInfo().getName()
-                            .compareToIgnoreCase(obj2.getTokenInfo().getName()));
-    }
-
-
-    private void updateTokenList(List<Token> tokens) {
-        if (tokens.size() == 0)
-            noTokenFound.set(true);
-        mTokens.clear();
-        mTokens.addAll(tokens);
-    }
-
-
-    private void updateAddressInfo(RemoteAddressInfo remoteAddressInfo) {
-        Address updatedAddress = mAddress.get();
-        updatedAddress.setRemoteAddressInfo(remoteAddressInfo);
-        mAddress.set(updatedAddress);
-        mAddress.notifyChange();
-    }
-
 
     private void handleError(Throwable throwable) {
         throwable.printStackTrace();
@@ -364,31 +258,19 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         return tokenTxList;
     }
 
-    public LiveData<PagedList<SimpleTxItem>> getEthTxList() {
-        return ethTxList;
-    }
-
-    public LiveData<String> getEthNetworkError() {
-        return ethNetworkError;
-    }
-
     public LiveData<String> getTokenNetworkError() {
         return tokenNetworkError;
     }
 
-    public SingleLiveEvent<Boolean> getIsTokenAddress() {
+    public MutableLiveData<Boolean> getIsTokenAddress() {
         return isTokenAddress;
-    }
-
-    public LiveData<Boolean> getEthTxExists() {
-        return ethTxExists;
     }
 
     public LiveData<Boolean> getTokenTxExists() {
         return tokenTxExists;
     }
 
-    public SingleLiveEvent<Address> getAddressSLE() {
+    public MutableLiveData<Address> getAddressSLE() {
         return addressSLE;
     }
 

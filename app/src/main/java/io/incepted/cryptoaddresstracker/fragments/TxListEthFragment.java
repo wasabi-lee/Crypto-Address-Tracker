@@ -63,8 +63,8 @@ public class TxListEthFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setupRecyclerView();
         setupObservers();
+        setupRecyclerView();
     }
 
 
@@ -81,7 +81,8 @@ public class TxListEthFragment extends Fragment {
         mEthTxListView.setItemAnimator(new DefaultItemAnimator());
         mEthTxListView.setLayoutManager(lm);
 
-        TxItemActionListener listener = transactionHash -> mSharedViewModel.toTxDetailActivity(transactionHash);
+        TxItemActionListener listener
+                = transactionHash -> mSharedViewModel.toTxDetailActivity(transactionHash);
 
         mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mEthTxListView.setAdapter(mAdapter);
@@ -89,13 +90,29 @@ public class TxListEthFragment extends Fragment {
 
 
     private void setupObservers() {
-        mSharedViewModel.getEthTxList().observe(this, simpleTxItems -> {
-                    String addrValue = Objects.requireNonNull(mSharedViewModel.mAddress.get().getAddrValue());
-                    mAdapter.submitList(simpleTxItems, addrValue);
+
+        mSharedViewModel.getAddressSLE().observe(this, address ->
+                mViewModel.getAddressValue().setValue(address.getAddrValue()));
+
+        mSharedViewModel.getIsTokenAddress().observe(this, isTokenAddress ->
+        mViewModel.getIsTokenAddress().setValue(isTokenAddress));
+
+        mViewModel.getEthTxList().observe(this, simpleTxItems -> {
+                    try {
+                        String addrValue = Objects.requireNonNull(mViewModel.getAddressValueStr());
+                        mAdapter.submitList(simpleTxItems, addrValue);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        mViewModel.getSnackbarTextRes().setValue(R.string.unexpected_error);
+                    }
                 }
         );
-        mSharedViewModel.getEthTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
 
+        mViewModel.getEthTxExists().observe(this, txExists ->
+                mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+
+        mViewModel.getNetworkError().observe(this, error ->
+                mViewModel.getSnackbarTextRes().setValue(R.string.error_network));
     }
 
 }

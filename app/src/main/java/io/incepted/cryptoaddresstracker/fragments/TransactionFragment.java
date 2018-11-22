@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -14,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
@@ -33,7 +31,7 @@ public class TransactionFragment extends Fragment {
     private static final String ETH_FRAG_TAG = "eth_frag_tag";
     private static final String TOKEN_FRAG_TAG = "token_frag_tag";
 
-    private DetailViewModel mViewModel;
+    private DetailViewModel mSharedViewModel;
     private FragmentTransactionBinding mBinding;
 
     @BindView(R.id.tx_frag_type_toggle_switch)
@@ -58,8 +56,8 @@ public class TransactionFragment extends Fragment {
             mBinding = FragmentTransactionBinding.bind(view);
         }
 
-        mViewModel = DetailActivity.obtainViewModel(getActivity());
-        mBinding.setViewmodel(mViewModel);
+        mSharedViewModel = DetailActivity.obtainViewModel(getActivity());
+        mBinding.setViewmodel(mSharedViewModel);
 
         setRetainInstance(false);
 
@@ -72,23 +70,25 @@ public class TransactionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TxListTokenFragment tokenFragment = new TxListTokenFragment();
-        TxListEthFragment ethFragment = new TxListEthFragment();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.tx_frag_child_frag_container, ethFragment, ETH_FRAG_TAG);
-        transaction.add(R.id.tx_frag_child_frag_container, tokenFragment, TOKEN_FRAG_TAG);
-        transaction.hide(tokenFragment);
-        transaction.show(ethFragment);
-        transaction.commit();
-        mSwitchDescription.setText(getText(R.string.latest_eth_transactions));
 
+        if (savedInstanceState == null) {
+            TxListTokenFragment tokenFragment = new TxListTokenFragment();
+            TxListEthFragment ethFragment = new TxListEthFragment();
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.add(R.id.tx_frag_child_frag_container, ethFragment, ETH_FRAG_TAG);
+            transaction.add(R.id.tx_frag_child_frag_container, tokenFragment, TOKEN_FRAG_TAG);
+            transaction.hide(tokenFragment);
+            transaction.show(ethFragment);
+            transaction.commit();
+        }
+        mSwitchDescription.setText(getText(R.string.latest_eth_transactions));
         setupObservers();
 
     }
 
 
     private void setupObservers() {
-        mViewModel.getIsTokenAddress().observe(this, isTokenAddress -> {
+        mSharedViewModel.getIsTokenAddress().observe(this, isTokenAddress -> {
                 mSwitch.setChecked(!isTokenAddress);
                 mSwitch.setEnabled(!isTokenAddress);
         });

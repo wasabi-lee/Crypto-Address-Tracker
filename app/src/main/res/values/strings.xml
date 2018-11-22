@@ -98,4 +98,5 @@
     <string name="no_transaction_found">No Transaction found</string>
 
     <string name="error_loading_price">The current price is not loaded</string>
+    <string name="error_network">Network error occurred. Please try again later!</string>
 </resources>

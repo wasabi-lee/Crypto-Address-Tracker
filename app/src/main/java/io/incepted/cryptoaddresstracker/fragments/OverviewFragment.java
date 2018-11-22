@@ -81,11 +81,16 @@ public class OverviewFragment extends Fragment {
 
     private void setupObservers() {
         mSharedViewModel.getAddressSLE().observe(this, address -> {
-            mViewModel.setAddress(address);
-            mViewModel.loadCurrentPrice();
+            mViewModel.loadDataFromNetwork(address);
+        });
+
+        mViewModel.getIsTokenAddress().observe(this, isTokenAddress -> {
+            mSharedViewModel.getIsTokenAddress().setValue(isTokenAddress);
         });
 
         mViewModel.getSnackbarTextRes().observe(this, textId -> mSharedViewModel.getSnackbarTextResource().setValue(textId));
+
+        mViewModel.getSnackbarText().observe(this, text -> mSharedViewModel.getSnackbarText().setValue(text));
     }
 
 

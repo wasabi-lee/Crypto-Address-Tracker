@@ -159,9 +159,6 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
                 }
         });
 
-        mViewModel.getEthNetworkError().observe(this, this::showSnackbar);
-
-        mViewModel.getTokenNetworkError().observe(this, this::showSnackbar);
     }
 
 

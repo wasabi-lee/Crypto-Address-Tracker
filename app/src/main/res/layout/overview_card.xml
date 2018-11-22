@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -11,17 +11,17 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        app:cardCornerRadius="@dimen/card_small_radius"
-        app:cardElevation="@dimen/card_xsmall_elevation"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/spacing_normal"
         android:layout_marginRight="@dimen/spacing_normal"
-        android:layout_marginBottom="@dimen/spacing_normal">
+        android:layout_marginBottom="@dimen/spacing_normal"
+        app:cardCornerRadius="@dimen/card_small_radius"
+        app:cardElevation="@dimen/card_xsmall_elevation">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:padding="@dimen/spacing_normal">
 
 
@@ -39,9 +39,9 @@
                     style="@style/TextMediumLargeBoldAppearance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent" />
+                    android:textColor="@color/colorAccent"
+                    app:double_text="@{viewmodel.mAddress.get().remoteAddressInfo.ethBalanceInfo.balance}" />
 
-                <!--app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.balance}"-->
 
                 <TextView
                     android:id="@+id/overview_frag_balance_unit"
@@ -53,97 +53,95 @@
             </LinearLayout>
 
             <TextView
-                style="@style/TextSecondaryAppearance"
                 android:id="@+id/overview_frag_basecurrency_value"
-                android:layout_height="wrap_content"
+                style="@style/TextSecondaryAppearance"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:base_currency_price="@{viewmodel.mCurrentPrice.get().price}"
                 app:base_currency_symbol="@{viewmodel.mCurrentPrice.get().tsym}"
-                app:eth_balance="@{viewmodel.mCurrentPrice.get().price}"
+                app:eth_balance="@{viewmodel.mAddress.get().remoteAddressInfo.ethBalanceInfo.balance}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/overview_frag_balance_container" />
 
-            <!--app:eth_balance="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.balance}"-->
 
             <TextView
-                style="@style/TextSecondaryAppearance"
                 android:id="@+id/overview_frag_basecurrency_rate"
-                android:layout_height="wrap_content"
+                style="@style/TextSecondaryAppearance"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="@{`(1 ETH = ` + viewmodel.mCurrentPrice.get().formattedPriceAndSymbol + `)`}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/overview_frag_basecurrency_value" />
 
             <View
-                android:background="@color/text_color_secondary_gray"
                 android:id="@+id/view"
+                android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="@dimen/spacing_normal"
-                android:layout_width="match_parent"
+                android:background="@color/text_color_secondary_gray"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/overview_frag_basecurrency_rate" />
 
             <TextView
-                style="@style/TextMediumRegularAppearance"
                 android:id="@+id/overview_frag_total_received_dummy"
+                style="@style/TextMediumRegularAppearance"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_normal"
-                android:layout_width="wrap_content"
                 android:text="@string/total_received"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/view" />
 
             <TextView
-                style="@style/TextMediumRegularAppearance"
                 android:id="@+id/overview_frag_total_sent_dummy"
+                style="@style/TextMediumRegularAppearance"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xsmall"
-                android:layout_width="wrap_content"
                 android:text="@string/total_sent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/overview_frag_total_received_dummy" />
 
             <TextView
-                style="@style/TextMediumRegularAppearance"
                 android:id="@+id/overview_frag_total_txs"
+                style="@style/TextMediumRegularAppearance"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xsmall"
-                android:layout_width="wrap_content"
                 android:text="@string/of_transactions"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/overview_frag_total_sent_dummy" />
 
             <TextView
-                style="@style/TextMediumSemiBoldAppearance"
                 android:id="@+id/overview_frag_total_received"
-                android:layout_height="wrap_content"
+                style="@style/TextMediumSemiBoldAppearance"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:double_text="@{viewmodel.mAddress.get().remoteAddressInfo.ethBalanceInfo.totalIn}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/overview_frag_total_received_dummy" />
-            <!--app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalIn}"-->
 
 
             <TextView
-                style="@style/TextMediumSemiBoldAppearance"
                 android:id="@+id/overview_frag_total_sent"
-                android:layout_height="wrap_content"
+                style="@style/TextMediumSemiBoldAppearance"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:double_text="@{viewmodel.mAddress.get().remoteAddressInfo.ethBalanceInfo.totalOut}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/overview_frag_total_sent_dummy" />
-            <!--app:double_text="@{viewmodel.mAddress.remoteAddressInfo.ethBalanceInfo.totalOut}"-->
 
 
             <TextView
-                style="@style/TextMediumSemiBoldAppearance"
                 android:id="@+id/overview_frag_total"
-                android:layout_height="wrap_content"
+                style="@style/TextMediumSemiBoldAppearance"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:double_text="@{viewmodel.mAddress.get().remoteAddressInfo.countTxs}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/overview_frag_total_txs" />
-            <!--app:double_text="@{viewmodel.mAddress.remoteAddressInfo.countTxs}"-->
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
