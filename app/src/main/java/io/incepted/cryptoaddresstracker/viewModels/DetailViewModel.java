@@ -48,14 +48,9 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     // ------------------------ Repositories ---------------------------
     private AddressRepository mAddressRepository;
-    private TxListRepository mTxListRepository;
 
 
     // ------------------------ TX list live data components ----------------------
-    private LiveData<SimpleTxItemResult> tokenTxResult;
-    private LiveData<PagedList<SimpleTxItem>> tokenTxList;
-    private LiveData<String> tokenNetworkError;
-    private LiveData<Boolean> tokenTxExists;
 
     private MutableLiveData<String> mAddrValue = new MutableLiveData<>();
     private MutableLiveData<Boolean> isTokenAddress = new MutableLiveData<>();
@@ -79,18 +74,9 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
 
     public DetailViewModel(@NonNull Application application,
-                           @NonNull AddressRepository addressRepository,
-                           @NonNull PriceRepository priceRepository,
-                           @NonNull TxListRepository txListRepository) {
+                           @NonNull AddressRepository addressRepository) {
         super(application);
         mAddressRepository = addressRepository;
-        mTxListRepository = txListRepository;
-
-        tokenTxResult = Transformations.map(mAddrValue, this::getTokenTxs);
-
-        tokenTxList = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemLiveDataList);
-        tokenNetworkError = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getError);
-        tokenTxExists = Transformations.switchMap(tokenTxResult, SimpleTxItemResult::getItemExists);
     }
 
 
@@ -105,16 +91,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     private void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         mAddressRepository.getAddress(addressId, this);
-    }
-
-
-    private SimpleTxItemResult loadTransactions(TxListRepository.Type type, String address) {
-        return mTxListRepository.getTxs(type, address, address);
-    }
-
-
-    private SimpleTxItemResult getTokenTxs(String address) {
-        return loadTransactions(TxListRepository.Type.TOKEN_TXS, address);
     }
 
 
@@ -250,24 +226,12 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         return mOpenTokenTransactions;
     }
 
-    public SingleLiveEvent<String> getOpenTxDetailActivity() {
-        return mOpenTxDetailActivity;
-    }
-
-    public LiveData<PagedList<SimpleTxItem>> getTokenTxList() {
-        return tokenTxList;
-    }
-
-    public LiveData<String> getTokenNetworkError() {
-        return tokenNetworkError;
-    }
-
     public MutableLiveData<Boolean> getIsTokenAddress() {
         return isTokenAddress;
     }
 
-    public LiveData<Boolean> getTokenTxExists() {
-        return tokenTxExists;
+    public SingleLiveEvent<String> getOpenTxDetailActivity() {
+        return mOpenTxDetailActivity;
     }
 
     public MutableLiveData<Address> getAddressSLE() {

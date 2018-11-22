@@ -92,13 +92,26 @@ public class TxListTokenFragment extends Fragment {
 
 
     private void setupObservers() {
-        mSharedViewModel.getTokenTxList().observe(this, simpleTxItems -> {
-                    String addrValue = Objects.requireNonNull(mSharedViewModel.mAddress.get().getAddrValue());
-                    mAdapter.submitList(simpleTxItems, addrValue);
+
+        mSharedViewModel.getAddressSLE().observe(this, address -> {
+            mViewModel.getAddressValue().setValue(address.getAddrValue());
+        });
+
+        mViewModel.getTokenTxList().observe(this, simpleTxItems -> {
+                    try {
+                        String addrValue = Objects.requireNonNull(mViewModel.getAddressValueStr());
+                        mAdapter.submitList(simpleTxItems, addrValue);
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        mViewModel.getSnackbarTextRes().setValue(R.string.unexpected_error);
+                    }
                 }
         );
 
-        mSharedViewModel.getTokenTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+        mViewModel.getTokenTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+
+        mViewModel.getTokenNetworkError().observe(this, error ->
+                mSharedViewModel.getSnackbarText().setValue(error));
     }
 
 }
