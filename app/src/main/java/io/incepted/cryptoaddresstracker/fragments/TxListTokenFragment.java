@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,17 +23,18 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
-import io.incepted.cryptoaddresstracker.databinding.FragmentTxListTokenBinding;
 import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
+import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
+import io.incepted.cryptoaddresstracker.viewModels.TxListTokenViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class TxListTokenFragment extends Fragment {
-    private FragmentTxListTokenBinding mBinding;
-    private DetailViewModel mViewModel;
+    private DetailViewModel mSharedViewModel;
+    private TxListTokenViewModel mViewModel;
     private TxAdapter mAdapter;
 
     @BindView(R.id.tx_token_recycler_view)
@@ -52,17 +53,15 @@ public class TxListTokenFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tx_list_token, container, false);
         ButterKnife.bind(this, view);
 
-        if (mBinding == null) {
-            mBinding = FragmentTxListTokenBinding.bind(view);
-        }
 
-        mViewModel = DetailActivity.obtainViewModel(getActivity());
-        mBinding.setViewmodel(mViewModel);
+        mSharedViewModel = DetailActivity.obtainViewModel(getActivity());
+        mViewModel = obtainViewModel(this);
 
         setRetainInstance(false);
 
-        return mBinding.getRoot();
+        return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -71,6 +70,13 @@ public class TxListTokenFragment extends Fragment {
         setupObservers();
     }
 
+
+    private TxListTokenViewModel obtainViewModel(Fragment fragment) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(fragment.getActivity().getApplication());
+        return ViewModelProviders.of(fragment, factory).get(TxListTokenViewModel.class);
+    }
+
+
     private void setupRecyclerView() {
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
         mTokenTxListView.setHasFixedSize(true);
@@ -78,20 +84,21 @@ public class TxListTokenFragment extends Fragment {
         mTokenTxListView.setItemAnimator(new DefaultItemAnimator());
         mTokenTxListView.setLayoutManager(lm);
 
-        TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
+        TxItemActionListener listener = transactionHash -> mSharedViewModel.toTxDetailActivity(transactionHash);
 
         mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mTokenTxListView.setAdapter(mAdapter);
     }
 
+
     private void setupObservers() {
-        mViewModel.getTokenTxList().observe(this, simpleTxItems -> {
-                    String addrValue = Objects.requireNonNull(mViewModel.mAddress.get().getAddrValue());
+        mSharedViewModel.getTokenTxList().observe(this, simpleTxItems -> {
+                    String addrValue = Objects.requireNonNull(mSharedViewModel.mAddress.get().getAddrValue());
                     mAdapter.submitList(simpleTxItems, addrValue);
                 }
         );
 
-        mViewModel.getTokenTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+        mSharedViewModel.getTokenTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
     }
 
 }

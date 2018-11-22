@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
 
-    <data>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.TxListEthFragment">
 
-        <import type="android.view.View" />
-
-        <variable
-            name="viewmodel"
-            type="io.incepted.cryptoaddresstracker.viewModels.DetailViewModel" />
-    </data>
-
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tx_eth_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.TxListEthFragment">
+        android:fillViewport="true" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tx_eth_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true" />
+    <TextView
+        android:id="@+id/tx_eth_no_tx_found"
+        style="@style/TextSecondaryMediumSemiBoldAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/spacing_xxxlarge"
+        android:gravity="center"
+        android:text="@string/no_ethereum_transactions_found" />
 
-        <TextView
-            android:id="@+id/tx_eth_no_tx_found"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/spacing_xxxlarge"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:text="@string/no_ethereum_transactions_found"
-            style="@style/TextSecondaryMediumSemiBoldAppearance"/>
+</FrameLayout>
 
-    </FrameLayout>
-
-</layout>

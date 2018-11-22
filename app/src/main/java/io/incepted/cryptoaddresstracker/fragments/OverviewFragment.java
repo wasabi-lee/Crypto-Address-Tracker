@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,8 +20,11 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TokenAdapter;
+import io.incepted.cryptoaddresstracker.data.model.Address;
 import io.incepted.cryptoaddresstracker.databinding.FragmentOverviewBinding;
+import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
+import io.incepted.cryptoaddresstracker.viewModels.OverviewViewModel;
 
 
 /**
@@ -27,9 +32,8 @@ import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
  */
 public class OverviewFragment extends Fragment {
 
-    private static final String TAG = OverviewFragment.class.getSimpleName();
-
-    private DetailViewModel mViewModel;
+    private DetailViewModel mSharedViewModel;
+    private OverviewViewModel mViewModel;
     private FragmentOverviewBinding mBinding;
 
     @BindView(R.id.overview_frag_token_recycler_view)
@@ -51,7 +55,8 @@ public class OverviewFragment extends Fragment {
             mBinding = FragmentOverviewBinding.bind(view);
         }
 
-        mViewModel = DetailActivity.obtainViewModel(getActivity());
+        mSharedViewModel = DetailActivity.obtainViewModel(getActivity());
+        mViewModel = obtainViewModel(this);
         mBinding.setViewmodel(mViewModel);
 
         setRetainInstance(false);
@@ -59,11 +64,30 @@ public class OverviewFragment extends Fragment {
         return mBinding.getRoot();
     }
 
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setupObservers();
         setupRecyclerView();
     }
+
+
+    private OverviewViewModel obtainViewModel(Fragment fragment) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(fragment.getActivity().getApplication());
+        return ViewModelProviders.of(fragment, factory).get(OverviewViewModel.class);
+    }
+
+
+    private void setupObservers() {
+        mSharedViewModel.getAddressSLE().observe(this, address -> {
+            mViewModel.setAddress(address);
+            mViewModel.loadCurrentPrice();
+        });
+
+        mViewModel.getSnackbarTextRes().observe(this, textId -> mSharedViewModel.getSnackbarTextResource().setValue(textId));
+    }
+
 
     private void setupRecyclerView() {
         LinearLayoutManager lm = new LinearLayoutManager(getContext());
@@ -73,7 +97,7 @@ public class OverviewFragment extends Fragment {
         mTokenListView.setLayoutManager(lm);
         mTokenListView.addItemDecoration(new DividerItemDecoration(getContext(), lm.getOrientation()));
 
-        TokenAdapter adapter = new TokenAdapter(mViewModel);
+        TokenAdapter adapter = new TokenAdapter(mSharedViewModel);
         mTokenListView.setAdapter(adapter);
     }
 

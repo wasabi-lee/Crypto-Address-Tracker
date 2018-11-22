@@ -13,10 +13,9 @@ import android.widget.TextView;
 
 import java.util.Objects;
 
-import androidx.lifecycle.Observer;
-import androidx.paging.PagedList;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -24,11 +23,11 @@ import butterknife.ButterKnife;
 import io.incepted.cryptoaddresstracker.R;
 import io.incepted.cryptoaddresstracker.activities.DetailActivity;
 import io.incepted.cryptoaddresstracker.adapters.TxAdapter;
-import io.incepted.cryptoaddresstracker.databinding.FragmentTxListEthBinding;
 import io.incepted.cryptoaddresstracker.listeners.TxItemActionListener;
 import io.incepted.cryptoaddresstracker.network.deserializer.SimpleTxItem;
+import io.incepted.cryptoaddresstracker.utils.ViewModelFactory;
 import io.incepted.cryptoaddresstracker.viewModels.DetailViewModel;
-import timber.log.Timber;
+import io.incepted.cryptoaddresstracker.viewModels.TxListEthViewModel;
 
 public class TxListEthFragment extends Fragment {
 
@@ -37,9 +36,9 @@ public class TxListEthFragment extends Fragment {
     @BindView(R.id.tx_eth_no_tx_found)
     TextView mNoTxFound;
 
-    private DetailViewModel mViewModel;
+    private DetailViewModel mSharedViewModel;
+    private TxListEthViewModel mViewModel;
 
-    private FragmentTxListEthBinding mBinding;
     private TxAdapter mAdapter;
 
     public TxListEthFragment() {
@@ -52,23 +51,26 @@ public class TxListEthFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_tx_list_eth, container, false);
         ButterKnife.bind(this, view);
 
-        if (mBinding == null) {
-            mBinding = FragmentTxListEthBinding.bind(view);
-        }
-
-        mViewModel = DetailActivity.obtainViewModel(getActivity());
-        mBinding.setViewmodel(mViewModel);
+        mSharedViewModel = DetailActivity.obtainViewModel(getActivity());
+        mViewModel = obtainViewModel(this);
 
         setRetainInstance(false);
 
-        return mBinding.getRoot();
+        return view;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupRecyclerView();
         setupObservers();
+    }
+
+
+    private TxListEthViewModel obtainViewModel(Fragment fragment) {
+        ViewModelFactory factory = ViewModelFactory.getInstance(fragment.getActivity().getApplication());
+        return ViewModelProviders.of(fragment, factory).get(TxListEthViewModel.class);
     }
 
 
@@ -79,7 +81,7 @@ public class TxListEthFragment extends Fragment {
         mEthTxListView.setItemAnimator(new DefaultItemAnimator());
         mEthTxListView.setLayoutManager(lm);
 
-        TxItemActionListener listener = transactionHash -> mViewModel.toTxDetailActivity(transactionHash);
+        TxItemActionListener listener = transactionHash -> mSharedViewModel.toTxDetailActivity(transactionHash);
 
         mAdapter = new TxAdapter(SimpleTxItem.DIFF_CALLBACK, listener);
         mEthTxListView.setAdapter(mAdapter);
@@ -87,12 +89,12 @@ public class TxListEthFragment extends Fragment {
 
 
     private void setupObservers() {
-        mViewModel.getEthTxList().observe(this, simpleTxItems -> {
-                    String addrValue = Objects.requireNonNull(mViewModel.mAddress.get().getAddrValue());
+        mSharedViewModel.getEthTxList().observe(this, simpleTxItems -> {
+                    String addrValue = Objects.requireNonNull(mSharedViewModel.mAddress.get().getAddrValue());
                     mAdapter.submitList(simpleTxItems, addrValue);
                 }
         );
-        mViewModel.getEthTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
+        mSharedViewModel.getEthTxExists().observe(this, txExists -> mNoTxFound.setVisibility(txExists ? View.GONE : View.VISIBLE));
 
     }
 

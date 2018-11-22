@@ -39,8 +39,7 @@ import io.incepted.cryptoaddresstracker.utils.SingleLiveEvent;
 
 public class DetailViewModel extends AndroidViewModel implements AddressLocalCallbacks.OnAddressLoadedListener,
         AddressLocalCallbacks.OnAddressDeletedListener, AddressLocalCallbacks.OnAddressUpdatedListener,
-        AddressRemoteCallbacks.DetailAddressInfoListener,
-        PriceRepository.OnPriceLoadedListener {
+        AddressRemoteCallbacks.DetailAddressInfoListener {
 
 
     private int mAddressId;
@@ -69,7 +68,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     // ------------------------ ObservableFields for databinding ----------------------
     public ObservableField<Address> mAddress = new ObservableField<>();
-    public ObservableField<CurrentPrice> mCurrentPrice = new ObservableField<>();
     public ObservableArrayList<Token> mTokens = new ObservableArrayList<>();
     public ObservableField<Boolean> noTokenFound = new ObservableField<>(false);
     public ObservableField<Boolean> isLoading = new ObservableField<>();
@@ -80,12 +78,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     private SingleLiveEvent<Integer> mSnackbarTextResource = new SingleLiveEvent<>();
     private SingleLiveEvent<TxExtraWrapper> mOpenTokenTransactions = new SingleLiveEvent<>();
     private SingleLiveEvent<String> mOpenTxDetailActivity = new SingleLiveEvent<>();
-
+    private SingleLiveEvent<Address> addressSLE = new SingleLiveEvent<>();
 
     // ------------------------- etc ------------------------------------
     private SingleLiveEvent<DeletionStateNavigator> mDeletionState = new SingleLiveEvent<>();
     public CopyListener copyListener = value -> CopyUtils.copyText(getApplication().getApplicationContext(), value);
-
 
 
     public DetailViewModel(@NonNull Application application,
@@ -113,16 +110,11 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public void start(int addressId) {
         this.mAddressId = addressId;
-        if (ConnectivityChecker.isConnected(getApplication())) {
-            loadAddress(addressId);
-            loadCurrentPrice();
-        } else {
-            mSnackbarTextResource.setValue(R.string.error_offline);
-        }
+        loadAddress(addressId);
     }
 
 
-    public void loadAddress(int addressId) {
+    private void loadAddress(int addressId) {
         isLoading.set(true); // Show progress bar
         mAddressRepository.getAddress(addressId, this);
     }
@@ -130,13 +122,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     private SimpleTxItemResult loadTransactions(TxListRepository.Type type, String address) {
         return mTxListRepository.getTxs(type, address, address);
-    }
-
-
-    private void loadCurrentPrice() {
-        int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
-        String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
-        mPriceRepository.loadCurrentPrice(tsym, this);
     }
 
 
@@ -208,6 +193,9 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
     @SuppressLint("CheckResult")
     @Override
     public void onAddressLoaded(Address address) {
+
+        addressSLE.setValue(address);
+
         if (shouldUpdateAddrName) {
             // Retrieving the updated address name only.
             // Do not trigger API call because we want to just update the name alone.
@@ -277,21 +265,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         isLoading.set(false);
         handleError(throwable);
     }
-
-
-    // -------- Price fetch callbacks (network) -----------
-
-    @Override
-    public void onPriceLoaded(CurrentPrice currentPrice) {
-        mCurrentPrice.set(currentPrice);
-        mCurrentPrice.notifyChange();
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-        handleError(throwable);
-    }
-
 
 
     // ---------------------------------------- UI update ---------------------------------------
@@ -365,7 +338,6 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
         getSnackbarTextResource().setValue(R.string.unexpected_error);
     }
 
-
     // ----------------------------- Getters ---------------------------
 
     public MutableLiveData<String> getSnackbarText() {
@@ -414,6 +386,10 @@ public class DetailViewModel extends AndroidViewModel implements AddressLocalCal
 
     public LiveData<Boolean> getTokenTxExists() {
         return tokenTxExists;
+    }
+
+    public SingleLiveEvent<Address> getAddressSLE() {
+        return addressSLE;
     }
 
     // ----------------------------- Setters ---------------------------
