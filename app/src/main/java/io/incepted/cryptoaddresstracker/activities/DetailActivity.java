@@ -18,6 +18,7 @@ import com.google.android.material.tabs.TabLayout;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 import butterknife.BindView;
@@ -143,21 +144,13 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
 
         mViewModel.getOpenTxDetailActivity().observe(this, this::toTxDetailActivity);
 
-        mViewModel.getDeletionState().observe(this, deletionStateNavigator -> {
-            if (deletionStateNavigator != null)
-                switch (deletionStateNavigator) {
-                    case DELETION_IN_PROGRESS:
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        break;
-                    case DELETION_SUCCESSFUL:
-                        mProgressBar.setVisibility(View.GONE);
-                        finish();
-                        break;
-                    case DELETION_FAILED:
-                        mProgressBar.setVisibility(View.GONE);
-                        break;
-                }
-        });
+        mViewModel.getFinishActivity().observe(this, call -> finish());
+
+        mViewModel.getIsDBLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+        mViewModel.getIsPriceLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+        mViewModel.getIsAddressInfoLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+        mViewModel.getIsEthTxLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+        mViewModel.getIsTokenTxLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
 
     }
 

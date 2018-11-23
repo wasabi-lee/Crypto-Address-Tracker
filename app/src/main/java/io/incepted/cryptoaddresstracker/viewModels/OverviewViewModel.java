@@ -44,6 +44,8 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
 
     private MutableLiveData<Boolean> mIsTokenAddress = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsPriceLoading = new MutableLiveData<>();
+    private MutableLiveData<Boolean> mIsAddressInfoLoading = new MutableLiveData<>();
 
 
     public OverviewViewModel(@NonNull Application application,
@@ -67,6 +69,7 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
 
 
     public void loadCurrentPrice() {
+        mIsPriceLoading.setValue(true);
         int tsymIntValue = SharedPreferenceHelper.getBaseCurrencyPrefValue(getApplication().getApplicationContext());
         String tsym = CurrencyUtils.getBaseCurrencyString(tsymIntValue);
         mPriceRepository.loadCurrentPrice(tsym, this);
@@ -74,13 +77,14 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
 
 
     private void loadAddressInfo(Address address) {
+        mIsAddressInfoLoading.setValue(true);
         mAddressRepository.fetchDetailedAddressInfo(address.getAddrValue(), this);
     }
 
 
     @Override
     public void onPriceLoaded(CurrentPrice currentPrice) {
-        Timber.d("Current Price: %s %s", currentPrice.getPrice(), currentPrice.getTsym());
+        mIsPriceLoading.setValue(false);
         mCurrentPrice.set(currentPrice);
         mCurrentPrice.notifyChange();
     }
@@ -88,6 +92,7 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
 
     @Override
     public void onError(Throwable throwable) {
+        mIsPriceLoading.setValue(false);
         throwable.printStackTrace();
         mSnackbarTextRes.setValue(R.string.error_loading_price);
     }
@@ -101,14 +106,18 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
 
     @Override
     public void onRemoteAddressInfoLoaded(RemoteAddressInfo remoteAddressInfo) {
+        mIsAddressInfoLoading.setValue(false);
         updateViews(remoteAddressInfo);
     }
 
 
     @Override
     public void onDataNotAvailable(Throwable throwable) {
-
+        throwable.printStackTrace();
+        mIsAddressInfoLoading.setValue(true);
+        mSnackbarTextRes.setValue(R.string.error_network);
     }
+
 
     public void updateViews(RemoteAddressInfo remoteAddressInfo) {
         if (remoteAddressInfo.isError()) {
@@ -179,6 +188,14 @@ public class OverviewViewModel extends AndroidViewModel implements PriceReposito
 
     public MutableLiveData<Boolean> getIsTokenAddress() {
         return mIsTokenAddress;
+    }
+
+    public MutableLiveData<Boolean> getIsPriceLoading() {
+        return mIsPriceLoading;
+    }
+
+    public MutableLiveData<Boolean> getIsAddressInfoLoading() {
+        return mIsAddressInfoLoading;
     }
 
     public ObservableField<CurrentPrice> getmCurrentPrice() {

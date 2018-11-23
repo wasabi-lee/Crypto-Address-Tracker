@@ -113,6 +113,10 @@ public class TxListEthFragment extends Fragment {
 
         mViewModel.getNetworkError().observe(this, error ->
                 mViewModel.getSnackbarTextRes().setValue(R.string.error_network));
+
+
+        mViewModel.getIsEthTxLoading().observe(this, isLoading ->
+                mSharedViewModel.getIsTokenTxLoading().setValue(isLoading));
     }
 
 }

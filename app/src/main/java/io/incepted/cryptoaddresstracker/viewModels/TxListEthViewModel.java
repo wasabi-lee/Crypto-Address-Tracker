@@ -23,9 +23,11 @@ public class TxListEthViewModel extends AndroidViewModel {
     private LiveData<PagedList<SimpleTxItem>> mEthTxList;
     private LiveData<String> mNetworkError;
     private LiveData<Boolean> mEthTxExists;
+    private LiveData<Boolean> mIsEthTxLoading;
 
     private SingleLiveEvent<Integer> mSnackbarTextRes = new SingleLiveEvent<>();
     private SingleLiveEvent<String> mSnackbarText = new SingleLiveEvent<>();
+
 
     public TxListEthViewModel(@NonNull Application application,
                               @NonNull TxListRepository txListRepository) {
@@ -40,6 +42,8 @@ public class TxListEthViewModel extends AndroidViewModel {
         mNetworkError = Transformations.switchMap(mEthResult, SimpleTxItemResult::getError);
 
         mEthTxExists = Transformations.switchMap(mEthResult, SimpleTxItemResult::getItemExists);
+
+        mIsEthTxLoading = Transformations.switchMap(mEthResult, SimpleTxItemResult::getIsLoading);
 
     }
 
@@ -66,6 +70,10 @@ public class TxListEthViewModel extends AndroidViewModel {
 
     public String getAddressValueStr() {
         return mAddressValue.getValue();
+    }
+
+    public LiveData<Boolean> getIsEthTxLoading() {
+        return mIsEthTxLoading;
     }
 
     public MutableLiveData<Boolean> getIsTokenAddress() {

@@ -21,6 +21,7 @@ public class TxListTokenViewModel extends AndroidViewModel {
     private LiveData<PagedList<SimpleTxItem>> mTokenTxList;
     private LiveData<String> mTokenNetworkError;
     private LiveData<Boolean> mTokenTxExists;
+    private LiveData<Boolean> mIsTokenTxLoading;
 
     private MutableLiveData<String> mAddrValue = new MutableLiveData<>();
 
@@ -39,6 +40,7 @@ public class TxListTokenViewModel extends AndroidViewModel {
         mTokenTxList = Transformations.switchMap(mTokenTxResult, SimpleTxItemResult::getItemLiveDataList);
         mTokenNetworkError = Transformations.switchMap(mTokenTxResult, SimpleTxItemResult::getError);
         mTokenTxExists = Transformations.switchMap(mTokenTxResult, SimpleTxItemResult::getItemExists);
+        mIsTokenTxLoading = Transformations.switchMap(mTokenTxResult, SimpleTxItemResult::getIsLoading);
     }
 
 
@@ -60,7 +62,9 @@ public class TxListTokenViewModel extends AndroidViewModel {
         return mAddrValue.getValue();
     }
 
-
+    public LiveData<Boolean> getIsTokenTxLoading() {
+        return mIsTokenTxLoading;
+    }
 
     public LiveData<PagedList<SimpleTxItem>> getTokenTxList() {
         return mTokenTxList;

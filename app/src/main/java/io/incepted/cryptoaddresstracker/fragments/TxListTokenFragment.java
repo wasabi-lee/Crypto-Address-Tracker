@@ -112,6 +112,9 @@ public class TxListTokenFragment extends Fragment {
 
         mViewModel.getTokenNetworkError().observe(this, error ->
                 mSharedViewModel.getSnackbarText().setValue(error));
+
+        mViewModel.getIsTokenTxLoading().observe(this, isLoading ->
+                mSharedViewModel.getIsTokenTxLoading().setValue(isLoading));
     }
 
 }
