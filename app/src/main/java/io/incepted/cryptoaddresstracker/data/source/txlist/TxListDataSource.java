@@ -49,7 +49,6 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     @SuppressLint("CheckResult")
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Long> params, @NonNull LoadInitialCallback<SimpleTxItem> callback) {
-        Timber.d("Type: %s, Load initial", type == TxListRepository.Type.ETH_TXS ? "eth" : "token");
         getNetworkServiceSingle(type, address, tokenAddress, getCurrentTimestamp())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
@@ -68,13 +67,11 @@ public class TxListDataSource extends ItemKeyedDataSource<Long, SimpleTxItem> {
     @SuppressLint("CheckResult")
     @Override
     public void loadAfter(@NonNull LoadParams<Long> params, @NonNull LoadCallback<SimpleTxItem> callback) {
-        Timber.d("Type: %s, Load after: %s", type == TxListRepository.Type.ETH_TXS ? "eth" : "token", params.key);
         getNetworkServiceSingle(type, address, tokenAddress, params.key)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> isLoading.postValue(true))
                 .subscribe(simpleTxItemResult -> {
-//                            Timber.d("LoadAfter: loaded %s items: ", simpleTxItemResult.getItems().size());
                             setItemAvailability(simpleTxItemResult.getItems());
                             callback.onResult(simpleTxItemResult.getItems());
                             isLoading.setValue(false);

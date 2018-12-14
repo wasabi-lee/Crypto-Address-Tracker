@@ -147,9 +147,13 @@ public class DetailActivity extends BaseActivity implements AppBarLayout.OnOffse
         mViewModel.getFinishActivity().observe(this, call -> finish());
 
         mViewModel.getIsDBLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+
         mViewModel.getIsPriceLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+
         mViewModel.getIsAddressInfoLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+
         mViewModel.getIsEthTxLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
+
         mViewModel.getIsTokenTxLoading().observe(this, isLoading -> mViewModel.handleLoadingState());
 
     }
