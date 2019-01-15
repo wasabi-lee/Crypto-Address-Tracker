@@ -25,7 +25,7 @@ CAT tries to implement the latest frameworks and tools! CAT is currently using:
 ![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/screenshots/combined_2.png?raw=true)
 
 
-## Future implementations
+## Future implementation
 1. Widgets
 2. Displaying detailed information when clicking an address / tx hash, instead of copying the text to the clipboard 
 
