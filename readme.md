@@ -1,4 +1,7 @@
+
 # Crypto Address Tracker (a.k.a CAT :cat2:) 
+
+![alt text](https://github.com/wasabi-lee/Crypto-Address-Tracker/blob/master/app/src/main/res/mipmap-xhdpi/ic_launcher.png?raw=true)
 
 Simple but powerful Ethereum explorer! 
 CAT is a work-in-progress Ethereum explorer Android application using [ethplorer.io](https://ethplorer.io/) and [cryptocompare.com](https://www.cryptocompare.com/)'s APIs. 
